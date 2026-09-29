@@ -45,3 +45,8 @@ When everything is done, give me:
 
 - **Always answer me in French**: questions, final reports, PR descriptions, replies to review comments.
 - Everything in the code stays in English: identifiers, comments, commit messages, branch names, technical docs.
+
+### Skills
+
+- Project skills live in `.claude/skills/`. Third-party skills are copied as-is from upstream; their source, version and license are listed in `.claude/skills/SOURCES.md`.
+- **When a skill conflicts with this file or with `cra-design-system`, this file and `cra-design-system` win.** Example: the Symfony UX skills show utility classes (`w-4 h-4`) and CSS class toggling (`classList`); here, styles use the design system's semantic tokens and Stimulus controllers only toggle attributes.
