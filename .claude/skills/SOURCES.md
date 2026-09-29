@@ -1,4 +1,4 @@
-# Skill and plugin sources
+# Skill sources
 
 `cra-design-system` is ours. Every other skill in this folder is a third-party skill copied as-is from upstream; the only added file is the upstream `LICENSE`. Do not edit a vendored skill: update it from upstream instead (see below).
 
@@ -31,18 +31,6 @@ When a skill conflicts with `CLAUDE.md` or `cra-design-system`, those two win (r
 3. Replace each `.claude/skills/<skill>/` with `skills/<skill>/` from the tag, and copy the upstream `LICENSE` into it.
 4. Update the table above.
 
-## Plugins
-
-Enabled for everyone in `.claude/settings.json`. Plugins only load in local sessions: cloud sessions do not install the plugins a repository declares.
-
-| Plugin | Marketplace | Version | License |
-|---|---|---|---|
-| [`php-lsp`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/php-lsp) | `claude-plugins-official` (Anthropic) | 1.0.0 (marketplace commit `fbe07fb`, 2026-09-28) | Apache-2.0 |
-
-- Gives Claude PHP code intelligence and diagnostics through the Intelephense language server.
-- Each developer installs the server once: `npm install -g intelephense` (1.18.5 at the time of writing).
-- The plugin follows the official marketplace, which updates automatically.
-
 ## Evaluated, not installed (2026-09-29)
 
 | Candidate | Why not, for now |
@@ -52,6 +40,7 @@ Enabled for everyone in `.claude/settings.json`. Plugins only load in local sess
 | Modern Web Guidance (Google Chrome) | Preview; declares itself mandatory for any HTML/CSS task; runs `npx modern-web-guidance@latest` on each use. |
 | `symfony-skills` (Johannes Wachter) | Prototype, not yet an official Symfony repository. |
 | Playwright MCP (Microsoft) | Declined. |
+| `php-lsp` (Anthropic) | Declined. |
 | Tailwind CSS skills | No official skill, and the app does not use Tailwind (native CSS design system). |
 | `security-guidance`, `code-review`, `code-simplifier`, `pr-review-toolkit`, `commit-commands`, `feature-dev`, `frontend-design`, `webapp-testing`, `skill-creator` (Anthropic) | Duplicate built-in commands (`/security-review`, `/code-review`, `/simplify`, `/verify`) or conflict with the workflow in `CLAUDE.md` or with `cra-design-system`. |
 | Context7 (Upstash), Axe Accessibility (Deque), Semgrep Guardian, GitHub MCP | Not from the technology's maintainers, paid subscription required, unauditable binaries, or duplicate of `gh`. |
