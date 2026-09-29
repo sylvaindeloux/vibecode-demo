@@ -66,7 +66,7 @@ Checks run before every commit (`composer check`):
 - Files: `src/Controller/CalendarController.php` (`save`), `src/Calendar/{DaysInput,DayInput}.php` (DTOs), `src/Repository/DayEntryRepository.php` (upsert and delete, BR-05), `tests/Controller/CalendarSaveTest.php`.
 - Done when: every row of the table of section 5.3 has a test (204, 403, 404, 400, 422 cases), the request is atomic, the last occurrence of a date wins, an `empty` state without note deletes the row.
 
-### [ ] F9. Printable CRA (US-10)
+### [x] F9. Printable CRA (US-10)
 
 - Goal: the printable sheet for one client and one month.
 - Files: `src/Controller/CraController.php`, `templates/cra/show.html.twig`, `tests/Controller/CraControllerTest.php`.
