@@ -1,0 +1,11 @@
+{#
+ # Toggle - on/off setting that applies immediately (checkbox with role="switch").
+ # For a choice submitted with a form, prefer <twig:Checkbox>.
+ #}
+{% props id, label, name = null, value = '1', checked = false %}
+<label class="toggle" for="{{ id }}">
+    <input type="checkbox" role="switch" id="{{ id }}" name="{{ name ?? id }}" value="{{ value }}"
+        {%- if checked %} checked{% endif %}
+        {{ attributes.defaults({class: 'toggle__input'}) }}>
+    <span class="toggle__label">{{ label }}</span>
+</label>

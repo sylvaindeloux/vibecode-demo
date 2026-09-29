@@ -1,0 +1,29 @@
+{#
+ # Calendar:Toolbar - month navigation (previous / title / next / month select / today)
+ # and quick actions (fill working days, clear month).
+ #}
+{% props month, readonly = false, clientId = null %}
+<div class="calendar__toolbar">
+    <div class="calendar__nav">
+        <twig:Button iconOnly icon="lucide:chevron-left" :href="month.previousUrl" label="Mois précédent" data-calendar-target="prevLink" />
+        <h2 class="calendar__title" id="calendar-title">{{ month.label }}</h2>
+        <twig:Button iconOnly icon="lucide:chevron-right" :href="month.nextUrl" label="Mois suivant" data-calendar-target="nextLink" />
+        <form class="calendar__month-form" method="get" action="{{ month.formAction }}" data-controller="autosubmit">
+            {% if clientId %}<input type="hidden" name="client" value="{{ clientId }}">{% endif %}
+            <label class="visually-hidden" for="calendar-month">Choisir le mois</label>
+            <twig:Select id="calendar-month" name="month" :options="month.monthOptions" :value="month.id" data-action="autosubmit#submit" />
+            <twig:Button type="submit" size="sm" class="autosubmit-fallback">Afficher</twig:Button>
+        </form>
+        {% if not month.isCurrent %}
+            <twig:Button variant="ghost" size="sm" :href="month.currentUrl">Aujourd’hui</twig:Button>
+        {% endif %}
+    </div>
+    {% if not readonly %}
+        <div class="calendar__quick-actions">
+            <twig:Button size="sm" icon="lucide:calendar-check" data-action="calendar#fillWorkdays">Cocher les jours ouvrés</twig:Button>
+            <twig:Button size="sm" variant="ghost" icon="lucide:eraser"
+                data-controller="modal-trigger" data-action="modal-trigger#open"
+                data-modal-trigger-id-param="calendar-clear-confirm">Vider le mois</twig:Button>
+        </div>
+    {% endif %}
+</div>

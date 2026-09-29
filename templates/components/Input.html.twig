@@ -1,0 +1,10 @@
+{#
+ # Input - text-like <input> (text, email, tel, date, number, search…). Use inside <twig:Field>.
+ # Extra HTML attributes (required, autocomplete, placeholder, maxlength…) pass through.
+ #}
+{% props id, name = null, type = 'text', value = null, invalid = false, describedBy = null %}
+<input type="{{ type }}" id="{{ id }}" name="{{ name ?? id }}"
+    {%- if value is not null %} value="{{ value }}"{% endif %}
+    {%- if invalid %} aria-invalid="true"{% endif %}
+    {%- if describedBy %} aria-describedby="{{ describedBy }}"{% endif %}
+    {{ attributes.defaults({class: 'input' ~ (type in ['number', 'date'] ? ' input--numeric' : '')}) }}>

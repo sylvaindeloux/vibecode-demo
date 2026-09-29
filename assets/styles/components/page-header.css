@@ -1,0 +1,46 @@
+/*
+ * Page header: title, optional subtitle, actions zone.
+ * Twig: <twig:PageHeader>
+ */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-stack-md) var(--space-inline-lg);
+}
+
+.page-header__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  min-width: 0;
+}
+
+.page-header__title {
+  font-size: var(--font-size-heading-1);
+  line-height: var(--line-height-display);
+  font-weight: var(--font-weight-bold);
+}
+
+.page-header__subtitle {
+  color: var(--color-text-muted);
+}
+
+.page-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline-md);
+}
+
+/* breakpoint-mobile */
+@media (max-width: 47.99rem) {
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-header__actions > * {
+    flex: 1;
+  }
+}

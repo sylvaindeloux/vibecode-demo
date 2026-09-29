@@ -1,0 +1,8 @@
+{#
+ # NavLink - one main navigation entry. `active` sets aria-current="page".
+ #}
+{% props href, label, icon, active = false %}
+<a href="{{ href }}"{% if active %} aria-current="page"{% endif %} {{ attributes.defaults({class: 'app-nav__link'}) }}>
+    <twig:ux:icon :name="icon" class="icon" />
+    <span class="app-nav__label">{{ label }}</span>
+</a>

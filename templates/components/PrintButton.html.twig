@@ -1,0 +1,14 @@
+{#
+ # PrintButton - opens the browser print dialog (window.print() via the `print` Stimulus controller).
+ # The PDF file name defaults to the page <title>: set it on the CRA page (references/print.md).
+ #}
+{% props label = null, variant = 'primary', size = 'md' %}
+<twig:Button
+    :variant="variant"
+    :size="size"
+    icon="lucide:printer"
+    data-controller="print"
+    data-action="print#print"
+    data-print-hide
+    {{ ...attributes }}
+>{{ label ?? 'Imprimer / Enregistrer en PDF' }}</twig:Button>

@@ -1,0 +1,8 @@
+# French is the only language: UI texts are written directly in the templates and PHP classes,
+# there is no translation file. The Translation component only provides the French version of
+# the messages shipped with Symfony (validation constraints, form errors).
+framework:
+    default_locale: fr
+    enabled_locales: ['fr']
+    translator:
+        fallbacks: ['fr']

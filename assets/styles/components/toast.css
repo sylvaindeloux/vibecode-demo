@@ -1,0 +1,106 @@
+/*
+ * Toast: transient feedback. Fed by Symfony flash messages (server) or by the
+ * `toast:show` window event (client). Tone: success | info | warning | error.
+ * success/info auto-dismiss after --duration-toast; warning/error stay until closed.
+ * Twig: <twig:ToastStack> (renders app.flashes), <twig:Toast>
+ */
+.toast-stack {
+  position: fixed;
+  inset-block-start: calc(var(--size-header-height) + var(--space-inset-md));
+  inset-inline-end: var(--space-page-gutter-compact);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  width: min(var(--size-toast-width), calc(100% - 2 * var(--space-page-gutter-compact)));
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.toast {
+  --toast-accent: var(--color-info-text);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-inline-sm);
+  padding: var(--space-inset-md);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-overlay);
+  color: var(--color-text);
+  box-shadow: var(--elevation-overlay);
+  pointer-events: auto;
+  animation: toast-in var(--duration-base) var(--easing-default);
+}
+
+.toast[data-leaving] {
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--space-inset-sm)));
+  transition: opacity var(--duration-base) var(--easing-default), transform var(--duration-base) var(--easing-default);
+}
+
+.toast__icon {
+  flex: none;
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+  color: var(--toast-accent);
+}
+
+.toast__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  min-width: 0;
+}
+
+.toast__title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.toast__message {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+.toast--success {
+  --toast-accent: var(--color-success-text);
+
+  border-color: var(--color-success-border);
+}
+
+.toast--info {
+  --toast-accent: var(--color-info-text);
+
+  border-color: var(--color-info-border);
+}
+
+.toast--warning {
+  --toast-accent: var(--color-warning-text);
+
+  border-color: var(--color-warning-border);
+}
+
+.toast--error {
+  --toast-accent: var(--color-error-text);
+
+  border-color: var(--color-error-border);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--space-inset-sm)));
+  }
+}
+
+/* breakpoint-mobile: toasts sit above the bottom navigation */
+@media (max-width: 47.99rem) {
+  .toast-stack {
+    inset-block-start: auto;
+    inset-block-end: calc(var(--size-bottom-nav-height) + var(--space-inset-md) + env(safe-area-inset-bottom));
+    inset-inline: var(--space-page-gutter-compact);
+    width: auto;
+  }
+}

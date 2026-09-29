@@ -1,0 +1,28 @@
+/*
+ * Entry stylesheet, imported by assets/app.js (AssetMapper, no build step).
+ * Cascade layers make the order explicit: later layers win, whatever the selector specificity.
+ * Add every new component stylesheet here, in the `components` layer.
+ */
+@layer tokens, base, components, utilities, print;
+
+@import url("./tokens.css") layer(tokens);
+@import url("./base.css") layer(base);
+
+@import url("./components/layout.css") layer(components);
+@import url("./components/page-header.css") layer(components);
+@import url("./components/button.css") layer(components);
+@import url("./components/form.css") layer(components);
+@import url("./components/data-table.css") layer(components);
+@import url("./components/calendar.css") layer(components);
+@import url("./components/client-picker.css") layer(components);
+@import url("./components/card.css") layer(components);
+@import url("./components/badge.css") layer(components);
+@import url("./components/tag.css") layer(components);
+@import url("./components/tooltip.css") layer(components);
+@import url("./components/toast.css") layer(components);
+@import url("./components/empty-state.css") layer(components);
+@import url("./components/modal.css") layer(components);
+@import url("./components/cra-document.css") layer(components);
+@import url("./utilities.css") layer(utilities);
+
+@import url("./print.css") layer(print);

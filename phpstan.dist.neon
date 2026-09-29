@@ -1,0 +1,18 @@
+parameters:
+    level: max
+    paths:
+        - src
+        - tests
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    ignoreErrors:
+        # Skeleton hook, overridden privately and read by Symfony's KernelTrait.
+        -
+            identifier: method.unused
+            path: src/Kernel.php
+        # Design-system files, copied as delivered.
+        -
+            identifier: missingType.generics
+            paths:
+                - src/Controller/DesignSystemController.php
+                - src/Form/Type/ToggleType.php

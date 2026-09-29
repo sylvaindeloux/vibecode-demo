@@ -1,0 +1,49 @@
+/*
+ * Tooltip: short supplementary text for an element that already has an accessible name.
+ * Shown on hover and keyboard focus, dismissed with Escape (Stimulus `tooltip`).
+ * Never put essential information or interactive content in a tooltip.
+ * Twig: <twig:Tooltip>
+ */
+.tooltip {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltip__bubble {
+  position: absolute;
+  inset-block-end: calc(100% + var(--space-inset-sm));
+  inset-inline-start: 50%;
+  z-index: var(--z-toast);
+  width: max-content;
+  max-width: var(--size-tooltip-max-width);
+  padding: var(--space-inset-xs) var(--space-inset-sm);
+  border-radius: var(--radius-tag);
+  background: var(--color-tooltip-bg);
+  color: var(--color-text-inverse);
+  box-shadow: var(--elevation-overlay);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-body);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%);
+  transition: opacity var(--duration-fast) var(--easing-default), visibility var(--duration-fast) var(--easing-default);
+}
+
+.tooltip--bottom .tooltip__bubble {
+  inset-block-start: calc(100% + var(--space-inset-sm));
+  inset-block-end: auto;
+}
+
+.tooltip:hover .tooltip__bubble,
+.tooltip:focus-within .tooltip__bubble {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip[data-tooltip-dismissed] .tooltip__bubble {
+  opacity: 0;
+  visibility: hidden;
+}

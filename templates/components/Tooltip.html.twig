@@ -1,0 +1,15 @@
+{#
+ # Tooltip - short supplementary text on hover/focus of its content.
+ # - The bubble is aria-hidden when `decorative` (it repeats the trigger's accessible name,
+ #   e.g. an icon-only button's aria-label).
+ # - Otherwise pass `id` and set aria-describedby="<id>" on the trigger.
+ #}
+{% props text, id = null, position = 'top', decorative = false %}
+<span {{ attributes.defaults({
+    class: 'tooltip' ~ (position == 'bottom' ? ' tooltip--bottom' : ''),
+    'data-controller': 'tooltip',
+    'data-action': 'keydown->tooltip#dismiss mouseleave->tooltip#reset focusout->tooltip#reset',
+}) }}>
+    {% block content %}{% endblock %}
+    <span class="tooltip__bubble" role="tooltip"{% if id %} id="{{ id }}"{% endif %}{% if decorative %} aria-hidden="true"{% endif %}>{{ text }}</span>
+</span>

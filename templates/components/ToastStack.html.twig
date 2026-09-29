@@ -1,0 +1,25 @@
+{#
+ # ToastStack - renders Symfony flash messages as toasts and hosts client-side toasts
+ # (window event `toast:show`, see toast_stack_controller.js). Place once, in base.html.twig.
+ # Flash types: success | info | warning | error (aliases: notice -> info, danger -> error).
+ # Flash messages are French texts: $this->addFlash('success', 'Client ajouté.').
+ #}
+{%- set toneOf = {success: 'success', info: 'info', notice: 'info', warning: 'warning', error: 'error', danger: 'error'} -%}
+<div {{ attributes.defaults({
+    class: 'toast-stack',
+    'aria-live': 'polite',
+    'aria-label': 'Notifications',
+    role: 'region',
+    'data-controller': 'toast-stack',
+    'data-action': 'toast:show@window->toast-stack#show',
+    'data-print-hide': '',
+}) }}>
+    {%- for type, messages in app.flashes %}
+        {%- for message in messages %}
+            <twig:Toast :tone="toneOf[type] ?? 'info'" :title="message" />
+        {%- endfor %}
+    {%- endfor %}
+    {%- for tone in ['success', 'info', 'warning', 'error'] %}
+        <template data-toast-stack-target="template" data-tone="{{ tone }}"><twig:Toast :tone="tone" title="" message="" /></template>
+    {%- endfor %}
+</div>

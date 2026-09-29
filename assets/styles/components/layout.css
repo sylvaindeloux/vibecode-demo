@@ -1,0 +1,214 @@
+/*
+ * Layout: app header, main navigation, theme switch, page container.
+ * Twig: base.html.twig, <twig:AppHeader>, <twig:NavLink>, <twig:ThemeSwitch>
+ */
+
+/* ---------- App header ---------- */
+.app-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-header);
+  background: var(--color-surface);
+  border-block-end: var(--border-width-default) solid var(--color-border);
+}
+
+.app-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline-lg);
+  max-width: var(--size-container);
+  height: var(--size-header-height);
+  margin-inline: auto;
+  padding-inline: var(--space-page-gutter);
+}
+
+.app-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  color: var(--color-text);
+  font-size: var(--font-size-heading-3);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-control);
+  text-decoration: none;
+}
+
+.app-header__brand:hover {
+  color: var(--color-text);
+}
+
+.app-header__logo {
+  display: inline-grid;
+  place-items: center;
+  width: var(--size-control-sm);
+  height: var(--size-control-sm);
+  border-radius: var(--radius-control);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.app-header__logo .icon {
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+}
+
+.app-header__end {
+  margin-inline-start: auto;
+}
+
+/* ---------- Main navigation ---------- */
+.app-nav__list {
+  display: flex;
+  gap: var(--space-inline-xs);
+  padding: 0;
+  list-style: none;
+}
+
+.app-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  min-height: var(--size-control-md);
+  padding-inline: var(--space-control-x-sm);
+  border-radius: var(--radius-control);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--easing-default), color var(--duration-fast) var(--easing-default);
+}
+
+.app-nav__link:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.app-nav__link[aria-current="page"] {
+  background: var(--color-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+.app-nav__link[aria-current="page"]:hover {
+  background: var(--color-primary-subtle-hover);
+}
+
+/* ---------- Theme switch (segmented radio group) ---------- */
+.theme-switch {
+  display: inline-flex;
+  padding: var(--space-inset-xs);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.theme-switch__option {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--size-control-sm);
+  height: var(--size-control-sm);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.theme-switch__option:hover {
+  color: var(--color-text);
+}
+
+.theme-switch__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.theme-switch__option:has(.theme-switch__input:checked) {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--elevation-raised);
+}
+
+.theme-switch__option:has(.theme-switch__input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.theme-switch__option .icon {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+/* ---------- Page container ---------- */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-lg);
+  max-width: var(--size-container);
+  margin-inline: auto;
+  padding: var(--space-stack-lg) var(--space-page-gutter) var(--space-stack-xl);
+}
+
+.page--narrow {
+  max-width: calc(var(--size-field-max-width) + 2 * var(--space-page-gutter));
+}
+
+/* ---------- Tablet (breakpoint-tablet: max-width 63.99rem) ---------- */
+@media (max-width: 63.99rem) {
+  .app-header__inner,
+  .page {
+    padding-inline: var(--space-page-gutter-compact);
+  }
+}
+
+/* ---------- Mobile (breakpoint-mobile: max-width 47.99rem) ---------- */
+@media (max-width: 47.99rem) {
+  body {
+    padding-block-end: calc(var(--size-bottom-nav-height) + env(safe-area-inset-bottom));
+  }
+
+  .app-header__inner {
+    gap: var(--space-inline-md);
+  }
+
+  /* Navigation becomes a bottom tab bar, reachable with the thumb. */
+  .app-nav {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: var(--z-header);
+    padding-block-end: env(safe-area-inset-bottom);
+    background: var(--color-surface);
+    border-block-start: var(--border-width-default) solid var(--color-border);
+    box-shadow: var(--elevation-raised);
+  }
+
+  .app-nav__list {
+    justify-content: space-around;
+    height: var(--size-bottom-nav-height);
+  }
+
+  .app-nav__list > li {
+    flex: 1;
+    display: flex;
+  }
+
+  .app-nav__link {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-stack-xs);
+    min-height: var(--size-touch-target);
+    border-radius: 0;
+    font-size: var(--font-size-caption);
+  }
+
+  .app-nav__link[aria-current="page"] {
+    background: transparent;
+    box-shadow: inset 0 var(--border-width-strong) 0 var(--color-primary);
+  }
+
+  .page {
+    padding-block-start: var(--space-stack-md);
+  }
+}

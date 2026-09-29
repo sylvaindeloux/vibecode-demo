@@ -1,0 +1,34 @@
+{#
+ # Cra:Sheet - the CRA document (A4). Identical on screen (paper preview) and in print.
+ # cra: {monthLabel, periodStart, periodEnd, mission, freelancer, client, days, total, generatedAt}
+ # Spec: references/print.md
+ #}
+{% props cra %}
+{%- set locale = app.request.locale -%}
+<article {{ attributes.defaults({class: 'cra-sheet', 'aria-labelledby': 'cra-title'}) }}>
+    <header class="cra-doc__header">
+        <div>
+            <p class="cra-doc__eyebrow">Compte rendu d’activité</p>
+            <h1 class="cra-doc__title" id="cra-title">{{ cra.monthLabel }}</h1>
+        </div>
+        <dl class="cra-doc__meta">
+            <dt>Mission</dt>
+            <dd class="cra-doc__meta-value--strong">{{ cra.mission }}</dd>
+            <dt>Période</dt>
+            <dd class="cra-doc__meta-value--numeric">{{ cra.periodStart|format_date(pattern: 'dd/MM/yyyy', locale: locale) }} – {{ cra.periodEnd|format_date(pattern: 'dd/MM/yyyy', locale: locale) }}</dd>
+            <dt>Jours travaillés</dt>
+            <dd class="cra-doc__meta-value--numeric">{{ cra.total|format_number(locale: locale) }}</dd>
+            <dt>Établi le</dt>
+            <dd class="cra-doc__meta-value--numeric">{{ cra.generatedAt|format_date(pattern: 'dd/MM/yyyy', locale: locale) }}</dd>
+        </dl>
+    </header>
+
+    <div class="cra-parties">
+        <twig:Cra:Party role="Prestataire" :party="cra.freelancer" />
+        <twig:Cra:Party role="Client" :party="cra.client" />
+    </div>
+
+    <twig:Cra:DaysTable :days="cra.days" :total="cra.total" />
+
+    <twig:Cra:Signatures :freelancerName="cra.freelancer.name" :clientName="cra.client.contactName ?? cra.client.name" />
+</article>

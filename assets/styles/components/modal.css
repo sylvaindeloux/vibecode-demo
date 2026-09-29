@@ -1,0 +1,103 @@
+/*
+ * Modal: native <dialog> opened with showModal() by the `modal` Stimulus controller.
+ * Top layer (no z-index), focus trapped natively, Escape closes, focus returns to the trigger.
+ * Variant: --danger (confirmation of a destructive action).
+ * Twig: <twig:Modal>, <twig:ConfirmDialog>
+ */
+.modal {
+  margin: auto; /* the global reset removes the UA centering of <dialog> */
+  width: min(var(--size-modal-width), calc(100% - 2 * var(--space-page-gutter-compact)));
+  max-height: calc(100% - 2 * var(--space-page-gutter-compact));
+  padding: 0;
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-modal);
+  background: var(--color-surface-overlay);
+  color: var(--color-text);
+  box-shadow: var(--elevation-modal);
+}
+
+.modal[open] {
+  display: flex;
+  flex-direction: column;
+  animation: modal-in var(--duration-base) var(--easing-default);
+}
+
+.modal::backdrop {
+  background: var(--color-backdrop);
+}
+
+.modal__form {
+  display: contents;
+}
+
+.modal__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-inline-md);
+  padding: var(--space-inset-lg) var(--space-inset-lg) 0;
+}
+
+.modal__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--size-control-md);
+  height: var(--size-control-md);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+.modal__icon .icon {
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+}
+
+.modal__title {
+  flex: 1;
+  padding-block-start: var(--space-inset-xs);
+  font-size: var(--font-size-heading-2);
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-semibold);
+}
+
+.modal__close {
+  margin-block-start: calc(-1 * var(--space-inset-xs));
+  margin-inline-end: calc(-1 * var(--space-inset-sm));
+}
+
+.modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-md);
+  padding: var(--space-inset-md) var(--space-inset-lg);
+  overflow-y: auto;
+  color: var(--color-text);
+}
+
+.modal__footer {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  gap: var(--space-inline-md);
+  padding: var(--space-inset-md) var(--space-inset-lg) var(--space-inset-lg);
+}
+
+.modal--danger .modal__icon {
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-inset-sm));
+  }
+}
+
+/* breakpoint-mobile: full-width buttons for the thumb */
+@media (max-width: 47.99rem) {
+  .modal__footer > * {
+    flex: 1;
+  }
+}

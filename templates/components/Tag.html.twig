@@ -1,0 +1,14 @@
+{#
+ # Tag - label attached to an item. `removable` adds a remove button; wire it with
+ # data-action on the component (e.g. data-action="click->filters#remove").
+ #}
+{% props icon = null, removable = false, removeLabel = null %}
+<span {{ attributes.defaults({class: 'tag'}) }}>
+    {%- if icon %}<twig:ux:icon :name="icon" class="icon" />{% endif -%}
+    <span class="tag__label">{% block content %}{% endblock %}</span>
+    {%- if removable -%}
+        <button type="button" class="tag__remove" aria-label="{{ removeLabel ?? 'Retirer' }}">
+            <twig:ux:icon name="lucide:x" class="icon" />
+        </button>
+    {%- endif -%}
+</span>

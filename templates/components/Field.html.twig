@@ -1,0 +1,22 @@
+{#
+ # Field - label + control (content block) + help + errors, for controls NOT rendered by a
+ # Symfony form (Symfony forms use templates/form/theme.html.twig, which outputs the same markup).
+ # The control must get: id="<id>", aria-describedby="<id>_help <id>_errors" (when present)
+ # and invalid=true when `errors` is not empty (Input/Select/Textarea props `describedBy`, `invalid`).
+ #}
+{% props label, id, help = null, errors = [], optional = false, hideLabel = false %}
+<div {{ attributes.defaults({class: 'field' ~ (errors is not empty ? ' field--invalid' : '')}) }}>
+    <label class="field__label{{ hideLabel ? ' visually-hidden' }}" for="{{ id }}">
+        {{- label -}}
+        {% if optional %} <span class="field__required">(facultatif)</span>{% endif -%}
+    </label>
+    {% block content %}{% endblock %}
+    {% if help %}<p class="field__help" id="{{ id }}_help">{{ help }}</p>{% endif %}
+    {% if errors is not empty %}
+        <ul class="field__errors" id="{{ id }}_errors">
+            {% for error in errors %}
+                <li class="field__error"><twig:ux:icon name="lucide:circle-alert" class="icon" />{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>

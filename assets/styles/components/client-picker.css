@@ -1,0 +1,38 @@
+/*
+ * Client / mission picker: labelled native <select> in a GET form, auto-submitted
+ * by the `autosubmit` Stimulus controller (Turbo navigation), with a no-JS submit fallback
+ * (.autosubmit-fallback, hidden by base.css once the controller is connected).
+ * Twig: <twig:ClientPicker>
+ */
+.client-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-inline-sm);
+}
+
+.client-picker__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.client-picker .select {
+  min-width: var(--size-field-min-width);
+}
+
+.client-picker__mission {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+/* breakpoint-mobile */
+@media (max-width: 47.99rem) {
+  .client-picker,
+  .client-picker .select {
+    width: 100%;
+    min-width: 0;
+  }
+}
