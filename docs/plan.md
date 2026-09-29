@@ -36,11 +36,11 @@ Checks run before every commit (`composer check`):
 - Files: `src/Entity/{Profile,Client,DayEntry}.php`, `src/Repository/{Profile,Client,DayEntry}Repository.php`, `src/DataFixtures/AppFixtures.php`, `config/services.yaml` (`EnableForeignKeys` middleware), `config/packages/doctrine.yaml`, `tests/DatabaseTestCase.php` (schema + fixtures before each test), `tests/Entity/DayEntryTest.php`, `tests/DataFixtures/AppFixturesTest.php`.
 - Done when: `doctrine:schema:validate` passes; `composer reset` works on a fresh clone; `DayEntry::quantity()` unit test passes; the fixture counts of spec section 6.1 (today frozen on 2026-11-17) are asserted by a test.
 
-### [ ] F4. Routes of the four sections
+### [x] F4. Routes of the four sections
 
 - Goal: register every route of spec section 5.1 so that the shared layout (header links) and the dev gallery can render; each following feature fills its controller.
 - Files: `src/Controller/{Calendar,Cra,Client,Profile}Controller.php` generated with `make:controller`, then trimmed to the route attributes and a minimal render.
-- Done when: `lint:container` and `debug:router` list the routes; the layout renders.
+- Done when: `debug:router` lists the routes; the layout renders; the smoke test (`tests/ApplicationAvailabilityTest.php`, moved here from F10) requests every page.
 
 ### [ ] F5. Profile (US-01)
 
