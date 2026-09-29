@@ -1,8 +1,8 @@
 # Skill sources
 
-`cra-design-system` is ours. Every other skill in this folder is a third-party skill copied as-is from upstream; the only added file is the upstream `LICENSE`. Do not edit a vendored skill: update it from upstream instead (see below).
+`cra-design-system`, `symfony-best-practices` and the `symfony-bp-*` skills are ours (the latter derived from the Symfony documentation, see below). Every other skill in this folder is a third-party skill copied as-is from upstream; the only added file is the upstream `LICENSE`. Do not edit a vendored skill: update it from upstream instead (see below).
 
-When a skill conflicts with `CLAUDE.md` or `cra-design-system`, those two win (rule in `CLAUDE.md`).
+When a skill conflicts with `CLAUDE.md` or `cra-design-system`, those two win (rule in `CLAUDE.md`). When an example of a vendored skill conflicts with a `symfony-bp-*` skill, the `symfony-bp-*` skill wins: vendored examples are illustrative (decision of 2026-09-29).
 
 ## Vendored skills
 
@@ -23,6 +23,9 @@ When a skill conflicts with `CLAUDE.md` or `cra-design-system`, those two win (r
   - examples with utility classes (`w-4 h-4`, `bg-blue-600`) instead of semantic tokens;
   - Stimulus examples that toggle CSS classes (`classList`, `static classes`) instead of attributes;
   - `twig-component` also triggers on "build a design system in Symfony": UI work follows `cra-design-system`.
+- Known conflicts, where the `symfony-bp-*` skills win:
+  - `turbo`, "Inline Editing" pattern (`references/patterns.md`): separate edit and update actions, data read with `$request->request->get()`, no form type and no validation. Follow `symfony-bp-forms`: form type class, constraints on the object, one action that renders and processes the form.
+- Not a conflict: Twig Component file names in PascalCase and camelCase props (`twig-component`, `cra-design-system`) versus the snake_case rule of `symfony-bp-templates`, which exempts Twig Components in its "Project notes".
 
 ### Updating
 
@@ -30,6 +33,23 @@ When a skill conflicts with `CLAUDE.md` or `cra-design-system`, those two win (r
 2. Review the diff since the commit above: still Markdown only? New conflicts with `cra-design-system`?
 3. Replace each `.claude/skills/<skill>/` with `skills/<skill>/` from the tag, and copy the upstream `LICENSE` into it.
 4. Update the table above.
+
+## Derived from the Symfony documentation
+
+| Skills | Source | Version | Read on | License |
+|---|---|---|---|---|
+| `symfony-best-practices` (index), `symfony-bp-creating-the-project`, `symfony-bp-configuration`, `symfony-bp-business-logic`, `symfony-bp-controllers`, `symfony-bp-templates`, `symfony-bp-forms`, `symfony-bp-security`, `symfony-bp-web-assets`, `symfony-bp-tests` | [The Symfony Framework Best Practices](https://symfony.com/doc/current/best_practices.html), one skill per section; the pages it links to were read for current syntax | Symfony 8.1 docs | 2026-09-29 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
+
+- Rules are rephrased and examples written for this repository; each skill ends with a "Source" section: section URL, reading date, linked pages checked, license.
+- Not covered: the "Internationalization" section (the project is not internationalized).
+- Project-specific points live only in "Project notes" sections, validated before being added. Gaps between the official page and current Symfony are flagged as "Doc note".
+
+### Updating
+
+1. Re-read <https://symfony.com/doc/current/best_practices.html>, note the Symfony version it documents, and compare each section with its `symfony-bp-*` skill.
+2. Re-check the examples against the linked pages listed in each skill's "Source" section.
+3. Stay faithful to the page: no invented rule; project-specific points only in "Project notes", once validated.
+4. Update the reading date and version in each skill and in the table above.
 
 ## Evaluated, not installed (2026-09-29)
 
