@@ -104,7 +104,7 @@
             "@php bin/console debug:translation fr --only-missing --domain=messages || [ $? -eq 64 ]"
         ],
         "reset": [
-            "@php bin/console doctrine:database:drop --force --if-exists",
+            "@php bin/console doctrine:database:drop --force",
             "@php bin/console doctrine:schema:create",
             "@php bin/console doctrine:fixtures:load --no-interaction"
         ]

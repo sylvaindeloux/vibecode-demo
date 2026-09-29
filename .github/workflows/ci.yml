@@ -20,5 +20,8 @@ jobs:
             - name: Install dependencies
               run: composer install --no-interaction --no-progress --prefer-dist
 
+            - name: Create the demo database
+              run: composer reset
+
             - name: Check
               run: composer check

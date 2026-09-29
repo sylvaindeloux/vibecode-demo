@@ -5,6 +5,9 @@ parameters:
         - tests
     symfony:
         containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    doctrine:
+        # Entities follow the MakerBundle style: nullable properties, filled by forms, for required columns.
+        allowNullablePropertyForRequiredField: true
     ignoreErrors:
         # Skeleton hook, overridden privately and read by Symfony's KernelTrait.
         -

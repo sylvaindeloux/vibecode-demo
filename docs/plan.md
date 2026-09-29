@@ -30,7 +30,7 @@ Checks run before every commit (`composer check`):
   - GitHub Actions workflow running `composer check`.
 - Done when: `composer check` is green; unit tests of the design-system view model pass (`FrenchHolidays` 2026, `CalendarMonth` totals and workday count); `/_design-system` renders in `dev` (checked with the test client in `dev` environment is out of scope: it is checked by hand in the report).
 
-### [ ] F3. Data model, demo data and reset
+### [x] F3. Data model, demo data and reset
 
 - Goal: the three entities, their repositories, the demo fixtures and `composer reset`.
 - Files: `src/Entity/{Profile,Client,DayEntry}.php`, `src/Repository/{Profile,Client,DayEntry}Repository.php`, `src/DataFixtures/AppFixtures.php`, `config/services.yaml` (`EnableForeignKeys` middleware), `config/packages/doctrine.yaml`, `tests/DatabaseTestCase.php` (schema + fixtures before each test), `tests/Entity/DayEntryTest.php`, `tests/DataFixtures/AppFixturesTest.php`.
@@ -90,3 +90,6 @@ Checks run before every commit (`composer check`):
 | P-06 | Browser checks | Keyboard use, themes, 390px width and the print preview cannot be checked in the cloud environment; they are listed as "to check by hand" in the final report. |
 | P-07 | Translation check | `debug:translation fr --only-missing` always lists the French constraint messages as missing: the Validator extractor reads them from the entities, and D-19 forbids translation files. `composer check` therefore restricts the command to the `messages` domain (a `\|trans` left in a template would still be caught) and accepts exit code 64 ("no message extracted"), which is what "no missing key" means for an application without translation keys. |
 | P-08 | PHP-CS-Fixer and design-system PHP files | `@Symfony` only (no risky set): the risky set would rewrite `sprintf` calls in the design-system controller. `declare_strict_types` is kept. Two design-system classes are excluded from the fixer (docblock alignment only), and PHPStan ignores the missing generics of two design-system files, so that the copies stay identical to the skill. |
+| P-09 | Reset script | `doctrine:database:drop --if-exists` is not supported by the SQLite platform (DBAL 4 lists databases). `--force` alone drops the file and succeeds when it is missing, so the script of spec 6.2 is written without `--if-exists`. |
+| P-10 | Schema validation | `doctrine:schema:validate` compares the mapping with the dev database, so `composer check` needs a database created from the current mapping: run `composer reset` after any change of the model (D-12). The CI workflow runs it before `composer check`. |
+| P-11 | "Today" | The Europe/Paris date of the day is needed by the calendar, the CRA and the fixtures: one small `App\Calendar\Today` service wraps the Symfony clock, with the time zone as a class constant (spec 7.5). |
