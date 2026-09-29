@@ -42,7 +42,7 @@ Checks run before every commit (`composer check`):
 - Files: `src/Controller/{Calendar,Cra,Client,Profile}Controller.php` generated with `make:controller`, then trimmed to the route attributes and a minimal render.
 - Done when: `debug:router` lists the routes; the layout renders; the smoke test (`tests/ApplicationAvailabilityTest.php`, moved here from F10) requests every page.
 
-### [ ] F5. Profile (US-01)
+### [x] F5. Profile (US-01)
 
 - Goal: record the freelancer's identity, with the SIRET rules of BR-16.
 - Files: `src/Controller/ProfileController.php`, `src/Form/ProfileType.php`, `templates/profile/edit.html.twig`, `tests/Controller/ProfileControllerTest.php`.

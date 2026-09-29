@@ -1,7 +1,28 @@
+{#
+ # Profile page: the freelance identity printed on every CRA. Route: app_profile
+ # Variables: form (ProfileType form view)
+ #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Profil · EasyCRA{% endblock %}
+{% block page_modifier %} page--narrow{% endblock %}
 
 {% block body %}
-    <twig:PageHeader title="Profil" />
+    <twig:PageHeader title="Profil" subtitle="Vos informations, telles qu’elles apparaissent sur chaque CRA." />
+
+    <twig:Card>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="form__row">
+                {{ form_row(form.name) }}
+                {{ form_row(form.company) }}
+            </div>
+            {{ form_row(form.siret) }}
+            {{ form_row(form.address) }}
+            {{ form_row(form.email) }}
+            <div class="form-actions">
+                <twig:Button type="submit" variant="primary" icon="lucide:check">Enregistrer</twig:Button>
+            </div>
+        {{ form_end(form) }}
+    </twig:Card>
 {% endblock %}
