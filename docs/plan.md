@@ -72,11 +72,12 @@ Checks run before every commit (`composer check`):
 - Files: `src/Controller/CraController.php`, `templates/cra/show.html.twig`, `tests/Controller/CraControllerTest.php`.
 - Done when: functional tests cover the content (header, parties, days in order, total), the empty month, the `<title>` (BR-20), the redirect with a warning toast when the profile is incomplete, the back link. Print preview is checked by hand (reported, not automated).
 
-### [ ] F10. Smoke test, layout and documentation (US-11, US-12)
+### [x] F10. Smoke test, layout and documentation (US-11, US-12)
 
 - Goal: the whole application is reachable, documented and verifiable.
-- Files: `tests/ApplicationAvailabilityTest.php`, `README.md`, `docs/plan.md`.
+- Files: `tests/ApplicationAvailabilityTest.php` (delivered with F4), `README.md`, `docs/plan.md`.
 - Done when: the smoke test requests every URL of section 5.1; `composer install && composer reset` then `symfony serve` gives a usable app; README lists prerequisites, installation, demo, useful commands; CI is green.
+- Verified in the cloud environment with the PHP built-in server (no Symfony CLI there) and Playwright/Chromium: every page and gallery screen answers 200, day cycling and keyboard shortcuts persist through the endpoint, bulk actions send one request, a failed save reverts with an error toast, the theme cookie is applied server-side, the mobile layout has the bottom bar without horizontal scroll, the print preview hides the chrome and a full month (20 rows) fits on one A4 page.
 
 ## Decisions & issues
 
@@ -87,7 +88,7 @@ Checks run before every commit (`composer check`):
 | P-03 | Project creation | No Symfony CLI in the cloud environment: the skeleton is created with `composer create-project symfony/skeleton:"8.1.*"`, which is what `symfony new` runs. Locally, `symfony serve` is used to run the app. |
 | P-04 | Composer downloads | GitHub dist downloads are refused by the cloud proxy; Composer falls back to source clones. No impact on the project files. |
 | P-05 | Test database | Tests use `var/data_test.db`, the schema is created and the fixtures are loaded before each test by `tests/DatabaseTestCase.php` (spec 8.7, assumption 7). |
-| P-06 | Browser checks | Keyboard use, themes, 390px width and the print preview cannot be checked in the cloud environment; they are listed as "to check by hand" in the final report. |
+| P-06 | Browser checks | Keyboard use, themes, 390px width and the print preview were checked in the cloud environment with Playwright and Chromium (see F10). Firefox and Safari, and the real `symfony serve`, remain to be checked by hand. |
 | P-07 | Translation check | `debug:translation fr --only-missing` always lists the French constraint messages as missing: the Validator extractor reads them from the entities, and D-19 forbids translation files. `composer check` therefore restricts the command to the `messages` domain (a `\|trans` left in a template would still be caught) and accepts exit code 64 ("no message extracted"), which is what "no missing key" means for an application without translation keys. |
 | P-08 | PHP-CS-Fixer and design-system PHP files | `@Symfony` only (no risky set): the risky set would rewrite `sprintf` calls in the design-system controller. `declare_strict_types` is kept. Two design-system classes are excluded from the fixer (docblock alignment only), and PHPStan ignores the missing generics of two design-system files, so that the copies stay identical to the skill. |
 | P-09 | Reset script | `doctrine:database:drop --if-exists` is not supported by the SQLite platform (DBAL 4 lists databases). `--force` alone drops the file and succeeds when it is missing, so the script of spec 6.2 is written without `--if-exists`. |
