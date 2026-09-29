@@ -18,7 +18,7 @@ Checks run before every commit (`composer check`):
 - Files: `docs/plan.md`.
 - Done when: this file is committed.
 
-### [ ] F2. Technical foundation
+### [x] F2. Technical foundation
 
 - Goal: a running Symfony 8.1 project with the design system installed and the quality tools wired.
 - Files: `composer.json`, `config/`, `bin/console`, `public/index.php`, `src/Kernel.php`, `assets/` (design system copy), `templates/` (design system copy), `src/Calendar/`, `src/Form/Type/ToggleType.php`, `src/Controller/DesignSystemController.php`, `importmap.php`, `.env`, `.env.test`, `phpstan.dist.neon`, `.php-cs-fixer.dist.php`, `phpunit.dist.xml`, `.github/workflows/ci.yml`, `.gitignore`, `README.md`.
@@ -88,3 +88,5 @@ Checks run before every commit (`composer check`):
 | P-04 | Composer downloads | GitHub dist downloads are refused by the cloud proxy; Composer falls back to source clones. No impact on the project files. |
 | P-05 | Test database | Tests use `var/data_test.db`, the schema is created and the fixtures are loaded before each test by `tests/DatabaseTestCase.php` (spec 8.7, assumption 7). |
 | P-06 | Browser checks | Keyboard use, themes, 390px width and the print preview cannot be checked in the cloud environment; they are listed as "to check by hand" in the final report. |
+| P-07 | Translation check | `debug:translation fr --only-missing` always lists the French constraint messages as missing: the Validator extractor reads them from the entities, and D-19 forbids translation files. `composer check` therefore restricts the command to the `messages` domain (a `\|trans` left in a template would still be caught) and accepts exit code 64 ("no message extracted"), which is what "no missing key" means for an application without translation keys. |
+| P-08 | PHP-CS-Fixer and design-system PHP files | `@Symfony` only (no risky set): the risky set would rewrite `sprintf` calls in the design-system controller. `declare_strict_types` is kept. Two design-system classes are excluded from the fixer (docblock alignment only), and PHPStan ignores the missing generics of two design-system files, so that the copies stay identical to the skill. |
