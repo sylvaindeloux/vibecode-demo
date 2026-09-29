@@ -1,0 +1,61 @@
+/*
+ * Card: flat surface grouping related content. Header (title + actions), body, footer.
+ * Twig: <twig:Card>
+ */
+.card {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--elevation-flat);
+}
+
+.card__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-inline-md);
+  padding: var(--space-inset-md) var(--space-inset-lg);
+  border-block-end: var(--border-width-default) solid var(--color-border);
+}
+
+.card__title {
+  font-size: var(--font-size-heading-3);
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-semibold);
+}
+
+.card__subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-md);
+  padding: var(--space-inset-lg);
+}
+
+.card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-inline-md);
+  padding: var(--space-inset-md) var(--space-inset-lg);
+  border-block-start: var(--border-width-default) solid var(--color-border);
+  background: var(--color-surface-muted);
+  border-end-start-radius: var(--radius-card);
+  border-end-end-radius: var(--radius-card);
+}
+
+/* breakpoint-mobile */
+@media (max-width: 47.99rem) {
+  .card__header,
+  .card__body,
+  .card__footer {
+    padding-inline: var(--space-inset-md);
+  }
+}

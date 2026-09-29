@@ -1,0 +1,13 @@
+# Validation messages (domain: validators). Keys referenced by constraint `message` options.
+client:
+    name:
+        not_blank: 'Indiquez le nom du client.'
+    mission:
+        not_blank: 'Indiquez le nom de la mission.'
+    contact_email:
+        invalid: 'Cette adresse e-mail n’est pas valide (exemple : prenom@societe.fr).'
+profile:
+    name:
+        not_blank: 'Indiquez votre nom.'
+    siret:
+        invalid: 'Le SIRET compte 14 chiffres.'

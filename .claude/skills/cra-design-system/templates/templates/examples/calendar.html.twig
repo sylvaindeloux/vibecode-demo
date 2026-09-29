@@ -1,0 +1,45 @@
+{#
+ # Reference screen 1 - Calendar (home page). Route: app_calendar
+ # Controller variables:
+ #   clients    [{id, name, mission}]           - all clients (ClientPicker)
+ #   client     {id, name, mission} | null      - selected client
+ #   month      CalendarMonth view model        - references/calendar.md#view-model
+ #   save_url   URL of the day-states endpoint  - references/calendar.md#persistence
+ #   print_url  URL of the printable CRA (app_cra) for this client and month
+ #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'calendar.page_title'|trans({month: month.label}) }} · {{ 'app.name'|trans }}{% endblock %}
+
+{% block body %}
+    {# Blocks cannot be conditional in Twig: branch around the whole component instead. #}
+    {% if clients is empty %}
+        <twig:PageHeader :title="'calendar.title'|trans" :subtitle="'calendar.subtitle'|trans" />
+    {% else %}
+        <twig:PageHeader :title="'calendar.title'|trans" :subtitle="'calendar.subtitle'|trans">
+            <twig:block name="actions">
+                <twig:ClientPicker :clients="clients" :selected="client.id ?? null" :action="path('app_calendar')" :params="{month: month.id}" />
+            </twig:block>
+        </twig:PageHeader>
+    {% endif %}
+
+    {% if client is null %}
+        <twig:EmptyState
+            icon="lucide:users"
+            :title="'calendar.no_client.title'|trans"
+            :message="'calendar.no_client.message'|trans"
+        >
+            <twig:block name="actions">
+                <twig:Button variant="primary" icon="lucide:user-plus" :href="path('app_client_new')">{{ 'client.index.add'|trans }}</twig:Button>
+            </twig:block>
+        </twig:EmptyState>
+    {% else %}
+        <twig:Calendar
+            :month="month"
+            :saveUrl="save_url"
+            :csrfToken="csrf_token('calendar')"
+            :printUrl="print_url"
+            :clientId="client.id"
+        />
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{#
+ # Cra:DaysTable - worked days of the month (full = 1, half = 0.5) and the total.
+ # days: [{date: 'Y-m-d', quantity: 1|0.5, note}]. Header repeats on every printed page;
+ # rows never split across pages; the total prints once, at the end.
+ #}
+{% props days, total %}
+{%- set locale = app.request.locale -%}
+<table class="cra-days">
+    <caption class="visually-hidden">{{ 'cra.table.caption'|trans }}</caption>
+    <thead>
+        <tr>
+            <th scope="col">{{ 'cra.table.date'|trans }}</th>
+            <th scope="col">{{ 'cra.table.weekday'|trans }}</th>
+            <th scope="col" class="cra-days__qty">{{ 'cra.table.quantity'|trans }}</th>
+            <th scope="col">{{ 'cra.table.note'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for day in days %}
+            <tr>
+                <td class="cra-days__date">{{ day.date|format_date(pattern: 'dd/MM/yyyy', locale: locale) }}</td>
+                <td>{{ day.date|format_date(pattern: 'EEEE', locale: locale)|capitalize }}</td>
+                <td class="cra-days__qty">{{ day.quantity|format_number(locale: locale) }}</td>
+                <td class="cra-days__note">{{ day.note }}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4">{{ 'cra.table.empty'|trans }}</td></tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="row" colspan="2">{{ 'cra.table.total'|trans }}</th>
+            <td class="cra-days__qty">{{ total|format_number(locale: locale) }}</td>
+            <td>{{ 'calendar.summary.unit'|trans({count: total}) }}</td>
+        </tr>
+    </tfoot>
+</table>

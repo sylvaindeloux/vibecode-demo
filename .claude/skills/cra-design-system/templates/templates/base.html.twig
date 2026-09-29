@@ -1,0 +1,32 @@
+{#
+ # Base layout shared by every page.
+ # - <html lang> from the request locale; data-theme from the `theme` cookie (theme_controller.js),
+ #   so the chosen theme is applied server-side: no flash and no inline script.
+ # - Blocks: title (also the default PDF file name on the CRA page), body, dialogs.
+ #}
+{%- set theme = app.request.cookies.get('theme', 'system') -%}
+{%- set theme = theme in ['light', 'dark', 'system'] ? theme : 'system' -%}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}"{% if theme != 'system' %} data-theme="{{ theme }}"{% endif %}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <title>{% block title %}{{ 'app.name'|trans }}{% endblock %}</title>
+    <link rel="preload" href="{{ asset('fonts/AtkinsonHyperlegibleNext-Variable.woff2') }}" as="font" type="font/woff2" crossorigin>
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+</head>
+<body>
+    <a class="skip-link" href="#main">{{ 'a11y.skip_to_content'|trans }}</a>
+
+    <twig:AppHeader :theme="theme" data-print-hide />
+
+    <main id="main" class="page{% block page_modifier %}{% endblock %}" tabindex="-1">
+        {% block body %}{% endblock %}
+    </main>
+
+    <twig:ToastStack />
+
+    {% block dialogs %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+{#
+ # ConfirmDialog - confirmation of a destructive action. One instance per page, reused by
+ # every trigger: the trigger passes action (form URL), token (CSRF) and subject (item name).
+ #
+ # <twig:ConfirmDialog id="confirm-delete-client" :title="…" :message="…" :confirmLabel="…" tokenId="delete-client" />
+ # <twig:Button … data-controller="modal-trigger" data-action="modal-trigger#open"
+ #     data-modal-trigger-id-param="confirm-delete-client"
+ #     data-modal-trigger-action-param="{{ path('app_client_delete', {id: client.id}) }}"
+ #     data-modal-trigger-subject-param="{{ client.name }}" />
+ #}
+{% props id, title, message, confirmLabel, subject = '', action = '', tokenId = null, icon = 'lucide:triangle-alert' %}
+<twig:Modal :id="id" :title="title" :icon="icon" variant="danger" {{ ...attributes }}>
+    <p><strong data-modal-slot="subject">{{ subject }}</strong></p>
+    <p>{{ message }}</p>
+    <twig:block name="footer">
+        <form method="post" action="{{ action }}" class="modal__form" data-modal-target="form">
+            {% if tokenId %}<input type="hidden" name="_token" value="{{ csrf_token(tokenId) }}">{% endif %}
+            <twig:Button variant="secondary" data-action="modal#close" data-modal-target="initialFocus">{{ 'action.cancel'|trans }}</twig:Button>
+            <twig:Button type="submit" variant="danger" icon="lucide:trash-2">{{ confirmLabel }}</twig:Button>
+        </form>
+    </twig:block>
+</twig:Modal>

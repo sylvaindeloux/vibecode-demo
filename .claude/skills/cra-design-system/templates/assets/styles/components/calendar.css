@@ -1,0 +1,542 @@
+/*
+ * Monthly calendar (key component): toolbar, grid, day cells, legend, summary bar.
+ * Day cell state lives in data attributes on .calendar-day (the gridcell):
+ *   data-kind  = workday | weekend | holiday | outside   (calendar fact, set by the server)
+ *   data-state = empty | full | half | off               (user input, changed by Stimulus / Live Component)
+ *   data-today (boolean), data-has-note (boolean), data-disabled (boolean)
+ * Twig: <twig:Calendar>, <twig:Calendar:Day>, <twig:Calendar:Toolbar>, <twig:Calendar:Legend>, <twig:Calendar:Summary>
+ * Spec: references/calendar.md
+ */
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-md);
+}
+
+/* ---------- Toolbar: month navigation + quick actions ---------- */
+.calendar__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-stack-sm) var(--space-inline-lg);
+}
+
+.calendar__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-inline-sm);
+}
+
+.calendar__title {
+  min-width: 0;
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-display);
+  font-weight: var(--font-weight-bold);
+  text-transform: capitalize;
+}
+
+.calendar__month-form {
+  display: contents;
+}
+
+.calendar__month-form .select {
+  min-width: var(--size-field-min-width);
+}
+
+.calendar__quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline-sm);
+}
+
+/* ---------- Grid ---------- */
+.calendar__grid {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: var(--space-calendar-gap);
+  margin: calc(-1 * var(--space-calendar-gap));
+  width: calc(100% + 2 * var(--space-calendar-gap));
+}
+
+.calendar__weekday {
+  padding-block-end: var(--space-stack-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  text-align: start;
+}
+
+.calendar__weekday abbr {
+  text-decoration: none;
+}
+
+.calendar__weekday-short {
+  display: none;
+}
+
+/* ---------- Day cell ---------- */
+.calendar-day {
+  position: relative;
+  padding: 0;
+  vertical-align: top;
+}
+
+.calendar-day__button {
+  --day-bg: var(--color-day-bg);
+  --day-bg-hover: var(--color-day-hover-bg);
+  --day-text: var(--color-day-text);
+  --day-border: var(--color-day-border);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-stack-xs);
+  width: 100%;
+  min-height: var(--size-day-min-height);
+  padding: var(--space-inset-sm);
+  border: var(--border-width-default) solid var(--day-border);
+  border-radius: var(--radius-control);
+  background: var(--day-bg);
+  color: var(--day-text);
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--easing-default), border-color var(--duration-fast) var(--easing-default);
+}
+
+.calendar-day__button:hover {
+  background: var(--day-bg-hover);
+}
+
+.calendar-day__number {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-control);
+}
+
+.calendar-day__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-xs);
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar-day__label .icon {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.calendar-day__note {
+  position: absolute;
+  inset-block-start: var(--space-inset-sm);
+  inset-inline-end: var(--space-inset-sm);
+  display: none;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.calendar-day[data-has-note] .calendar-day__note {
+  display: block;
+}
+
+/* ---------- Kind (calendar facts) ---------- */
+.calendar-day[data-kind="weekend"] .calendar-day__button {
+  --day-bg: var(--color-day-weekend-bg);
+  --day-text: var(--color-day-weekend-text);
+  --day-border: var(--color-day-weekend-bg);
+}
+
+.calendar-day[data-kind="holiday"] .calendar-day__button {
+  --day-bg: var(--color-day-holiday-bg);
+  --day-bg-hover: var(--color-day-holiday-bg);
+  --day-text: var(--color-day-holiday-text);
+  --day-border: var(--color-day-holiday-border);
+}
+
+.calendar-day[data-kind="holiday"] .calendar-day__button:hover {
+  border-color: var(--color-day-holiday-text);
+}
+
+.calendar-day[data-kind="outside"] .calendar-day__button {
+  --day-bg: transparent;
+  --day-bg-hover: transparent;
+  --day-text: var(--color-day-outside-text);
+  --day-border: var(--color-day-border);
+
+  border-style: dashed;
+  cursor: default;
+}
+
+/* ---------- State (user input) - declared after kind: a worked weekend looks worked ---------- */
+.calendar-day[data-state="full"] .calendar-day__button {
+  --day-bg: var(--color-day-worked-bg);
+  --day-bg-hover: var(--color-day-worked-hover-bg);
+  --day-text: var(--color-day-worked-text);
+  --day-border: var(--color-day-worked-bg);
+}
+
+.calendar-day[data-state="half"] .calendar-day__button {
+  --day-text: var(--color-day-text);
+  --day-border: var(--color-day-half-border);
+
+  border-width: var(--border-width-strong);
+  background: linear-gradient(to bottom right, var(--color-day-half-bg) 50%, var(--color-day-worked-bg) 50%);
+}
+
+.calendar-day[data-state="half"] .calendar-day__button:hover {
+  background: linear-gradient(to bottom right, var(--color-day-half-bg) 50%, var(--color-day-worked-hover-bg) 50%);
+}
+
+.calendar-day[data-state="half"] .calendar-day__label {
+  align-self: flex-end;
+  color: var(--color-day-worked-text);
+}
+
+.calendar-day[data-state="off"] .calendar-day__button {
+  --day-text: var(--color-day-off-text);
+  --day-border: var(--color-day-off-hatch);
+
+  background:
+    repeating-linear-gradient(
+      135deg,
+      var(--color-day-off-hatch) 0 var(--size-hatch-stripe),
+      var(--color-day-off-bg) var(--size-hatch-stripe) var(--size-hatch-gap)
+    );
+}
+
+.calendar-day[data-state="off"] .calendar-day__label {
+  padding-inline: var(--space-inset-xs);
+  border-radius: var(--radius-tag);
+  background: var(--color-day-off-bg);
+}
+
+/* ---------- Today ---------- */
+.calendar-day[data-today] .calendar-day__number {
+  padding-inline: var(--space-inset-xs);
+  background: var(--color-day-today-bg);
+  color: var(--color-day-today-text);
+}
+
+.calendar-day[data-today][data-state="full"] .calendar-day__number {
+  background: var(--color-day-today-inverse-bg);
+  color: var(--color-day-today-inverse-text);
+}
+
+.calendar-day[data-today]:not([data-state="full"]) .calendar-day__button {
+  box-shadow: inset 0 0 0 var(--border-width-default) var(--color-day-today-ring);
+  border-color: var(--color-day-today-ring);
+}
+
+/* ---------- Focus (roving tabindex) ---------- */
+.calendar-day__button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  z-index: var(--z-sticky);
+}
+
+/* ---------- Disabled (read-only month, pending save) ---------- */
+.calendar-day[data-disabled] .calendar-day__button,
+.calendar[data-readonly] .calendar-day__button {
+  cursor: not-allowed;
+}
+
+.calendar-day[data-disabled] .calendar-day__button:hover,
+.calendar[data-readonly] .calendar-day__button:hover {
+  background: var(--day-bg);
+}
+
+.calendar-day[data-pending] .calendar-day__button {
+  cursor: progress;
+}
+
+/* ---------- Selection bar: details of the focused day + "Edit" (state, note) ---------- */
+.calendar-selection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-stack-xs) var(--space-inline-md);
+  min-height: var(--size-control-lg);
+  padding: var(--space-inset-sm) var(--space-inset-md);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-muted);
+}
+
+.calendar-selection__date {
+  font-weight: var(--font-weight-semibold);
+}
+
+.calendar-selection__state {
+  color: var(--color-text-muted);
+}
+
+.calendar-selection__note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-xs);
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-style: italic;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar-selection__note:empty {
+  display: none;
+}
+
+.calendar-selection__edit {
+  margin-inline-start: auto;
+}
+
+/* ---------- Legend ---------- */
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-stack-xs) var(--space-inline-lg);
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+.calendar-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+}
+
+.calendar-legend__swatch {
+  flex: none;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+  border: var(--border-width-default) solid var(--color-day-border);
+  border-radius: var(--radius-tag);
+  background: var(--color-day-bg);
+}
+
+.calendar-legend__swatch[data-state="full"] {
+  border-color: var(--color-day-worked-bg);
+  background: var(--color-day-worked-bg);
+}
+
+.calendar-legend__swatch[data-state="half"] {
+  border-color: var(--color-day-half-border);
+  background: linear-gradient(to bottom right, var(--color-day-half-bg) 50%, var(--color-day-worked-bg) 50%);
+}
+
+.calendar-legend__swatch[data-state="off"] {
+  border-color: var(--color-day-off-hatch);
+  background: repeating-linear-gradient(135deg, var(--color-day-off-hatch) 0 var(--size-hatch-stripe), var(--color-day-off-bg) var(--size-hatch-stripe) var(--size-hatch-gap));
+}
+
+.calendar-legend__swatch[data-kind="weekend"] {
+  border-color: var(--color-day-weekend-bg);
+  background: var(--color-day-weekend-bg);
+}
+
+.calendar-legend__swatch[data-kind="holiday"] {
+  border-color: var(--color-day-holiday-border);
+  background: var(--color-day-holiday-bg);
+}
+
+/* ---------- Keyboard help ---------- */
+.calendar__help {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+.calendar__help summary {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.calendar__help dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-stack-xs) var(--space-inline-md);
+  margin-block-start: var(--space-stack-sm);
+}
+
+.calendar__help dd {
+  margin: 0;
+}
+
+/* ---------- Summary bar ---------- */
+.calendar-summary {
+  position: sticky;
+  inset-block-end: var(--space-inset-md);
+  z-index: var(--z-sticky);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-stack-md) var(--space-inline-lg);
+  padding: var(--space-inset-md) var(--space-inset-lg);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--elevation-raised);
+}
+
+.calendar-summary__figures {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  min-width: 0;
+}
+
+.calendar-summary__total {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-inline-sm);
+}
+
+.calendar-summary__value {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-numeric);
+  font-size: var(--font-size-heading-1);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-display);
+}
+
+.calendar-summary__unit {
+  font-weight: var(--font-weight-semibold);
+}
+
+.calendar-summary__breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-stack-xs) var(--space-inline-md);
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+.calendar-summary__breakdown div {
+  display: flex;
+  gap: var(--space-inline-xs);
+}
+
+.calendar-summary__breakdown dt::after {
+  content: " :";
+}
+
+.calendar-summary__breakdown dd {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+}
+
+.calendar-summary__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline-md);
+  margin-inline-start: auto;
+}
+
+/* ---------- Mobile (breakpoint-mobile) ---------- */
+@media (max-width: 47.99rem) {
+  .calendar__title {
+    font-size: var(--font-size-heading-2);
+  }
+
+  .calendar__toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .calendar__title {
+    flex: 1;
+    text-align: center;
+  }
+
+  .calendar__month-form .select {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .calendar__quick-actions > * {
+    flex: 1 1 auto;
+  }
+
+  .calendar__grid {
+    border-spacing: var(--space-calendar-gap-compact);
+    margin: calc(-1 * var(--space-calendar-gap-compact));
+    width: calc(100% + 2 * var(--space-calendar-gap-compact));
+  }
+
+  .calendar__weekday {
+    font-size: var(--font-size-caption);
+    text-align: center;
+  }
+
+  .calendar-day__button {
+    justify-content: flex-start;
+    min-height: var(--size-day-min-height-compact);
+    padding: var(--space-inset-xs);
+  }
+
+  .calendar-day__label {
+    display: none;
+  }
+
+  .calendar-day__note {
+    inset-block-start: var(--space-inset-xs);
+    inset-inline-end: var(--space-inset-xs);
+    width: var(--size-note-dot);
+    height: var(--size-note-dot);
+    border-radius: var(--radius-pill);
+    background: currentColor;
+  }
+
+  .calendar-day__note .icon {
+    display: none;
+  }
+
+  /* Not sticky on phones: it would hide half of the grid. */
+  .calendar-summary {
+    position: static;
+    padding: var(--space-inset-md);
+    box-shadow: var(--elevation-flat);
+  }
+
+  .calendar-summary__actions {
+    width: 100%;
+    margin-inline-start: 0;
+  }
+
+  .calendar-summary__actions > * {
+    flex: 1;
+  }
+}
+
+/* breakpoint-small: weekday initials only */
+@media (max-width: 29.99rem) {
+  .calendar__weekday-long {
+    display: none;
+  }
+
+  .calendar__weekday-short {
+    display: inline;
+  }
+}

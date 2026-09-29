@@ -1,0 +1,12 @@
+{#
+ # EmptyState - icon, title, message and one primary action (`actions` block).
+ #}
+{% props icon, title, message = null, headingLevel = 2 %}
+<section {{ attributes.defaults({class: 'empty-state'}) }}>
+    <span class="empty-state__icon" aria-hidden="true"><twig:ux:icon :name="icon" class="icon" /></span>
+    <h{{ headingLevel }} class="empty-state__title">{{ title }}</h{{ headingLevel }}>
+    {% if message %}<p class="empty-state__message">{{ message }}</p>{% endif %}
+    {% if block('actions') is defined %}
+        <div class="empty-state__actions">{{ block('actions') }}</div>
+    {% endif %}
+</section>

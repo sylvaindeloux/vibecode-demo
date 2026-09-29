@@ -1,0 +1,29 @@
+{#
+ # Reference screen 4 - Profile (freelance identity printed on every CRA). Route: app_profile
+ # Controller variables:
+ #   form  ProfileType form view (name, company, siret, address, email)
+ #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'profile.title'|trans }} · {{ 'app.name'|trans }}{% endblock %}
+{% block page_modifier %} page--narrow{% endblock %}
+
+{% block body %}
+    <twig:PageHeader :title="'profile.title'|trans" :subtitle="'profile.subtitle'|trans" />
+
+    <twig:Card>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="form__row">
+                {{ form_row(form.name) }}
+                {{ form_row(form.company) }}
+            </div>
+            {{ form_row(form.siret) }}
+            {{ form_row(form.address) }}
+            {{ form_row(form.email) }}
+            <div class="form-actions">
+                <twig:Button type="submit" variant="primary" icon="lucide:check">{{ 'action.save'|trans }}</twig:Button>
+            </div>
+        {{ form_end(form) }}
+    </twig:Card>
+{% endblock %}

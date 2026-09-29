@@ -1,0 +1,21 @@
+{#
+ # Toast - one notification. tone: success | info | warning | error.
+ # success/info auto-dismiss (duration-toast); warning/error are persistent and use role="alert".
+ #}
+{% props tone = 'info', title, message = null, persistent = null %}
+{%- set icons = {success: 'lucide:circle-check', info: 'lucide:info', warning: 'lucide:triangle-alert', error: 'lucide:circle-x'} -%}
+{%- set isUrgent = tone in ['warning', 'error'] -%}
+<div role="{{ isUrgent ? 'alert' : 'status' }}" {{ attributes.defaults({
+    class: 'toast toast--' ~ tone,
+    'data-controller': 'toast',
+    'data-toast-persistent-value': (persistent ?? isUrgent) ? 'true' : 'false',
+    'data-action': 'mouseenter->toast#pause mouseleave->toast#start focusin->toast#pause focusout->toast#start',
+    'data-turbo-temporary': '',
+}) }}>
+    <twig:ux:icon :name="icons[tone] ?? icons.info" class="icon toast__icon" />
+    <div class="toast__body">
+        <p class="toast__title" data-toast-slot="title">{{ title }}</p>
+        {% if message is not null %}<p class="toast__message" data-toast-slot="message">{{ message }}</p>{% endif %}
+    </div>
+    <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:x" :label="'action.close_notification'|trans" data-action="toast#close" />
+</div>

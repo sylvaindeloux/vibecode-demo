@@ -1,0 +1,12 @@
+{#
+ # Calendar:Selection - details of the focused/last clicked day and the "Edit day" button
+ # (state + note dialog). Filled by the calendar controller.
+ #}
+<div class="calendar-selection" data-print-hide>
+    <span class="calendar-selection__date" data-calendar-target="selectionDate"></span>
+    <span class="calendar-selection__state" data-calendar-target="selectionState"></span>
+    <span class="calendar-selection__note" data-calendar-target="selectionNote"></span>
+    <twig:Button size="sm" icon="lucide:notebook-pen" class="calendar-selection__edit" data-action="calendar#openDialog" aria-keyshortcuts="N">
+        {{- 'calendar.edit_day'|trans -}}
+    </twig:Button>
+</div>

@@ -1,0 +1,108 @@
+{#
+ # Calendar - monthly work calendar (key component). Spec: references/calendar.md
+ #
+ # Props
+ #   month      CalendarMonth view model (see references/calendar.md#view-model)
+ #   saveUrl    endpoint receiving {"days":[{date,state,note}]} (POST, JSON). null = no persistence.
+ #   csrfToken  token sent in the X-CSRF-Token header
+ #   printUrl   URL of the printable CRA for this month/client (summary CTA)
+ #   readonly   true when the month cannot be edited (no client selected, month locked)
+ #   clientId   kept in the month selector query string
+ #
+ # Stimulus: calendar_controller.js (keyboard grid, states, day dialog, quick actions, summary).
+ #}
+{% props month, saveUrl = null, csrfToken = null, printUrl = null, readonly = false, clientId = null %}
+{%- set states = ['empty', 'full', 'half', 'off'] -%}
+{%- set stateLabels = {} -%}
+{%- for state in states %}{% set stateLabels = stateLabels|merge({(state): ('calendar.state.' ~ state)|trans}) %}{% endfor -%}
+{%- set labels = {
+    states: stateLabels,
+    unit: {one: 'calendar.summary.unit'|trans({count: 1}), other: 'calendar.summary.unit'|trans({count: 2})},
+    note: 'calendar.note'|trans,
+    total: 'calendar.summary.total'|trans,
+    daysUpdated: 'calendar.days_updated'|trans,
+    saveError: 'calendar.save_error'|trans,
+    saveErrorHint: 'calendar.save_error_hint'|trans,
+} -%}
+{%- set weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] -%}
+<section {{ attributes.defaults({
+    class: 'calendar',
+    'aria-labelledby': 'calendar-title',
+    'data-controller': 'calendar',
+    'data-calendar-url-value': saveUrl ?? '',
+    'data-calendar-csrf-token-value': csrfToken ?? '',
+    'data-calendar-readonly-value': readonly ? 'true' : 'false',
+    'data-calendar-labels-value': labels|json_encode,
+}) }}{% if readonly %} data-readonly{% endif %}>
+
+    <twig:Calendar:Toolbar :month="month" :readonly="readonly" :clientId="clientId" />
+
+    <p id="calendar-instructions" class="visually-hidden">{{ 'calendar.instructions'|trans }}</p>
+
+    <table class="calendar__grid" role="grid" aria-labelledby="calendar-title" aria-describedby="calendar-instructions"{% if readonly %} aria-readonly="true"{% endif %}>
+        <thead>
+            <tr role="row">
+                {% for weekday in weekdays %}
+                    <th role="columnheader" scope="col" class="calendar__weekday">
+                        <abbr title="{{ ('calendar.weekday.' ~ weekday ~ '.long')|trans }}">
+                            <span class="calendar__weekday-long">{{ ('calendar.weekday.' ~ weekday ~ '.short')|trans }}</span>
+                            <span class="calendar__weekday-short">{{ ('calendar.weekday.' ~ weekday ~ '.initial')|trans }}</span>
+                        </abbr>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in month.weeks %}
+                <tr role="row">
+                    {% for day in week %}
+                        <twig:Calendar:Day :day="day" :tabbable="day.date == month.focusDate" />
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not readonly %}<twig:Calendar:Selection />{% endif %}
+
+    <div class="visually-hidden" role="status" aria-live="polite" data-calendar-target="status"></div>
+
+    <twig:Calendar:Legend />
+
+    <details class="calendar__help" data-print-hide>
+        <summary>{{ 'calendar.shortcuts.title'|trans }}</summary>
+        <dl>
+            <dt><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></dt><dd>{{ 'calendar.shortcuts.move'|trans }}</dd>
+            <dt><kbd>{{ 'calendar.shortcuts.enter_key'|trans }}</kbd> / <kbd>{{ 'calendar.shortcuts.space_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.cycle'|trans }}</dd>
+            <dt><kbd>J</kbd> <kbd>D</kbd> <kbd>C</kbd></dt><dd>{{ 'calendar.shortcuts.set'|trans }}</dd>
+            <dt><kbd>{{ 'calendar.shortcuts.delete_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.clear'|trans }}</dd>
+            <dt><kbd>N</kbd></dt><dd>{{ 'calendar.shortcuts.note'|trans }}</dd>
+            <dt><kbd>{{ 'calendar.shortcuts.home_key'|trans }}</kbd> / <kbd>{{ 'calendar.shortcuts.end_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.week_edges'|trans }}</dd>
+            <dt><kbd>{{ 'calendar.shortcuts.page_up_key'|trans }}</kbd> / <kbd>{{ 'calendar.shortcuts.page_down_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.months'|trans }}</dd>
+        </dl>
+    </details>
+
+    <twig:Calendar:Summary :month="month" :printUrl="printUrl" />
+
+    {# Visible day labels, cloned by the controller when a state changes. #}
+    {% for key in ['full', 'half', 'off', 'kind-holiday', 'kind-workday', 'kind-weekend'] %}
+        <template data-calendar-target="labelTemplate" data-key="{{ key }}">
+            {%- if key starts with 'kind-' -%}
+                <twig:Calendar:DayLabel state="empty" :kind="key|slice(5)" holidayName="" />
+            {%- else -%}
+                <twig:Calendar:DayLabel :state="key" kind="workday" />
+            {%- endif -%}
+        </template>
+    {% endfor %}
+
+    {% if not readonly %}
+        <twig:Calendar:DayDialog />
+        <twig:Modal id="calendar-clear-confirm" variant="danger" icon="lucide:eraser" :title="'calendar.clear.title'|trans">
+            <p>{{ 'calendar.clear.message'|trans({month: month.label}) }}</p>
+            <twig:block name="footer">
+                <twig:Button data-action="modal#close" data-modal-target="initialFocus">{{ 'action.cancel'|trans }}</twig:Button>
+                <twig:Button variant="danger" icon="lucide:eraser" data-action="calendar#clearMonth modal#close">{{ 'calendar.clear.confirm'|trans }}</twig:Button>
+            </twig:block>
+        </twig:Modal>
+    {% endif %}
+</section>

@@ -1,0 +1,21 @@
+{#
+ # ThemeSwitch - light | dark | system, as a radio group (fieldset + legend).
+ # `current` comes from the `theme` cookie (see base.html.twig). Stimulus: theme_controller.js
+ #}
+{% props current = 'system' %}
+{%- set options = [
+    {value: 'light', icon: 'lucide:sun'},
+    {value: 'dark', icon: 'lucide:moon'},
+    {value: 'system', icon: 'lucide:monitor'},
+] -%}
+<fieldset {{ attributes.defaults({class: 'theme-switch', 'data-controller': 'theme'}) }}>
+    <legend class="visually-hidden">{{ 'theme.label'|trans }}</legend>
+    {%- for option in options %}
+        <label class="theme-switch__option" title="{{ ('theme.' ~ option.value)|trans }}">
+            <input class="theme-switch__input" type="radio" name="theme" value="{{ option.value }}"
+                {%- if current == option.value %} checked{% endif %} data-action="change->theme#change">
+            <twig:ux:icon :name="option.icon" class="icon" />
+            <span class="visually-hidden">{{ ('theme.' ~ option.value)|trans }}</span>
+        </label>
+    {%- endfor %}
+</fieldset>

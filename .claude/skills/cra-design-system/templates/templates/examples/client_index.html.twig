@@ -1,0 +1,85 @@
+{#
+ # Reference screen 3a/3b - Client list, and its empty state. Route: app_client_index
+ # Controller variables:
+ #   clients  [{id, name, contactName, contactEmail, mission}]
+ # Deletion: one shared ConfirmDialog; each row's delete button passes action + subject.
+ #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'client.index.title'|trans }} · {{ 'app.name'|trans }}{% endblock %}
+
+{% block body %}
+    {# Blocks cannot be conditional in Twig: branch around the whole component instead. #}
+    {% if clients is empty %}
+        <twig:PageHeader :title="'client.index.title'|trans" :subtitle="'client.index.subtitle'|trans" />
+    {% else %}
+        <twig:PageHeader :title="'client.index.title'|trans" :subtitle="'client.index.subtitle'|trans">
+            <twig:block name="actions">
+                <twig:Button variant="primary" icon="lucide:plus" :href="path('app_client_new')">{{ 'client.index.add'|trans }}</twig:Button>
+            </twig:block>
+        </twig:PageHeader>
+    {% endif %}
+
+    {% if clients is empty %}
+        <twig:EmptyState
+            icon="lucide:briefcase"
+            :title="'client.index.empty.title'|trans"
+            :message="'client.index.empty.message'|trans"
+        >
+            <twig:block name="actions">
+                <twig:Button variant="primary" icon="lucide:user-plus" :href="path('app_client_new')">{{ 'client.index.add'|trans }}</twig:Button>
+            </twig:block>
+        </twig:EmptyState>
+    {% else %}
+        <twig:DataTable
+            :caption="'client.index.caption'|trans"
+            :columns="[
+                {label: 'client.field.name'|trans},
+                {label: 'client.field.contact'|trans},
+                {label: 'client.field.mission'|trans},
+                {label: 'client.index.actions'|trans, type: 'actions', hidden: true},
+            ]"
+        >
+            {% for client in clients %}
+                <twig:DataTable:Row>
+                    <twig:DataTable:Cell type="primary">
+                        <a class="data-table__link" href="{{ path('app_client_edit', {id: client.id}) }}">{{ client.name }}</a>
+                    </twig:DataTable:Cell>
+                    <twig:DataTable:Cell :label="'client.field.contact'|trans">
+                        {{ client.contactName }}
+                        {% if client.contactEmail %}<br><span class="text-muted text-small">{{ client.contactEmail }}</span>{% endif %}
+                    </twig:DataTable:Cell>
+                    <twig:DataTable:Cell :label="'client.field.mission'|trans">
+                        {% if client.mission %}{{ client.mission }}{% else %}<twig:Badge>{{ 'client.index.no_mission'|trans }}</twig:Badge>{% endif %}
+                    </twig:DataTable:Cell>
+                    <twig:DataTable:Cell type="actions">
+                        <twig:Tooltip :text="'action.edit'|trans" decorative>
+                            <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:pencil"
+                                :href="path('app_client_edit', {id: client.id})"
+                                :label="'client.index.edit_named'|trans({name: client.name})" />
+                        </twig:Tooltip>
+                        <twig:Tooltip :text="'action.delete'|trans" decorative>
+                            <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:trash-2"
+                                :label="'client.index.delete_named'|trans({name: client.name})"
+                                data-controller="modal-trigger"
+                                data-action="modal-trigger#open"
+                                data-modal-trigger-id-param="confirm-delete-client"
+                                data-modal-trigger-action-param="{{ path('app_client_delete', {id: client.id}) }}"
+                                data-modal-trigger-subject-param="{{ client.name }}" />
+                        </twig:Tooltip>
+                    </twig:DataTable:Cell>
+                </twig:DataTable:Row>
+            {% endfor %}
+        </twig:DataTable>
+    {% endif %}
+{% endblock %}
+
+{% block dialogs %}
+    <twig:ConfirmDialog
+        id="confirm-delete-client"
+        :title="'client.delete.title'|trans"
+        :message="'client.delete.message'|trans"
+        :confirmLabel="'client.delete.confirm'|trans"
+        tokenId="delete-client"
+    />
+{% endblock %}

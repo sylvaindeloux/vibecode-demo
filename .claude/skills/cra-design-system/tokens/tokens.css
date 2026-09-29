@@ -1,0 +1,584 @@
+/*
+ * CRA design tokens - mirrors tokens/tokens.json (source of truth). Keep both files in sync.
+ * 1. Primitives: raw values, named by value. NEVER reference them outside this file.
+ * 2. Semantic tokens: named by usage. The ONLY tokens allowed in component CSS.
+ * 3. Dark theme: only semantic colors and elevations are redefined, and only on screen,
+ *    so printing always uses the light theme.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ---------- Primitives: color ---------- */
+  --gray-0: #ffffff;
+  --gray-50: #f6f7f7;
+  --gray-100: #eceeee;
+  --gray-150: #e3e6e6;
+  --gray-200: #d8dcdc;
+  --gray-300: #bfc5c5;
+  --gray-400: #949d9d;
+  --gray-500: #6b7575;
+  --gray-600: #515a5a;
+  --gray-700: #3c4444;
+  --gray-800: #2a3030;
+  --gray-850: #212626;
+  --gray-900: #191d1d;
+  --gray-950: #101313;
+  --gray-1000: #000000;
+  --teal-50: #ecf7f5;
+  --teal-100: #d2eee9;
+  --teal-200: #a5dcd3;
+  --teal-300: #6fc3b6;
+  --teal-400: #3aa797;
+  --teal-500: #1d8b7c;
+  --teal-600: #137166;
+  --teal-700: #115d54;
+  --teal-800: #0f4b45;
+  --teal-900: #0d3d38;
+  --teal-950: #072421;
+  --green-50: #edf7ef;
+  --green-100: #d3eed9;
+  --green-200: #a6dcb2;
+  --green-300: #6fc184;
+  --green-400: #41a35a;
+  --green-500: #2a8643;
+  --green-600: #1f6d36;
+  --green-700: #1a572d;
+  --green-800: #164526;
+  --green-900: #12381f;
+  --green-950: #081f10;
+  --amber-50: #fdf6e6;
+  --amber-100: #fae8c0;
+  --amber-200: #f5d189;
+  --amber-300: #eeb44b;
+  --amber-400: #e2981f;
+  --amber-500: #c37b0c;
+  --amber-600: #9c5f08;
+  --amber-700: #7b4a0a;
+  --amber-800: #5f3a0c;
+  --amber-900: #482d0c;
+  --amber-950: #291805;
+  --red-50: #fdf0ee;
+  --red-100: #fadad5;
+  --red-200: #f3b3a9;
+  --red-300: #ea8574;
+  --red-400: #dc5946;
+  --red-500: #c63b28;
+  --red-600: #a52e1e;
+  --red-700: #84251a;
+  --red-800: #681f17;
+  --red-900: #4e1914;
+  --red-950: #2c0b08;
+  --blue-50: #eef3fc;
+  --blue-100: #d6e3f9;
+  --blue-200: #adc8f3;
+  --blue-300: #7ca6ea;
+  --blue-400: #4f84dc;
+  --blue-500: #3067c4;
+  --blue-600: #2552a4;
+  --blue-700: #1f4383;
+  --blue-800: #1b3667;
+  --blue-900: #172c51;
+  --blue-950: #0b172c;
+  --black-a40: rgba(0, 0, 0, 0.4);
+  --black-a60: rgba(0, 0, 0, 0.6);
+  --gray-950-a45: rgba(16, 19, 19, 0.45);
+
+  /* ---------- Primitives: space ---------- */
+  --space-0: 0;
+  --space-0-5: 0.125rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ---------- Primitives: fontSize ---------- */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.1875rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 1.875rem;
+  --font-size-3xl: 2.5rem;
+  --font-size-pt-8: 8pt;
+  --font-size-pt-9: 9pt;
+  --font-size-pt-10: 10pt;
+  --font-size-pt-12: 12pt;
+  --font-size-pt-16: 16pt;
+
+  /* ---------- Primitives: lineHeight ---------- */
+  --line-height-100: 1;
+  --line-height-120: 1.2;
+  --line-height-135: 1.35;
+  --line-height-150: 1.5;
+
+  /* ---------- Primitives: fontWeight ---------- */
+  --font-weight-400: 400;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+  --font-weight-700: 700;
+
+  /* ---------- Primitives: fontFamily ---------- */
+  --font-family-sans: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-mono: "Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ---------- Primitives: letterSpacing ---------- */
+  --letter-spacing-0: 0;
+  --letter-spacing-6: 0.06em;
+  --letter-spacing-neg-1: -0.01em;
+
+  /* ---------- Primitives: radius ---------- */
+  --radius-0: 0;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-10: 10px;
+  --radius-14: 14px;
+  --radius-full: 9999px;
+
+  /* ---------- Primitives: borderWidth ---------- */
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-3: 3px;
+
+  /* ---------- Primitives: size ---------- */
+  --size-4: 0.25rem;
+  --size-8: 0.5rem;
+  --size-16: 1rem;
+  --size-20: 1.25rem;
+  --size-24: 1.5rem;
+  --size-32: 2rem;
+  --size-40: 2.5rem;
+  --size-44: 2.75rem;
+  --size-48: 3rem;
+  --size-64: 4rem;
+  --size-80: 5rem;
+  --size-240: 15rem;
+  --size-320: 20rem;
+  --size-480: 30rem;
+  --size-560: 35rem;
+  --size-720: 45rem;
+  --size-1120: 70rem;
+  --size-em-0-2: 0.2em;
+  --size-a4-width: 210mm;
+  --size-a4-height: 297mm;
+  --size-mm-15: 15mm;
+  --size-mm-18: 18mm;
+  --size-mm-20: 20mm;
+
+  /* ---------- Primitives: shadow ---------- */
+  --shadow-0: none;
+  --shadow-1: 0 1px 2px rgba(16, 19, 19, 0.06), 0 1px 3px rgba(16, 19, 19, 0.08);
+  --shadow-2: 0 4px 12px rgba(16, 19, 19, 0.08), 0 1px 3px rgba(16, 19, 19, 0.06);
+  --shadow-3: 0 16px 40px rgba(16, 19, 19, 0.14), 0 2px 6px rgba(16, 19, 19, 0.08);
+  --shadow-dark-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-dark-2: 0 4px 12px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-dark-3: 0 16px 40px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.45);
+
+  /* ---------- Primitives: duration ---------- */
+  --duration-0: 0ms;
+  --duration-120: 120ms;
+  --duration-200: 200ms;
+  --duration-800: 800ms;
+  --duration-5000: 5000ms;
+
+  /* ---------- Primitives: easing ---------- */
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---------- Primitives: zIndex ---------- */
+  --z-0: 0;
+  --z-10: 10;
+  --z-100: 100;
+  --z-1000: 1000;
+
+  /* ---------- Primitives: breakpoint ---------- */
+  --breakpoint-480: 30rem;
+  --breakpoint-768: 48rem;
+  --breakpoint-1024: 64rem;
+
+  /* ---------- Semantic: space ---------- */
+  --space-inline-xs: var(--space-1); /* Gap between an icon and its label inside badges/tags. */
+  --space-inline-sm: var(--space-2); /* Gap between an icon and its label in buttons, between inline controls. */
+  --space-inline-md: var(--space-3); /* Gap between buttons in a group, between toolbar items. */
+  --space-inline-lg: var(--space-6); /* Gap between toolbar groups. */
+  --space-stack-xs: var(--space-1); /* Label to input, title to subtitle. */
+  --space-stack-sm: var(--space-2); /* Input to help/error text, items in a tight list. */
+  --space-stack-md: var(--space-4); /* Between form fields, paragraphs, card sections. */
+  --space-stack-lg: var(--space-6); /* Between page blocks (page header to content). */
+  --space-stack-xl: var(--space-10); /* Between major page sections. */
+  --space-inset-xs: var(--space-1); /* Padding of tiny elements (tooltip vertical, badge vertical). */
+  --space-inset-sm: var(--space-2); /* Padding of compact elements (day cell, tag). */
+  --space-inset-md: var(--space-4); /* Padding of cards, toasts, table cells (horizontal). */
+  --space-inset-lg: var(--space-6); /* Padding of modals, page sections, empty states. */
+  --space-inset-xl: var(--space-8); /* Padding of the CRA sheet preview on screen. */
+  --space-control-x-sm: var(--space-3); /* Horizontal padding, small controls. */
+  --space-control-x-md: var(--space-4); /* Horizontal padding, medium controls and inputs. */
+  --space-control-x-lg: var(--space-6); /* Horizontal padding, large controls. */
+  --space-table-cell-y: var(--space-3); /* Vertical padding of table cells. */
+  --space-calendar-gap: var(--space-2); /* Gap between calendar day cells (desktop). */
+  --space-calendar-gap-compact: var(--space-1); /* Gap between calendar day cells (mobile). */
+  --space-page-gutter: var(--space-8); /* Horizontal page padding (desktop). */
+  --space-page-gutter-compact: var(--space-4); /* Horizontal page padding (mobile), 16px gutter. */
+  --space-print-cell-y: var(--space-0-5); /* Vertical padding of CRA table cells (fits a full month on one A4 page). */
+  --space-print-section: var(--space-3); /* Gap between blocks of the CRA sheet. */
+
+  /* ---------- Semantic: radius ---------- */
+  --radius-control: var(--radius-6); /* Buttons, inputs, selects, checkboxes, day cells. */
+  --radius-card: var(--radius-10); /* Cards, tables, calendar, toasts, summary bar. */
+  --radius-modal: var(--radius-14); /* Modal dialog. */
+  --radius-tag: var(--radius-4); /* Tags, tooltips, kbd. */
+  --radius-pill: var(--radius-full); /* Badges, toggles, avatars. */
+  --radius-none: var(--radius-0); /* Printed document elements. */
+
+  /* ---------- Semantic: fontFamily ---------- */
+  --font-family-body: var(--font-family-sans); /* All UI text. */
+  --font-family-numeric: var(--font-family-mono); /* Totals, day counts, SIRET, dates in tables. */
+
+  /* ---------- Semantic: fontSize ---------- */
+  --font-size-display: var(--font-size-3xl); /* Display: calendar month title on desktop, empty-state hero. */
+  --font-size-heading-1: var(--font-size-2xl); /* Page title (h1). */
+  --font-size-heading-2: var(--font-size-xl); /* Section title (h2), modal title, summary total. */
+  --font-size-heading-3: var(--font-size-lg); /* Card title (h3). */
+  --font-size-body: var(--font-size-md); /* Body text, inputs, buttons (md). */
+  --font-size-small: var(--font-size-sm); /* Help text, table meta, small buttons, badges. */
+  --font-size-caption: var(--font-size-xs); /* Captions, day labels (Férié, ½), weekday headers on mobile. */
+  --font-size-print-body: var(--font-size-pt-10); /* Printed body and table text. */
+  --font-size-print-small: var(--font-size-pt-8); /* Printed footnotes, signature hints. */
+  --font-size-print-meta: var(--font-size-pt-9); /* Printed party blocks (freelance / client). */
+  --font-size-print-heading: var(--font-size-pt-16); /* Printed document title. */
+  --font-size-print-subheading: var(--font-size-pt-12); /* Printed section titles and total. */
+
+  /* ---------- Semantic: lineHeight ---------- */
+  --line-height-display: var(--line-height-120); /* Display and heading-1. */
+  --line-height-heading: var(--line-height-135); /* Headings 2-3. */
+  --line-height-body: var(--line-height-150); /* Body, small, caption. */
+  --line-height-control: var(--line-height-100); /* Single-line controls (height is set by size-control-*). */
+  --line-height-print: var(--line-height-135); /* CRA sheet text (compact, fits a month on one page). */
+
+  /* ---------- Semantic: letterSpacing ---------- */
+  --letter-spacing-caps: var(--letter-spacing-6); /* Uppercase eyebrows and role labels (CRA sheet). */
+  --letter-spacing-display: var(--letter-spacing-neg-1); /* Display text. */
+  --letter-spacing-normal: var(--letter-spacing-0); /* Everything else. */
+
+  /* ---------- Semantic: fontWeight ---------- */
+  --font-weight-regular: var(--font-weight-400); /* Body text. */
+  --font-weight-medium: var(--font-weight-500); /* Labels, nav links, table headers. */
+  --font-weight-semibold: var(--font-weight-600); /* Buttons, headings 2-3, badges. */
+  --font-weight-bold: var(--font-weight-700); /* Heading 1, display, totals. */
+
+  /* ---------- Semantic: borderWidth ---------- */
+  --border-width-default: var(--border-width-1); /* Every border and divider. */
+  --border-width-strong: var(--border-width-2); /* Selected/today ring, active nav underline, half-day border. */
+  --focus-ring-width: var(--border-width-2); /* Focus outline width. */
+  --focus-ring-offset: var(--border-width-2); /* Focus outline offset. */
+
+  /* ---------- Semantic: size ---------- */
+  --size-icon-sm: var(--size-16); /* Icons in small buttons, badges, inline text. */
+  --size-icon-md: var(--size-20); /* Icons in buttons, nav, inputs. */
+  --size-icon-lg: var(--size-24); /* Icons in toasts, modal header. */
+  --size-icon-xl: var(--size-48); /* Empty-state icon. */
+  --size-control-sm: var(--size-32); /* Height of small buttons/controls. */
+  --size-control-md: var(--size-40); /* Height of medium buttons, inputs, selects. */
+  --size-control-lg: var(--size-48); /* Height of large buttons. */
+  --size-touch-target: var(--size-44); /* Minimum hit area on touch devices (mobile nav, day cells). */
+  --size-checkbox: var(--size-20); /* Checkbox box size. */
+  --size-toggle-width: var(--size-40); /* Toggle track width. */
+  --size-toggle-height: var(--size-24); /* Toggle track height. */
+  --size-header-height: var(--size-64); /* App header height. */
+  --size-bottom-nav-height: var(--size-64); /* Mobile bottom navigation height. */
+  --size-day-min-height: var(--size-80); /* Calendar day cell minimum height (desktop). */
+  --size-day-min-height-compact: var(--size-48); /* Calendar day cell minimum height (mobile). */
+  --size-field-max-width: var(--size-560); /* Max width of forms. */
+  --size-field-min-width: var(--size-240); /* Min width of a column in a multi-column form row. */
+  --size-input-date-width: var(--size-240); /* Max width of date inputs. */
+  --size-hatch-stripe: var(--size-4); /* Stripe width of the leave/absence hatch pattern. */
+  --size-hatch-gap: var(--size-8); /* Repeat period of the leave/absence hatch pattern. */
+  --size-note-dot: var(--size-8); /* Diameter of the 'has note' dot on a day cell (mobile). */
+  --size-modal-width: var(--size-480); /* Modal width. */
+  --size-toast-width: var(--size-320); /* Toast width. */
+  --size-tooltip-max-width: var(--size-240); /* Tooltip max width. */
+  --size-empty-state-max-width: var(--size-480); /* Empty state text column. */
+  --size-container: var(--size-1120); /* Max width of page content. */
+  --size-link-underline-offset: var(--size-em-0-2); /* Distance between inline link text and its underline. */
+  --size-sheet-width: var(--size-a4-width); /* A4 sheet width (screen preview and print). */
+  --size-sheet-height: var(--size-a4-height); /* A4 sheet min height (screen preview). */
+  --size-sheet-padding: var(--size-mm-18); /* Inner margin of the A4 sheet preview on screen (mirrors @page margin). */
+  --size-signature-height: var(--size-mm-20); /* Height of each signature box. */
+  --size-print-margin: var(--size-mm-15); /* Documented value of @page margin (literal in @page, see print.md). */
+
+  /* ---------- Semantic: duration ---------- */
+  --duration-fast: var(--duration-120); /* Hover/focus color transitions. */
+  --duration-base: var(--duration-200); /* Modal/toast enter and leave. */
+  --duration-toast: var(--duration-5000); /* Auto-dismiss delay of non-error toasts. */
+  --duration-spinner: var(--duration-800); /* One rotation of the loading spinner. */
+  --duration-none: var(--duration-0); /* Used when prefers-reduced-motion: reduce. */
+
+  /* ---------- Semantic: easing ---------- */
+  --easing-default: var(--easing-standard); /* Every transition. */
+
+  /* ---------- Semantic: zIndex ---------- */
+  --z-base: var(--z-0); /* Default stacking. */
+  --z-sticky: var(--z-10); /* Sticky table headers, calendar weekday row. */
+  --z-header: var(--z-100); /* App header and mobile bottom nav. */
+  --z-toast: var(--z-1000); /* Toast stack (dialogs use the top layer, no z-index). */
+
+  /* ---------- Semantic: breakpoint ---------- */
+  /* Informational only: custom properties cannot be used in @media. Use the literal value + a comment. */
+  --breakpoint-mobile: var(--breakpoint-768); /* max-width: 47.99rem  -> phones: bottom nav, stacked tables, compact calendar. */
+  --breakpoint-tablet: var(--breakpoint-1024); /* max-width: 63.99rem  -> tablets: narrower gutters. */
+  --breakpoint-small: var(--breakpoint-480); /* max-width: 29.99rem  -> small phones: weekday initials only. */
+
+  /* ---------- Semantic: color (light) ---------- */
+  --color-bg: var(--gray-50);
+  --color-surface: var(--gray-0);
+  --color-surface-muted: var(--gray-100);
+  --color-surface-hover: var(--gray-100);
+  --color-surface-active: var(--gray-150);
+  --color-surface-overlay: var(--gray-0);
+  --color-backdrop: var(--gray-950-a45);
+  --color-border: var(--gray-200);
+  --color-border-strong: var(--gray-500);
+  --color-border-disabled: var(--gray-200);
+  --color-text: var(--gray-900);
+  --color-text-muted: var(--gray-600);
+  --color-text-disabled: var(--gray-400);
+  --color-text-inverse: var(--gray-0);
+  --color-text-link: var(--teal-700);
+  --color-text-link-hover: var(--teal-800);
+  --color-primary: var(--teal-600);
+  --color-primary-hover: var(--teal-700);
+  --color-primary-active: var(--teal-800);
+  --color-on-primary: var(--gray-0);
+  --color-primary-subtle: var(--teal-50);
+  --color-primary-subtle-hover: var(--teal-100);
+  --color-text-primary: var(--teal-700);
+  --color-border-primary: var(--teal-600);
+  --color-focus-ring: var(--teal-600);
+  --color-neutral-bg: var(--gray-100);
+  --color-neutral-text: var(--gray-700);
+  --color-neutral-border: var(--gray-200);
+  --color-success-bg: var(--green-50);
+  --color-success-text: var(--green-700);
+  --color-success-border: var(--green-200);
+  --color-success-solid: var(--green-600);
+  --color-warning-bg: var(--amber-50);
+  --color-warning-text: var(--amber-700);
+  --color-warning-border: var(--amber-200);
+  --color-warning-solid: var(--amber-400);
+  --color-error-bg: var(--red-50);
+  --color-error-text: var(--red-600);
+  --color-error-border: var(--red-200);
+  --color-error-solid: var(--red-600);
+  --color-error-solid-hover: var(--red-700);
+  --color-on-error: var(--gray-0);
+  --color-info-bg: var(--blue-50);
+  --color-info-text: var(--blue-700);
+  --color-info-border: var(--blue-200);
+  --color-info-solid: var(--blue-600);
+  --color-tooltip-bg: var(--gray-900);
+  --color-day-bg: var(--gray-0);
+  --color-day-border: var(--gray-200);
+  --color-day-text: var(--gray-900);
+  --color-day-hover-bg: var(--gray-100);
+  --color-day-worked-bg: var(--teal-600);
+  --color-day-worked-hover-bg: var(--teal-700);
+  --color-day-worked-text: var(--gray-0);
+  --color-day-half-bg: var(--teal-100);
+  --color-day-half-border: var(--teal-600);
+  --color-day-weekend-bg: var(--gray-100);
+  --color-day-weekend-text: var(--gray-600);
+  --color-day-holiday-bg: var(--amber-50);
+  --color-day-holiday-text: var(--amber-700);
+  --color-day-holiday-border: var(--amber-300);
+  --color-day-off-bg: var(--gray-100);
+  --color-day-off-hatch: var(--gray-200);
+  --color-day-off-text: var(--gray-700);
+  --color-day-today-ring: var(--teal-600);
+  --color-day-today-bg: var(--teal-600);
+  --color-day-today-text: var(--gray-0);
+  --color-day-today-inverse-bg: var(--gray-0);
+  --color-day-today-inverse-text: var(--teal-700);
+  --color-day-outside-text: var(--gray-400);
+  --color-paper-bg: var(--gray-0);
+  --color-paper-text: var(--gray-1000);
+  --color-paper-text-muted: var(--gray-600);
+  --color-paper-rule: var(--gray-500);
+  --color-paper-rule-light: var(--gray-300);
+  --color-paper-fill: var(--gray-100);
+  --color-paper-accent: var(--teal-700);
+
+  /* ---------- Semantic: elevation (light) ---------- */
+  --elevation-flat: var(--shadow-0);
+  --elevation-raised: var(--shadow-1);
+  --elevation-overlay: var(--shadow-2);
+  --elevation-modal: var(--shadow-3);
+}
+
+/* Dark theme, automatic: follows the OS unless the user forced light. Screen only. */
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: var(--gray-950);
+    --color-surface: var(--gray-900);
+    --color-surface-muted: var(--gray-850);
+    --color-surface-hover: var(--gray-800);
+    --color-surface-active: var(--gray-700);
+    --color-surface-overlay: var(--gray-850);
+    --color-backdrop: var(--black-a60);
+    --color-border: var(--gray-800);
+    --color-border-disabled: var(--gray-800);
+    --color-text: var(--gray-50);
+    --color-text-muted: var(--gray-400);
+    --color-text-disabled: var(--gray-600);
+    --color-text-inverse: var(--gray-950);
+    --color-text-link: var(--teal-300);
+    --color-text-link-hover: var(--teal-200);
+    --color-primary: var(--teal-400);
+    --color-primary-hover: var(--teal-300);
+    --color-primary-active: var(--teal-200);
+    --color-on-primary: var(--gray-950);
+    --color-primary-subtle: var(--teal-950);
+    --color-primary-subtle-hover: var(--teal-900);
+    --color-text-primary: var(--teal-300);
+    --color-border-primary: var(--teal-400);
+    --color-focus-ring: var(--teal-300);
+    --color-neutral-bg: var(--gray-800);
+    --color-neutral-text: var(--gray-200);
+    --color-neutral-border: var(--gray-700);
+    --color-success-bg: var(--green-950);
+    --color-success-text: var(--green-300);
+    --color-success-border: var(--green-800);
+    --color-success-solid: var(--green-400);
+    --color-warning-bg: var(--amber-950);
+    --color-warning-text: var(--amber-300);
+    --color-warning-border: var(--amber-800);
+    --color-error-bg: var(--red-950);
+    --color-error-text: var(--red-300);
+    --color-error-border: var(--red-800);
+    --color-error-solid: var(--red-400);
+    --color-error-solid-hover: var(--red-300);
+    --color-on-error: var(--gray-950);
+    --color-info-bg: var(--blue-950);
+    --color-info-text: var(--blue-300);
+    --color-info-border: var(--blue-800);
+    --color-info-solid: var(--blue-400);
+    --color-tooltip-bg: var(--gray-100);
+    --color-day-bg: var(--gray-900);
+    --color-day-border: var(--gray-800);
+    --color-day-text: var(--gray-50);
+    --color-day-hover-bg: var(--gray-800);
+    --color-day-worked-bg: var(--teal-400);
+    --color-day-worked-hover-bg: var(--teal-300);
+    --color-day-worked-text: var(--gray-950);
+    --color-day-half-bg: var(--teal-900);
+    --color-day-half-border: var(--teal-400);
+    --color-day-weekend-bg: var(--gray-850);
+    --color-day-weekend-text: var(--gray-400);
+    --color-day-holiday-bg: var(--amber-950);
+    --color-day-holiday-text: var(--amber-300);
+    --color-day-holiday-border: var(--amber-700);
+    --color-day-off-bg: var(--gray-850);
+    --color-day-off-hatch: var(--gray-700);
+    --color-day-off-text: var(--gray-300);
+    --color-day-today-ring: var(--teal-300);
+    --color-day-today-bg: var(--teal-400);
+    --color-day-today-text: var(--gray-950);
+    --color-day-today-inverse-bg: var(--gray-950);
+    --color-day-today-inverse-text: var(--teal-300);
+    --color-day-outside-text: var(--gray-600);
+    --elevation-raised: var(--shadow-dark-1);
+    --elevation-overlay: var(--shadow-dark-2);
+    --elevation-modal: var(--shadow-dark-3);
+  }
+}
+
+/* Dark theme, manual choice (<html data-theme="dark">). Screen only. */
+@media screen {
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-bg: var(--gray-950);
+    --color-surface: var(--gray-900);
+    --color-surface-muted: var(--gray-850);
+    --color-surface-hover: var(--gray-800);
+    --color-surface-active: var(--gray-700);
+    --color-surface-overlay: var(--gray-850);
+    --color-backdrop: var(--black-a60);
+    --color-border: var(--gray-800);
+    --color-border-disabled: var(--gray-800);
+    --color-text: var(--gray-50);
+    --color-text-muted: var(--gray-400);
+    --color-text-disabled: var(--gray-600);
+    --color-text-inverse: var(--gray-950);
+    --color-text-link: var(--teal-300);
+    --color-text-link-hover: var(--teal-200);
+    --color-primary: var(--teal-400);
+    --color-primary-hover: var(--teal-300);
+    --color-primary-active: var(--teal-200);
+    --color-on-primary: var(--gray-950);
+    --color-primary-subtle: var(--teal-950);
+    --color-primary-subtle-hover: var(--teal-900);
+    --color-text-primary: var(--teal-300);
+    --color-border-primary: var(--teal-400);
+    --color-focus-ring: var(--teal-300);
+    --color-neutral-bg: var(--gray-800);
+    --color-neutral-text: var(--gray-200);
+    --color-neutral-border: var(--gray-700);
+    --color-success-bg: var(--green-950);
+    --color-success-text: var(--green-300);
+    --color-success-border: var(--green-800);
+    --color-success-solid: var(--green-400);
+    --color-warning-bg: var(--amber-950);
+    --color-warning-text: var(--amber-300);
+    --color-warning-border: var(--amber-800);
+    --color-error-bg: var(--red-950);
+    --color-error-text: var(--red-300);
+    --color-error-border: var(--red-800);
+    --color-error-solid: var(--red-400);
+    --color-error-solid-hover: var(--red-300);
+    --color-on-error: var(--gray-950);
+    --color-info-bg: var(--blue-950);
+    --color-info-text: var(--blue-300);
+    --color-info-border: var(--blue-800);
+    --color-info-solid: var(--blue-400);
+    --color-tooltip-bg: var(--gray-100);
+    --color-day-bg: var(--gray-900);
+    --color-day-border: var(--gray-800);
+    --color-day-text: var(--gray-50);
+    --color-day-hover-bg: var(--gray-800);
+    --color-day-worked-bg: var(--teal-400);
+    --color-day-worked-hover-bg: var(--teal-300);
+    --color-day-worked-text: var(--gray-950);
+    --color-day-half-bg: var(--teal-900);
+    --color-day-half-border: var(--teal-400);
+    --color-day-weekend-bg: var(--gray-850);
+    --color-day-weekend-text: var(--gray-400);
+    --color-day-holiday-bg: var(--amber-950);
+    --color-day-holiday-text: var(--amber-300);
+    --color-day-holiday-border: var(--amber-700);
+    --color-day-off-bg: var(--gray-850);
+    --color-day-off-hatch: var(--gray-700);
+    --color-day-off-text: var(--gray-300);
+    --color-day-today-ring: var(--teal-300);
+    --color-day-today-bg: var(--teal-400);
+    --color-day-today-text: var(--gray-950);
+    --color-day-today-inverse-bg: var(--gray-950);
+    --color-day-today-inverse-text: var(--teal-300);
+    --color-day-outside-text: var(--gray-600);
+    --elevation-raised: var(--shadow-dark-1);
+    --elevation-overlay: var(--shadow-dark-2);
+    --elevation-modal: var(--shadow-dark-3);
+  }
+}
+
+/* Reduced motion: every duration collapses to 0. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: var(--duration-0);
+    --duration-base: var(--duration-0);
+  }
+}

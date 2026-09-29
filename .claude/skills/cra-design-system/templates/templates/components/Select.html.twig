@@ -1,0 +1,17 @@
+{#
+ # Select - native <select> with a decorative chevron. Use inside <twig:Field> (or with a
+ # visually-hidden <label>). options: [{value, label}], value: the selected value.
+ #}
+{% props id, options = [], name = null, value = null, placeholder = null, invalid = false, describedBy = null %}
+<span class="select">
+    <select id="{{ id }}" name="{{ name ?? id }}"
+        {%- if invalid %} aria-invalid="true"{% endif %}
+        {%- if describedBy %} aria-describedby="{{ describedBy }}"{% endif %}
+        {{ attributes.defaults({class: 'input'}) }}>
+        {% if placeholder %}<option value="">{{ placeholder }}</option>{% endif %}
+        {% for option in options %}
+            <option value="{{ option.value }}"{% if option.value ~ '' == value ~ '' %} selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+    </select>
+    <twig:ux:icon name="lucide:chevron-down" class="icon select__chevron" />
+</span>

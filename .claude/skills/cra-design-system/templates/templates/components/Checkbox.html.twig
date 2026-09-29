@@ -1,0 +1,11 @@
+{#
+ # Checkbox - boolean choice with its label on the right.
+ #}
+{% props id, label, name = null, value = '1', checked = false, invalid = false %}
+<label class="checkbox" for="{{ id }}">
+    <input type="checkbox" id="{{ id }}" name="{{ name ?? id }}" value="{{ value }}"
+        {%- if checked %} checked{% endif %}
+        {%- if invalid %} aria-invalid="true"{% endif %}
+        {{ attributes.defaults({class: 'checkbox__input'}) }}>
+    <span class="checkbox__label">{{ label }}</span>
+</label>

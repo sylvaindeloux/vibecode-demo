@@ -1,0 +1,25 @@
+{#
+ # Calendar:Summary - total worked days (full + half / 2), breakdown and the CTA to the
+ # printable CRA. Values are server-rendered, then kept up to date by the calendar controller.
+ #}
+{% props month, printUrl = null %}
+{%- set counts = month.counts -%}
+<div {{ attributes.defaults({class: 'calendar-summary'}) }}>
+    <div class="calendar-summary__figures">
+        <p class="calendar-summary__total">
+            <span class="calendar-summary__value" data-calendar-target="summaryValue" data-key="total">{{ counts.total|format_number(locale: app.request.locale) }}</span>
+            <span class="calendar-summary__unit" data-calendar-target="summaryValue" data-key="unit">{{ 'calendar.summary.unit'|trans({count: counts.total}) }}</span>
+        </p>
+        <dl class="calendar-summary__breakdown">
+            <div><dt>{{ 'calendar.summary.full'|trans }}</dt><dd data-calendar-target="summaryValue" data-key="full">{{ counts.full }}</dd></div>
+            <div><dt>{{ 'calendar.summary.half'|trans }}</dt><dd data-calendar-target="summaryValue" data-key="half">{{ counts.half }}</dd></div>
+            <div><dt>{{ 'calendar.summary.off'|trans }}</dt><dd data-calendar-target="summaryValue" data-key="off">{{ counts.off }}</dd></div>
+            <div><dt>{{ 'calendar.summary.workdays'|trans }}</dt><dd>{{ month.workdayCount }}</dd></div>
+        </dl>
+    </div>
+    {% if printUrl %}
+        <div class="calendar-summary__actions">
+            <twig:Button variant="primary" :href="printUrl" icon="lucide:file-text">{{ 'calendar.summary.open_cra'|trans }}</twig:Button>
+        </div>
+    {% endif %}
+</div>

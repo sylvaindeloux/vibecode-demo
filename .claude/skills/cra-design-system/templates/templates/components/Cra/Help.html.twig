@@ -1,0 +1,15 @@
+{#
+ # Cra:Help - screen-only instructions to save the CRA as PDF from the browser print dialog.
+ #}
+<aside class="cra-help" data-print-hide aria-labelledby="cra-help-title">
+    <twig:ux:icon name="lucide:info" class="icon cra-help__icon" />
+    <div>
+        <p class="cra-help__title" id="cra-help-title">{{ 'cra.help.title'|trans }}</p>
+        <ol>
+            <li>{{ 'cra.help.step_print'|trans }}</li>
+            <li>{{ 'cra.help.step_destination'|trans }}</li>
+            <li>{{ 'cra.help.step_headers'|trans }}</li>
+            <li>{{ 'cra.help.step_save'|trans }}</li>
+        </ol>
+    </div>
+</aside>

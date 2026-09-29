@@ -1,0 +1,23 @@
+{#
+ # Modal - native <dialog> + `modal` Stimulus controller.
+ # Open it with a trigger: data-controller="modal-trigger" data-action="modal-trigger#open"
+ #                         data-modal-trigger-id-param="<id>"
+ # Blocks: content (body), footer (buttons). variant: default | danger.
+ #}
+{% props id, title, icon = null, variant = 'default', openOnConnect = false %}
+<dialog id="{{ id }}" aria-labelledby="{{ id }}-title" {{ attributes.defaults({
+    class: 'modal' ~ (variant == 'danger' ? ' modal--danger' : ''),
+    'data-controller': 'modal',
+    'data-action': 'modal:open->modal#open click->modal#backdropClose turbo:before-cache@document->modal#close',
+    'data-modal-open-on-connect-value': openOnConnect ? 'true' : 'false',
+}) }}>
+    <header class="modal__header">
+        {% if icon %}<span class="modal__icon" aria-hidden="true"><twig:ux:icon :name="icon" class="icon" /></span>{% endif %}
+        <h2 class="modal__title" id="{{ id }}-title">{{ title }}</h2>
+        <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:x" :label="'action.close'|trans" class="modal__close" data-action="modal#close" />
+    </header>
+    <div class="modal__body">{% block content %}{% endblock %}</div>
+    {% if block('footer') is defined %}
+        <footer class="modal__footer">{{ block('footer') }}</footer>
+    {% endif %}
+</dialog>

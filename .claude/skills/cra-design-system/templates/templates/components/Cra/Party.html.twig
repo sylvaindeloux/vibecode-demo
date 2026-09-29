@@ -1,0 +1,14 @@
+{#
+ # Cra:Party - one party block of the CRA (freelance or client).
+ # party: {name, company?, siret?, address?, contactName?, contactEmail?, email?}
+ #}
+{% props role, party %}
+<section class="cra-party" aria-label="{{ role }}">
+    <p class="cra-party__role">{{ role }}</p>
+    <p class="cra-party__name">{{ party.name }}</p>
+    {% if party.company ?? null %}<p>{{ party.company }}</p>{% endif %}
+    {% if party.address ?? null %}<address>{{ party.address }}</address>{% endif %}
+    {% if party.siret ?? null %}<p>{{ 'cra.siret'|trans }} <span class="cra-party__id">{{ party.siret }}</span></p>{% endif %}
+    {% if party.contactName ?? null %}<p>{{ 'cra.contact'|trans }} {{ party.contactName }}{% if party.contactEmail ?? null %} · {{ party.contactEmail }}{% endif %}</p>{% endif %}
+    {% if party.email ?? null %}<p>{{ party.email }}</p>{% endif %}
+</section>
