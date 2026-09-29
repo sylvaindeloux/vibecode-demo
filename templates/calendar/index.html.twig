@@ -1,7 +1,45 @@
+{#
+ # Calendar (home page). Route: app_calendar
+ # Variables:
+ #   clients    Client[] sorted by name (ClientPicker), empty when there is no client
+ #   client     selected Client, null when there is no client
+ #   month      CalendarMonth view model (references/calendar.md#view-model), null when there is no client
+ #   save_url   URL of the day-states endpoint (app_calendar_save)
+ #   print_url  URL of the printable CRA (app_cra) for this client and month
+ #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Calendrier · EasyCRA{% endblock %}
+{% block title %}Calendrier{% if month %} – {{ month.label }}{% endif %} · EasyCRA{% endblock %}
 
 {% block body %}
-    <twig:PageHeader title="Calendrier" />
+    {# Blocks cannot be conditional in Twig: branch around the whole component instead. #}
+    {% if clients is empty %}
+        <twig:PageHeader title="Calendrier" subtitle="Cochez vos jours travaillés, puis ouvrez votre CRA pour l’enregistrer en PDF." />
+    {% else %}
+        <twig:PageHeader title="Calendrier" subtitle="Cochez vos jours travaillés, puis ouvrez votre CRA pour l’enregistrer en PDF.">
+            <twig:block name="actions">
+                <twig:ClientPicker :clients="clients" :selected="client.id ?? null" :action="path('app_calendar')" :params="{month: month.id}" />
+            </twig:block>
+        </twig:PageHeader>
+    {% endif %}
+
+    {% if client is null %}
+        <twig:EmptyState
+            icon="lucide:users"
+            title="Ajoutez votre premier client"
+            message="Le calendrier se remplit mission par mission. Créez un client pour commencer à cocher vos jours."
+        >
+            <twig:block name="actions">
+                <twig:Button variant="primary" icon="lucide:user-plus" :href="path('app_client_new')">Ajouter un client</twig:Button>
+            </twig:block>
+        </twig:EmptyState>
+    {% else %}
+        <twig:Calendar
+            :month="month"
+            :saveUrl="save_url"
+            :csrfToken="csrf_token('calendar')"
+            :printUrl="print_url"
+            :clientId="client.id"
+        />
+    {% endif %}
 {% endblock %}

@@ -54,13 +54,13 @@ Checks run before every commit (`composer check`):
 - Files: `src/Controller/ClientController.php`, `src/Form/ClientType.php`, `templates/client/{index,form}.html.twig`, `tests/Controller/ClientControllerTest.php`.
 - Done when: functional tests cover the list (sorted, empty state), create, edit, validation errors (422), 404 on unknown id, delete with a valid token (303, cascade on day entries), without token (403), GET on the delete URL (405).
 
-### [ ] F7. Calendar page (US-05)
+### [x] F7. Calendar page (US-05)
 
 - Goal: show the monthly calendar of one client, with client and month resolution (BR-12, BR-13).
 - Files: `src/Controller/CalendarController.php` (`index`), `src/Repository/DayEntryRepository.php` (entries of a month), `templates/calendar/index.html.twig`, `tests/Controller/CalendarControllerTest.php`.
 - Done when: functional tests cover the current month by default, `client` and `month` query parameters, the cookie (write and read, stale cookie ignored), 404 on unknown client or invalid month, the empty state without any client, holidays and today in the grid.
 
-### [ ] F8. Saving days (US-06, US-07, US-08, US-09)
+### [x] F8. Saving days (US-06, US-07, US-08, US-09)
 
 - Goal: the JSON endpoint used by the design-system Stimulus controller (spec section 5.3).
 - Files: `src/Controller/CalendarController.php` (`save`), `src/Calendar/{DaysInput,DayInput}.php` (DTOs), `src/Repository/DayEntryRepository.php` (upsert and delete, BR-05), `tests/Controller/CalendarSaveTest.php`.
@@ -93,3 +93,7 @@ Checks run before every commit (`composer check`):
 | P-09 | Reset script | `doctrine:database:drop --if-exists` is not supported by the SQLite platform (DBAL 4 lists databases). `--force` alone drops the file and succeeds when it is missing, so the script of spec 6.2 is written without `--if-exists`. |
 | P-10 | Schema validation | `doctrine:schema:validate` compares the mapping with the dev database, so `composer check` needs a database created from the current mapping: run `composer reset` after any change of the model (D-12). The CI workflow runs it before `composer check`. |
 | P-11 | "Today" | The Europe/Paris date of the day is needed by the calendar, the CRA and the fixtures: one small `App\Calendar\Today` service wraps the Symfony clock, with the time zone as a class constant (spec 7.5). |
+| P-12 | F7 and F8 in one commit | The calendar page needs the URL of the save endpoint (`save_url`), so the page and the endpoint are delivered in the same commit, with the tests of both. |
+| P-13 | Date outside the month | The DTOs cannot know the month of the URL, and the spec wants the controller to only check the token and delegate. `DayEntryRepository::save()` throws `UnprocessableEntityHttpException` before any write, which the kernel turns into the 422 of spec 5.3. |
+| P-14 | Token checked after the payload | `#[MapRequestPayload]` resolves and validates the body before the action runs, so a request with an invalid token and an invalid body answers 400 or 422 rather than 403. Every case of the spec table (one problem at a time) answers as specified. |
+| P-15 | Calendar page title without client | The reference screen reads `month.label` in the `<title>`, which does not exist when there is no client (spec 5.2: the calendar is not built). The page template makes that part of the title conditional; the design-system copy in `templates/examples/` is untouched. |
