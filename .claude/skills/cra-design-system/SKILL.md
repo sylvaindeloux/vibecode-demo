@@ -1,6 +1,6 @@
 ---
 name: cra-design-system
-description: Design system of EasyCRA, the CRA app (French freelancers' monthly activity report, Symfony + Twig Components + Stimulus + Turbo + AssetMapper). Use it for ANY creation or change of UI in this app - Twig templates or pages, Twig Components, CSS or design tokens, Stimulus controllers, Symfony form rendering, icons, UI texts/translations, the calendar, or the printable CRA page - even for a small tweak.
+description: Design system of EasyCRA, the CRA app (French freelancers' monthly activity report, Symfony + Twig Components + Stimulus + Turbo + AssetMapper). Use it for ANY creation or change of UI in this app - Twig templates or pages, Twig Components, CSS or design tokens, Stimulus controllers, Symfony form rendering, icons, UI texts, the calendar, or the printable CRA page - even for a small tweak.
 ---
 
 # EasyCRA design system
@@ -15,17 +15,17 @@ Calm, clean, professional but friendly: a tool opened once a month and closed af
 4. **Interactions only through Stimulus.** No `<script>` in templates, no `on*=` attributes, no `style=` set from JS. Controllers toggle attributes (`data-*`, `aria-*`); CSS does the visuals.
 5. **CRA page = check the print preview.** Any change touching the CRA page, `Cra:*` components, `cra-document.css`, `print.css`, tokens used by them or `base.html.twig` must be checked on screen **and** in print preview (checklist in `references/print.md`).
 6. **All states and accessibility, every time.** Implement every state of a component (hover, focus-visible, active, disabled, loading, invalid, empty…), keyboard operation, labels and ARIA as specified; contrast ≥ 4.5:1 for text (3:1 for UI marks) in both themes; color is never the only cue.
-7. **Texts in French through translations; code in English.** UI strings via `|trans` with keys in `translations/messages+intl-icu.fr.yaml` (validation: `validators+intl-icu.fr.yaml`). Class names, props, tokens, keys, comments, commits: English.
+7. **Texts in French, written where they are used; code in English.** The app has one language: write UI strings directly in the templates, form types, constraints and controllers. No translation key, no `|trans`, no translation file. Class names, props, tokens, comments, commits: English.
 
 ## How to work
 
 1. Identify the page/component in `references/screens.md` and `references/components.md`; open the matching example in `templates/templates/examples/`.
 2. Compose with existing components; follow their props, blocks and Do/Don't.
 3. Style with semantic tokens in the component's own CSS file (BEM: `.block__element--modifier`, states in attributes), registered in `assets/styles/app.css` (`components` layer).
-4. Add translation keys for every new text.
+4. Write every new text in French, in the file that shows it, with French typography (`references/foundations.md`, "Typography").
 5. Verify, then report what you checked:
    - `php <skill-dir>/scripts/check-styles.php` from the project root (tokens in sync, only semantic tokens, no literals) must print `OK`;
-   - `php bin/console lint:twig templates` and `php bin/console debug:translation fr --only-missing`;
+   - `php bin/console lint:twig templates`;
    - look at the page (or `/_design-system/<screen>` in dev) in light, dark, 390px wide, keyboard only; CRA: print preview.
 
 ## Where to look
@@ -37,7 +37,7 @@ Calm, clean, professional but friendly: a tool opened once a month and closed af
 | `references/calendar.md` | anything about the calendar: day states, view model, keyboard, ARIA, summary, persistence endpoint, Live Component variant, French holidays |
 | `references/print.md` | anything about the printable CRA: structure, `<title>`/file name, A4, print CSS, page breaks, browser support, verification checklist |
 | `references/screens.md` | building or changing a page: routes, composition, fields, controller variables, flows |
-| `references/symfony-integration.md` | installing the system, Twig Component / Stimulus / Turbo / form theme / translations / UX Icons conventions, AssetMapper CSS organisation, file layout |
+| `references/symfony-integration.md` | installing the system, Twig Component / Stimulus / Turbo / form theme / UI texts / UX Icons conventions, AssetMapper CSS organisation, file layout |
 | `tokens/tokens.json` | source of truth of tokens (primitive + semantic, light/dark); edit first when a value changes |
 | `tokens/tokens.css` | same tokens as CSS custom properties; copy to `assets/styles/tokens.css` |
 | `scripts/check-styles.php` | after every CSS/token change (`php <skill-dir>/scripts/check-styles.php [project-root]`) |
@@ -49,8 +49,7 @@ Calm, clean, professional but friendly: a tool opened once a month and closed af
 | `templates/templates/components/` | all Twig Components (Button, Field, DataTable, Calendar/*, Cra/*, Modal…) |
 | `templates/templates/form/theme.html.twig` | Symfony form theme (labels, help, errors, widgets, toggle, segmented) |
 | `templates/templates/examples/` | reference screens: `calendar`, `cra_print`, `client_index` (list + empty + delete dialog), `client_form`, `profile` |
-| `templates/translations/` | French strings (ICU) and validation messages |
-| `templates/config/packages/` | `twig.yaml` (form theme), `ux_icons.yaml`, `translation.yaml` |
+| `templates/config/packages/` | `twig.yaml` (form theme), `ux_icons.yaml`, `translation.yaml` (locale `fr`, no translation file) |
 | `templates/src/` | calendar view model + `FrenchHolidays`, `ToggleType`, dev gallery `DesignSystemController` (`/_design-system`) |
 
 ## Quick reference
@@ -59,6 +58,6 @@ Calm, clean, professional but friendly: a tool opened once a month and closed af
 - Buttons: `<twig:Button variant="primary|secondary|ghost|danger" size="sm|md|lg" icon="lucide:…" href="…">Texte</twig:Button>`; icon-only needs `iconOnly` + `label`.
 - Icons: `<twig:ux:icon name="lucide:calendar-days" class="icon" />` (Lucide only).
 - Forms: Symfony `form_row()` with the global theme; standalone controls: `<twig:Field>` + `<twig:Input|Select|Textarea>`.
-- Feedback: flash `addFlash('success', 'translation.key')` → toast; confirmation of destructive actions → `<twig:ConfirmDialog>`.
+- Feedback: flash `addFlash('success', 'Client ajouté.')` → toast; confirmation of destructive actions → `<twig:ConfirmDialog>`.
 - Breakpoints (literal in `@media`, comment the token): mobile `max-width: 47.99rem`, tablet `63.99rem`, small `29.99rem`.
 - Screen-only elements on the CRA page: `data-print-hide`.

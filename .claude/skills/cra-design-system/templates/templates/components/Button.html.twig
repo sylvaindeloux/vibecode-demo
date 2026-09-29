@@ -41,5 +41,5 @@
         <span class="button__label">{% block content %}{{ label }}{% endblock %}</span>
     {%- endif -%}
     {%- if iconEnd %}<twig:ux:icon :name="iconEnd" class="icon button__icon" />{% endif -%}
-    {%- if loading %}<span class="visually-hidden">{{ 'a11y.loading'|trans }}</span>{% endif -%}
+    {%- if loading %}<span class="visually-hidden">Chargement…</span>{% endif -%}
 </{{ isLink ? 'a' : 'button' }}>

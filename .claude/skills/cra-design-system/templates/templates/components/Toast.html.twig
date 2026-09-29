@@ -17,5 +17,5 @@
         <p class="toast__title" data-toast-slot="title">{{ title }}</p>
         {% if message is not null %}<p class="toast__message" data-toast-slot="message">{{ message }}</p>{% endif %}
     </div>
-    <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:x" :label="'action.close_notification'|trans" data-action="toast#close" />
+    <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:x" label="Fermer la notification" data-action="toast#close" />
 </div>

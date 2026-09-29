@@ -4,11 +4,11 @@
  #}
 {% props state, kind, holidayName = null %}
 {%- if state == 'full' -%}
-    <twig:ux:icon name="lucide:check" class="icon" />{{ 'calendar.label.full'|trans }}
+    <twig:ux:icon name="lucide:check" class="icon" />Journée
 {%- elseif state == 'half' -%}
-    {{ 'calendar.label.half'|trans }}
+    ½ j
 {%- elseif state == 'off' -%}
-    <twig:ux:icon name="lucide:tree-palm" class="icon" />{{ 'calendar.label.off'|trans }}
+    <twig:ux:icon name="lucide:tree-palm" class="icon" />Congé
 {%- elseif kind == 'holiday' -%}
     <twig:ux:icon name="lucide:flag" class="icon" /><span data-slot="holiday">{{ holidayName }}</span>
 {%- endif -%}

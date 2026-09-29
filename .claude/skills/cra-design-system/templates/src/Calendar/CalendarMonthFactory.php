@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
-
 /**
  * Builds the CalendarMonth view model. Reference implementation: adapt the URL callback
  * and the source of day entries to the application.
  */
-final readonly class CalendarMonthFactory
+final class CalendarMonthFactory
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     /**
      * @param array<string, array{state: string, note?: string}> $entries saved days, keyed by 'Y-m-d'
      * @param callable(string $monthId): string                   $urlFor     URL of the calendar for a month ('Y-m')
@@ -59,7 +53,7 @@ final readonly class CalendarMonthFactory
                 state: \in_array($entry['state'] ?? null, CalendarDay::STATES, true) ? $entry['state'] : CalendarDay::STATE_EMPTY,
                 note: (string) ($entry['note'] ?? ''),
                 isToday: $key === $today->format('Y-m-d'),
-                holidayName: isset($holidays[$key]) && $inMonth ? $this->translator->trans($holidays[$key]) : null,
+                holidayName: $inMonth ? ($holidays[$key] ?? null) : null,
                 label: (string) $dayFormatter->format($date),
             );
 

@@ -12,7 +12,7 @@ namespace App\Calendar;
 final class FrenchHolidays
 {
     /**
-     * @return array<string, string> date ('Y-m-d') => translation key of the holiday name
+     * @return array<string, string> date ('Y-m-d') => French name of the holiday
      */
     public static function forYear(int $year, bool $alsaceMoselle = false): array
     {
@@ -20,22 +20,22 @@ final class FrenchHolidays
         $relative = static fn (int $days): string => $easter->modify(sprintf('%+d days', $days))->format('Y-m-d');
 
         $holidays = [
-            sprintf('%d-01-01', $year) => 'holiday.new_year',
-            $relative(1) => 'holiday.easter_monday',
-            sprintf('%d-05-01', $year) => 'holiday.labour_day',
-            sprintf('%d-05-08', $year) => 'holiday.victory_1945',
-            $relative(39) => 'holiday.ascension',
-            $relative(50) => 'holiday.whit_monday',
-            sprintf('%d-07-14', $year) => 'holiday.bastille_day',
-            sprintf('%d-08-15', $year) => 'holiday.assumption',
-            sprintf('%d-11-01', $year) => 'holiday.all_saints',
-            sprintf('%d-11-11', $year) => 'holiday.armistice',
-            sprintf('%d-12-25', $year) => 'holiday.christmas',
+            sprintf('%d-01-01', $year) => 'Jour de l’an',
+            $relative(1) => 'Lundi de Pâques',
+            sprintf('%d-05-01', $year) => 'Fête du Travail',
+            sprintf('%d-05-08', $year) => 'Victoire 1945',
+            $relative(39) => 'Ascension',
+            $relative(50) => 'Lundi de Pentecôte',
+            sprintf('%d-07-14', $year) => 'Fête nationale',
+            sprintf('%d-08-15', $year) => 'Assomption',
+            sprintf('%d-11-01', $year) => 'Toussaint',
+            sprintf('%d-11-11', $year) => 'Armistice 1918',
+            sprintf('%d-12-25', $year) => 'Noël',
         ];
 
         if ($alsaceMoselle) {
-            $holidays[$relative(-2)] = 'holiday.good_friday';
-            $holidays[sprintf('%d-12-26', $year)] = 'holiday.st_stephen';
+            $holidays[$relative(-2)] = 'Vendredi saint';
+            $holidays[sprintf('%d-12-26', $year)] = 'Saint-Étienne';
         }
 
         ksort($holidays);

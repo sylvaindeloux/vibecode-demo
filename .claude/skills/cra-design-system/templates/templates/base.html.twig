@@ -12,12 +12,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="light dark">
-    <title>{% block title %}{{ 'app.name'|trans }}{% endblock %}</title>
+    <title>{% block title %}EasyCRA{% endblock %}</title>
     <link rel="preload" href="{{ asset('fonts/AtkinsonHyperlegibleNext-Variable.woff2') }}" as="font" type="font/woff2" crossorigin>
     {% block importmap %}{{ importmap('app') }}{% endblock %}
 </head>
 <body>
-    <a class="skip-link" href="#main">{{ 'a11y.skip_to_content'|trans }}</a>
+    <a class="skip-link" href="#main">Aller au contenu</a>
 
     <twig:AppHeader :theme="theme" data-print-hide />
 

@@ -7,13 +7,13 @@
  #}
 {% extends 'base.html.twig' %}
 
-{% set title = client ? 'client.form.edit_title'|trans({name: client.name}) : 'client.form.new_title'|trans %}
+{% set title = client ? 'Modifier ' ~ client.name : 'Nouveau client' %}
 
-{% block title %}{{ title }} · {{ 'app.name'|trans }}{% endblock %}
+{% block title %}{{ title }} · EasyCRA{% endblock %}
 {% block page_modifier %} page--narrow{% endblock %}
 
 {% block body %}
-    <twig:PageHeader :title="title" :subtitle="'client.form.subtitle'|trans" />
+    <twig:PageHeader :title="title" subtitle="Ces informations figurent sur le CRA remis au client." />
 
     <twig:Card>
         {{ form_start(form) }}
@@ -26,8 +26,8 @@
             </div>
             {{ form_row(form.mission) }}
             <div class="form-actions">
-                <twig:Button type="submit" variant="primary" icon="lucide:check">{{ 'action.save'|trans }}</twig:Button>
-                <twig:Button variant="ghost" :href="path('app_client_index')">{{ 'action.cancel'|trans }}</twig:Button>
+                <twig:Button type="submit" variant="primary" icon="lucide:check">Enregistrer</twig:Button>
+                <twig:Button variant="ghost" :href="path('app_client_index')">Annuler</twig:Button>
             </div>
         {{ form_end(form) }}
     </twig:Card>

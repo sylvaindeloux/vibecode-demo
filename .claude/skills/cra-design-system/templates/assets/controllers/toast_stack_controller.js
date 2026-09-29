@@ -9,7 +9,7 @@ import { Controller } from '@hotwired/stimulus';
  *   }));
  *
  * Each tone has a <template data-toast-stack-target="template" data-tone="…"> rendered by Twig
- * (icon + translated close label), so no markup or text is hard-coded here.
+ * (icon + close label), so no markup or text is hard-coded here.
  */
 export default class extends Controller {
     static targets = ['template'];

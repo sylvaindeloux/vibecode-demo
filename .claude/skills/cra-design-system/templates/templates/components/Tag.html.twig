@@ -7,7 +7,7 @@
     {%- if icon %}<twig:ux:icon :name="icon" class="icon" />{% endif -%}
     <span class="tag__label">{% block content %}{% endblock %}</span>
     {%- if removable -%}
-        <button type="button" class="tag__remove" aria-label="{{ removeLabel ?? 'action.remove'|trans }}">
+        <button type="button" class="tag__remove" aria-label="{{ removeLabel ?? 'Retirer' }}">
             <twig:ux:icon name="lucide:x" class="icon" />
         </button>
     {%- endif -%}

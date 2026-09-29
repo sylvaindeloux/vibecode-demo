@@ -31,7 +31,7 @@ export default class extends Controller {
         url: String,
         csrfToken: String,
         readonly: Boolean,
-        labels: Object, // translated strings, see <twig:Calendar> (states, units, messages)
+        labels: Object, // French texts, see <twig:Calendar> (states, units, messages)
     };
 
     connect() {

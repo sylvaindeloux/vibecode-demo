@@ -6,13 +6,13 @@
 {% props days, total %}
 {%- set locale = app.request.locale -%}
 <table class="cra-days">
-    <caption class="visually-hidden">{{ 'cra.table.caption'|trans }}</caption>
+    <caption class="visually-hidden">Jours travaillés du mois</caption>
     <thead>
         <tr>
-            <th scope="col">{{ 'cra.table.date'|trans }}</th>
-            <th scope="col">{{ 'cra.table.weekday'|trans }}</th>
-            <th scope="col" class="cra-days__qty">{{ 'cra.table.quantity'|trans }}</th>
-            <th scope="col">{{ 'cra.table.note'|trans }}</th>
+            <th scope="col">Date</th>
+            <th scope="col">Jour</th>
+            <th scope="col" class="cra-days__qty">Temps (j)</th>
+            <th scope="col">Commentaire</th>
         </tr>
     </thead>
     <tbody>
@@ -24,14 +24,14 @@
                 <td class="cra-days__note">{{ day.note }}</td>
             </tr>
         {% else %}
-            <tr><td colspan="4">{{ 'cra.table.empty'|trans }}</td></tr>
+            <tr><td colspan="4">Aucun jour travaillé ce mois-ci.</td></tr>
         {% endfor %}
     </tbody>
     <tfoot>
         <tr>
-            <th scope="row" colspan="2">{{ 'cra.table.total'|trans }}</th>
+            <th scope="row" colspan="2">Total</th>
             <td class="cra-days__qty">{{ total|format_number(locale: locale) }}</td>
-            <td>{{ 'calendar.summary.unit'|trans({count: total}) }}</td>
+            <td>{{ total < 2 ? 'jour travaillé' : 'jours travaillés' }}</td>
         </tr>
     </tfoot>
 </table>

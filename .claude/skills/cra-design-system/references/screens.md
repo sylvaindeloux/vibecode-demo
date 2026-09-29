@@ -38,18 +38,18 @@ Purpose: produce the PDF attached to the invoice.
 
 Screen: `Cra:Toolbar` (← Retour au calendrier · "CRA - Client - Mois" · Imprimer / Enregistrer en PDF), `Cra:Help` (4 steps), `Cra:Sheet` (A4 paper preview). Print: only the sheet. `<title>` = PDF file name. Everything in **print.md**.
 
-Controller: 404 if the client does not belong to the user; build `cra` from the profile, the client and the month's `full`/`half` entries; allow empty months (the table says so).
+Controller: 404 if the client does not exist; while the profile is incomplete, redirect to `app_profile` with the warning flash "Complétez votre profil pour ouvrir le CRA."; build `cra` from the profile, the client and the month's `full`/`half` entries; allow empty months (the table says so).
 
 ## 3. Clients
 
 ### 3a. Liste
 
 1. `PageHeader` "Clients" + subtitle + primary "Ajouter un client" (`plus`).
-2. `DataTable` caption "Liste des clients", columns Nom du client (primary cell, link to edit) · Contact (name + muted e-mail) · Nom de la mission (or neutral Badge "Aucune mission") · actions (visually hidden header): icon-only ghost `sm` Edit (`pencil`, link) and Delete (`trash-2`, opens the ConfirmDialog), each in a decorative Tooltip, labels "Modifier {name}" / "Supprimer {name}".
+2. `DataTable` caption "Liste des clients", columns Nom du client (primary cell, link to edit) · Contact (name + muted e-mail) · Nom de la mission · actions (visually hidden header): icon-only ghost `sm` Edit (`pencil`, link) and Delete (`trash-2`, opens the ConfirmDialog), each in a decorative Tooltip, labels "Modifier {name}" / "Supprimer {name}".
 3. Mobile: rows become cards.
 4. `dialogs` block: one `ConfirmDialog` `#confirm-delete-client` ("Supprimer ce client ?", subject = client name, "Ses jours saisis seront aussi supprimés. Cette action est définitive.", danger "Supprimer le client", CSRF `delete-client`).
 
-After delete: flash `client.flash.deleted` + redirect (303) to the list.
+After delete: flash "Client supprimé." + redirect (303) to the list.
 
 ### 3b. Liste vide
 
@@ -64,9 +64,9 @@ After delete: flash `client.flash.deleted` + redirect (303) to the list.
 | Nom du client (`name`) | TextType | yes | NotBlank "Indiquez le nom du client." |
 | Adresse (`address`) | TextareaType | no | help "Telle qu’elle doit apparaître sur le CRA." |
 | Nom du contact (`contactName`) + E-mail du contact (`contactEmail`) | TextType + EmailType, side by side in `.form__row` | no | Email "Cette adresse e-mail n’est pas valide (exemple : prenom@societe.fr)." |
-| Nom de la mission (`mission`) | TextType | yes | help "Par exemple : « Refonte du back-office »." NotBlank |
+| Nom de la mission (`mission`) | TextType | yes | help "Par exemple : « Refonte du back-office »." NotBlank "Indiquez le nom de la mission." |
 
-Actions: primary "Enregistrer" (`check`) + ghost "Annuler" (back to list). Invalid submit: HTTP 422, errors under each field (reference shows two). Success: flash `client.flash.created|updated`, redirect to the list.
+Actions: primary "Enregistrer" (`check`) + ghost "Annuler" (back to list). Invalid submit: HTTP 422, errors under each field (reference shows two). Success: flash "Client ajouté." or "Client mis à jour.", redirect to the list.
 
 ### 3d. Suppression
 
@@ -78,12 +78,18 @@ ConfirmDialog (see 3a); never delete on GET; no "undo" promise.
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| Nom et prénom (`name`) + Société (`company`) | TextType ×2 in `.form__row` | yes / no | |
-| SIRET (`siret`) | TextType, `inputmode="numeric"`, class `input--numeric` | yes | help "14 chiffres, visibles sur votre avis de situation Insee."; validate 14 digits (spaces allowed), message `profile.siret.invalid` |
-| Adresse (`address`) | TextareaType | yes | multi-line, printed as is |
-| E-mail (`email`) | EmailType | no | help "Affiché sur le CRA si renseigné." |
+| Nom et prénom (`name`) + Société (`company`) | TextType ×2 in `.form__row` | yes / no | NotBlank "Indiquez votre nom." |
+| SIRET (`siret`) | TextType, `inputmode="numeric"`, class `input--numeric` | yes | help "14 chiffres, visibles sur votre avis de situation Insee."; see below |
+| Adresse (`address`) | TextareaType | yes | multi-line, printed as is; NotBlank "Indiquez votre adresse." |
+| E-mail (`email`) | EmailType | no | help "Affiché sur le CRA si renseigné."; Email "Cette adresse e-mail n’est pas valide (exemple : prenom@societe.fr)." |
 
-Action: primary "Enregistrer". Success: flash `profile.flash.updated`, stay on the page.
+SIRET:
+
+- Input: spaces are allowed. Storage: the 14 digits only.
+- Display: always in groups of 3, 3, 3 and 5 digits (`812 345 678 00013`), in the field (data transformer of the form type) and on the CRA (`Cra:Party`).
+- Validation: exactly 14 digits, "Le SIRET compte 14 chiffres."; then the Luhn checksum, "Ce numéro SIRET n’est pas valide : vérifiez les chiffres saisis."
+
+Action: primary "Enregistrer". Success: flash "Profil enregistré.", stay on the page.
 
 ## Screen-level rules
 

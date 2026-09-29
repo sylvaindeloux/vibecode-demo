@@ -7,11 +7,11 @@
  #}
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'cra.document_title'|trans({client: cra.client.name|replace({'/': '-', '\\': '-', ':': '-'}), month: cra.monthLabel}) }}{% endblock %}
+{% block title %}CRA - {{ cra.client.name|replace({'/': '-', '\\': '-', ':': '-'}) }} - {{ cra.monthLabel }}{% endblock %}
 
 {% block body %}
     <div class="cra-screen">
-        <twig:Cra:Toolbar :backUrl="back_url" :title="'cra.document_title'|trans({client: cra.client.name, month: cra.monthLabel})" />
+        <twig:Cra:Toolbar :backUrl="back_url" title="CRA - {{ cra.client.name }} - {{ cra.monthLabel }}" />
         <twig:Cra:Help />
         <twig:Cra:Sheet :cra="cra" />
     </div>

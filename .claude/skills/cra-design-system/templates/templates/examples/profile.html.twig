@@ -5,11 +5,11 @@
  #}
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'profile.title'|trans }} · {{ 'app.name'|trans }}{% endblock %}
+{% block title %}Profil · EasyCRA{% endblock %}
 {% block page_modifier %} page--narrow{% endblock %}
 
 {% block body %}
-    <twig:PageHeader :title="'profile.title'|trans" :subtitle="'profile.subtitle'|trans" />
+    <twig:PageHeader title="Profil" subtitle="Vos informations, telles qu’elles apparaissent sur chaque CRA." />
 
     <twig:Card>
         {{ form_start(form) }}
@@ -22,7 +22,7 @@
             {{ form_row(form.address) }}
             {{ form_row(form.email) }}
             <div class="form-actions">
-                <twig:Button type="submit" variant="primary" icon="lucide:check">{{ 'action.save'|trans }}</twig:Button>
+                <twig:Button type="submit" variant="primary" icon="lucide:check">Enregistrer</twig:Button>
             </div>
         {{ form_end(form) }}
     </twig:Card>

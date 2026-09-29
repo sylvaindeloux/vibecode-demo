@@ -12,19 +12,25 @@
  # Stimulus: calendar_controller.js (keyboard grid, states, day dialog, quick actions, summary).
  #}
 {% props month, saveUrl = null, csrfToken = null, printUrl = null, readonly = false, clientId = null %}
-{%- set states = ['empty', 'full', 'half', 'off'] -%}
-{%- set stateLabels = {} -%}
-{%- for state in states %}{% set stateLabels = stateLabels|merge({(state): ('calendar.state.' ~ state)|trans}) %}{% endfor -%}
+{# Texts used by the controller; `states` also names the state in the accessible name of each day. #}
 {%- set labels = {
-    states: stateLabels,
-    unit: {one: 'calendar.summary.unit'|trans({count: 1}), other: 'calendar.summary.unit'|trans({count: 2})},
-    note: 'calendar.note'|trans,
-    total: 'calendar.summary.total'|trans,
-    daysUpdated: 'calendar.days_updated'|trans,
-    saveError: 'calendar.save_error'|trans,
-    saveErrorHint: 'calendar.save_error_hint'|trans,
+    states: {empty: 'Non travaillé', full: 'Journée complète', half: 'Demi-journée', off: 'Congé ou absence'},
+    unit: {one: 'jour travaillé', other: 'jours travaillés'},
+    note: 'Note',
+    total: 'Total',
+    daysUpdated: 'Jours mis à jour',
+    saveError: 'Enregistrement impossible',
+    saveErrorHint: 'Vos dernières modifications ont été annulées. Vérifiez votre connexion et réessayez.',
 } -%}
-{%- set weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] -%}
+{%- set weekdays = [
+    {long: 'lundi', short: 'Lun', initial: 'L'},
+    {long: 'mardi', short: 'Mar', initial: 'M'},
+    {long: 'mercredi', short: 'Mer', initial: 'M'},
+    {long: 'jeudi', short: 'Jeu', initial: 'J'},
+    {long: 'vendredi', short: 'Ven', initial: 'V'},
+    {long: 'samedi', short: 'Sam', initial: 'S'},
+    {long: 'dimanche', short: 'Dim', initial: 'D'},
+] -%}
 <section {{ attributes.defaults({
     class: 'calendar',
     'aria-labelledby': 'calendar-title',
@@ -37,16 +43,16 @@
 
     <twig:Calendar:Toolbar :month="month" :readonly="readonly" :clientId="clientId" />
 
-    <p id="calendar-instructions" class="visually-hidden">{{ 'calendar.instructions'|trans }}</p>
+    <p id="calendar-instructions" class="visually-hidden">Grille du mois. Flèches pour changer de jour, Entrée pour cocher, N pour ajouter une note. Liste des raccourcis sous le calendrier.</p>
 
     <table class="calendar__grid" role="grid" aria-labelledby="calendar-title" aria-describedby="calendar-instructions"{% if readonly %} aria-readonly="true"{% endif %}>
         <thead>
             <tr role="row">
                 {% for weekday in weekdays %}
                     <th role="columnheader" scope="col" class="calendar__weekday">
-                        <abbr title="{{ ('calendar.weekday.' ~ weekday ~ '.long')|trans }}">
-                            <span class="calendar__weekday-long">{{ ('calendar.weekday.' ~ weekday ~ '.short')|trans }}</span>
-                            <span class="calendar__weekday-short">{{ ('calendar.weekday.' ~ weekday ~ '.initial')|trans }}</span>
+                        <abbr title="{{ weekday.long }}">
+                            <span class="calendar__weekday-long">{{ weekday.short }}</span>
+                            <span class="calendar__weekday-short">{{ weekday.initial }}</span>
                         </abbr>
                     </th>
                 {% endfor %}
@@ -56,7 +62,7 @@
             {% for week in month.weeks %}
                 <tr role="row">
                     {% for day in week %}
-                        <twig:Calendar:Day :day="day" :tabbable="day.date == month.focusDate" />
+                        <twig:Calendar:Day :day="day" :stateLabel="labels.states[day.state]" :tabbable="day.date == month.focusDate" />
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -70,15 +76,15 @@
     <twig:Calendar:Legend />
 
     <details class="calendar__help" data-print-hide>
-        <summary>{{ 'calendar.shortcuts.title'|trans }}</summary>
+        <summary>Raccourcis clavier</summary>
         <dl>
-            <dt><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></dt><dd>{{ 'calendar.shortcuts.move'|trans }}</dd>
-            <dt><kbd>{{ 'calendar.shortcuts.enter_key'|trans }}</kbd> / <kbd>{{ 'calendar.shortcuts.space_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.cycle'|trans }}</dd>
-            <dt><kbd>J</kbd> <kbd>D</kbd> <kbd>C</kbd></dt><dd>{{ 'calendar.shortcuts.set'|trans }}</dd>
-            <dt><kbd>{{ 'calendar.shortcuts.delete_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.clear'|trans }}</dd>
-            <dt><kbd>N</kbd></dt><dd>{{ 'calendar.shortcuts.note'|trans }}</dd>
-            <dt><kbd>{{ 'calendar.shortcuts.home_key'|trans }}</kbd> / <kbd>{{ 'calendar.shortcuts.end_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.week_edges'|trans }}</dd>
-            <dt><kbd>{{ 'calendar.shortcuts.page_up_key'|trans }}</kbd> / <kbd>{{ 'calendar.shortcuts.page_down_key'|trans }}</kbd></dt><dd>{{ 'calendar.shortcuts.months'|trans }}</dd>
+            <dt><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Changer de jour</dd>
+            <dt><kbd>Entrée</kbd> / <kbd>Espace</kbd></dt><dd>Journée → demi-journée → non travaillé</dd>
+            <dt><kbd>J</kbd> <kbd>D</kbd> <kbd>C</kbd></dt><dd>Journée complète, demi-journée, congé</dd>
+            <dt><kbd>Suppr</kbd></dt><dd>Non travaillé</dd>
+            <dt><kbd>N</kbd></dt><dd>Modifier le jour (type et note)</dd>
+            <dt><kbd>Début</kbd> / <kbd>Fin</kbd></dt><dd>Début ou fin de semaine (Ctrl : du mois)</dd>
+            <dt><kbd>Page préc.</kbd> / <kbd>Page suiv.</kbd></dt><dd>Mois précédent ou suivant</dd>
         </dl>
     </details>
 
@@ -97,11 +103,11 @@
 
     {% if not readonly %}
         <twig:Calendar:DayDialog />
-        <twig:Modal id="calendar-clear-confirm" variant="danger" icon="lucide:eraser" :title="'calendar.clear.title'|trans">
-            <p>{{ 'calendar.clear.message'|trans({month: month.label}) }}</p>
+        <twig:Modal id="calendar-clear-confirm" variant="danger" icon="lucide:eraser" title="Vider le mois ?">
+            <p>Tous les jours cochés et toutes les notes de {{ month.label }} seront effacés.</p>
             <twig:block name="footer">
-                <twig:Button data-action="modal#close" data-modal-target="initialFocus">{{ 'action.cancel'|trans }}</twig:Button>
-                <twig:Button variant="danger" icon="lucide:eraser" data-action="calendar#clearMonth modal#close">{{ 'calendar.clear.confirm'|trans }}</twig:Button>
+                <twig:Button data-action="modal#close" data-modal-target="initialFocus">Annuler</twig:Button>
+                <twig:Button variant="danger" icon="lucide:eraser" data-action="calendar#clearMonth modal#close">Vider le mois</twig:Button>
             </twig:block>
         </twig:Modal>
     {% endif %}

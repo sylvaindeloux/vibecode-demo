@@ -76,14 +76,14 @@ Built server-side (`CalendarMonthFactory::create()`), rendered by Twig, then upd
 | `state` | `empty` · `full` · `half` · `off` | user input |
 | `note` | `'Démo client (après-midi)'` | ≤ 140 chars, printed on the CRA |
 | `isToday` | `false` | |
-| `holidayName` | `'Armistice 1918'` | translated (`holiday.*` keys), holidays only |
+| `holidayName` | `'Armistice 1918'` | French name given by `FrenchHolidays`, holidays only |
 | `label` | `'vendredi 13 novembre 2026'` | IntlDateFormatter `EEEE d MMMM y`, start of the accessible name |
 
 Quantity of a day: `full` = 1, `half` = 0.5, others = 0. **Total = full + half / 2.** `off` (leave/absence) is informative: counted in the summary, not printed in the CRA table.
 
 ### French public holidays
 
-`FrenchHolidays::forYear($year, $alsaceMoselle = false)`: 1er janvier, lundi de Pâques, 1er mai, 8 mai, Ascension, lundi de Pentecôte, 14 juillet, 15 août, 1er novembre, 11 novembre, 25 décembre; Alsace-Moselle adds Vendredi saint and 26 décembre (expose it as a profile setting if needed). Holiday names are translation keys `holiday.*`. A holiday on a weekend keeps `kind: holiday`.
+`FrenchHolidays::forYear($year, $alsaceMoselle = false)`: 1er janvier, lundi de Pâques, 1er mai, 8 mai, Ascension, lundi de Pentecôte, 14 juillet, 15 août, 1er novembre, 11 novembre, 25 décembre; Alsace-Moselle adds Vendredi saint and 26 décembre (expose it as a profile setting if needed). It returns the French name of each holiday, keyed by date. A holiday on a weekend keeps `kind: holiday`.
 
 ## Day cell states
 
@@ -112,6 +112,8 @@ State rules are declared after kind rules: **a worked weekend or holiday looks w
 | Saving | `[data-pending]` | `cursor: progress` | — |
 
 Visible labels are decorative (`aria-hidden`); the button's `aria-label` carries everything: `"{label}[, jour férié : {name}][, week-end][, aujourd’hui], {state}[, Note : {note}]"`.
+
+The names of the states ("Non travaillé", "Journée complète", "Demi-journée", "Congé ou absence") are written once, in `labels.states` of `Calendar.html.twig`. `Calendar` gives them to the controller (`labels` value) and to each `Calendar:Day` (prop `stateLabel`), so the accessible name is the same whether the server or the controller wrote it.
 
 Layout: desktop cells ≥ `size-day-min-height` (80px), gap `space-calendar-gap`, number top-left, label bottom-left. Mobile (< 768px): cells ≥ 48px, gap 4px, labels hidden (fills, split, hatch and borders remain), note as a dot, weekday initials under 480px.
 
@@ -163,7 +165,7 @@ Modal "Modifier le jour": date line, SegmentedControl "Type de journée" (Journ�
 
 ## Summary bar (`Calendar:Summary`)
 
-`{total} {jour(s) travaillé(s)}` in `font-family-numeric` `font-size-heading-1` `color-text-primary`, breakdown (`Journées complètes`, `Demi-journées`, `Congés`, `Jours ouvrés du mois`), primary CTA "Voir le CRA imprimable". Server-rendered, then recomputed by the controller after each change (`data-calendar-target="summaryValue"` + `data-key`). Numbers formatted with `Intl.NumberFormat(lang)` (`12,5`), unit with `Intl.PluralRules` (French: "0 jour", "1,5 jour", "2 jours" — ICU key `calendar.summary.unit`). Sticky at the bottom of the viewport on desktop (`elevation-raised`); static on mobile.
+`{total} {jour(s) travaillé(s)}` in `font-family-numeric` `font-size-heading-1` `color-text-primary`, breakdown (`Journées complètes`, `Demi-journées`, `Congés`, `Jours ouvrés du mois`), primary CTA "Voir le CRA imprimable". Server-rendered, then recomputed by the controller after each change (`data-calendar-target="summaryValue"` + `data-key`). Numbers formatted with `Intl.NumberFormat(lang)` (`12,5`), unit with `Intl.PluralRules` (French: "0 jour", "1,5 jour", "2 jours"; both forms are in `labels.unit`, and the server uses the singular under 2). Sticky at the bottom of the viewport on desktop (`elevation-raised`); static on mobile.
 
 ## Persistence
 
@@ -199,4 +201,4 @@ Choose one mode per project; do not mix persistence mechanisms.
 - Do: route every new day appearance through `data-*` + CSS tokens (`color-day-*`); add a legend entry and a `DayLabel` branch.
 - Don't: add a second focusable element inside a day cell (breaks the grid pattern): use the selection bar / dialog.
 - Don't: show a day's state with color only, or hide the kind (holiday/weekend) from the accessible name.
-- Don't: hard-code French strings in the controller: pass them through the `labels` value (built from translations in `Calendar.html.twig`).
+- Don't: hard-code French strings in the controller: pass them through the `labels` value (written in `Calendar.html.twig`).

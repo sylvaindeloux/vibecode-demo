@@ -14,7 +14,7 @@
     <header class="modal__header">
         {% if icon %}<span class="modal__icon" aria-hidden="true"><twig:ux:icon :name="icon" class="icon" /></span>{% endif %}
         <h2 class="modal__title" id="{{ id }}-title">{{ title }}</h2>
-        <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:x" :label="'action.close'|trans" class="modal__close" data-action="modal#close" />
+        <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:x" label="Fermer" class="modal__close" data-action="modal#close" />
     </header>
     <div class="modal__body">{% block content %}{% endblock %}</div>
     {% if block('footer') is defined %}

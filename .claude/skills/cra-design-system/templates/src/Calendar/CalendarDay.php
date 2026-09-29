@@ -28,7 +28,7 @@ final readonly class CalendarDay
         public string $state,         // STATE_*
         public string $note,          // '' when none, max 140 chars
         public bool $isToday,
-        public ?string $holidayName,  // translated name, holidays only
+        public ?string $holidayName,  // French name, holidays only
         public string $label,         // 'lundi 14 septembre 2026' (localized, accessible name)
     ) {
     }

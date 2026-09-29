@@ -8,7 +8,7 @@ Files: `templates/examples/cra_print.html.twig`, `templates/components/Cra/*.htm
 
 ```twig
 {% extends 'base.html.twig' %}
-{% block title %}{{ 'cra.document_title'|trans({client: …, month: cra.monthLabel}) }}{% endblock %}
+{% block title %}CRA - {{ … }} - {{ cra.monthLabel }}{% endblock %}
 {% block body %}
     <div class="cra-screen">
         <twig:Cra:Toolbar :backUrl="…" :title="…" />   {# screen only #}
@@ -20,7 +20,7 @@ Files: `templates/examples/cra_print.html.twig`, `templates/components/Cra/*.htm
 
 ### `<title>` = PDF file name
 
-Browsers propose the page title as the PDF file name. Always set it to `CRA - {client} - {Mois AAAA}` (key `cra.document_title`, e.g. `CRA - Pharmacie Lumière - Novembre 2026`):
+Browsers propose the page title as the PDF file name. Always set it to `CRA - {client} - {Mois AAAA}` (e.g. `CRA - Pharmacie Lumière - Novembre 2026`):
 
 - month capitalised (`ucfirst` of IntlDateFormatter `LLLL y`);
 - characters invalid in file names (`/ \ :`) replaced by `-` in the client name;
@@ -33,7 +33,7 @@ Browsers propose the page title as the PDF file name. Always set it to `CRA - {c
 | `monthLabel` | `'Novembre 2026'` |
 | `periodStart`, `periodEnd` | `'2026-11-01'`, `'2026-11-30'` |
 | `mission` | `'Refonte du back-office'` |
-| `freelancer` | `{name, company, siret, address (multi-line), email}` — from the Profile |
+| `freelancer` | `{name, company, siret, address (multi-line), email}` — from the Profile; `siret` is 14 digits without spaces |
 | `client` | `{name, address, contactName, contactEmail}` |
 | `days` | `[{date: '2026-11-02', quantity: 1, note: ''}, …]` — `full` (1) and `half` (0.5) days only, chronological |
 | `total` | `11.5` (sum of quantities) |
@@ -42,7 +42,7 @@ Browsers propose the page title as the PDF file name. Always set it to `CRA - {c
 ## Sheet content (in order)
 
 1. **Header**: eyebrow "COMPTE RENDU D’ACTIVITÉ" (`color-paper-accent`, caps, `letter-spacing-caps`), month as `<h1>` (`font-size-print-heading` 16pt); right: Mission, Période (dd/MM/yyyy – dd/MM/yyyy), Jours travaillés, Établi le. 2px black rule under.
-2. **Parties**: two framed blocks side by side — Prestataire (name, company, address, SIRET in mono, email) and Client (name, address, contact).
+2. **Parties**: two framed blocks side by side — Prestataire (name, company, address, SIRET in mono and in groups of 3, 3, 3 and 5 digits: `812 345 678 00013`, email) and Client (name, address, contact).
 3. **Days table** (`Cra:DaysTable`): Date (mono, dd/MM/yyyy) · Jour (capitalised weekday) · Temps (j) (mono, right-aligned, `1` / `0,5`) · Commentaire (note, muted). Header row with 2px bottom rule; light rules between rows; **total row** in `tfoot` (2px top rule, 12pt bold, `22,5 jours travaillés`). Empty month: one row "Aucun jour travaillé ce mois-ci."
 4. **Signatures**: two columns "Le prestataire" / "Le client", name, box `size-signature-height` (20mm) with `color-paper-rule` border, hint "Date, nom et signature".
 
@@ -52,7 +52,7 @@ A full month (23 rows including worked weekends) fits on **one** A4 page; longer
 
 - `.cra-screen`: toolbar (Back ghost button, document name, PrintButton), help panel (`color-info-*`), then the sheet.
 - `.cra-sheet`: `size-sheet-width` (210mm) × min `size-sheet-height` (297mm), padding `size-sheet-padding` (18mm ≈ `@page` margin), `color-paper-bg`, `elevation-overlay`, square corners. It uses **only `color-paper-*` tokens and print font sizes (pt)**, so it stays white with black text in dark theme and matches the printout.
-- Help text (`Cra:Help`, keys `cra.help.*`): click the button; choose "Enregistrer au format PDF"; in "Plus de paramètres" uncheck "En-têtes et pieds de page"; save (the file name is already right).
+- Help text (`Cra:Help`): click the button; choose "Enregistrer au format PDF"; in "Plus de paramètres" uncheck "En-têtes et pieds de page"; save (the file name is already right).
 - Mobile: toolbar title hidden, sheet reflows to the screen width (min-height removed, padding `space-inset-md`, parties and signatures stacked, table scrolls horizontally if needed).
 
 ## Print stylesheet (`print.css`)

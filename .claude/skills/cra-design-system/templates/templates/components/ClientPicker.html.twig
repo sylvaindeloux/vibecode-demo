@@ -8,8 +8,8 @@
 <form method="get" action="{{ action }}" {{ attributes.defaults({class: 'client-picker', 'data-controller': 'autosubmit'}) }}>
     {% for key, value in params %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
     <label class="client-picker__label" for="client-picker">
-        <twig:ux:icon name="lucide:briefcase" class="icon" />{{ 'client_picker.label'|trans }}
+        <twig:ux:icon name="lucide:briefcase" class="icon" />Mission
     </label>
     <twig:Select id="client-picker" :name="name" :options="options" :value="selected" data-action="autosubmit#submit" />
-    <twig:Button type="submit" size="sm" class="autosubmit-fallback">{{ 'action.apply'|trans }}</twig:Button>
+    <twig:Button type="submit" size="sm" class="autosubmit-fallback">Afficher</twig:Button>
 </form>

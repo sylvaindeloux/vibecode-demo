@@ -30,13 +30,15 @@ final class DesignSystemController extends AbstractController
     private const CLIENTS = [
         ['id' => 1, 'name' => 'Pharmacie Lumière', 'contactName' => 'Claire Martin', 'contactEmail' => 'claire.martin@pharmacie-lumiere.fr', 'mission' => 'Refonte du back-office', 'address' => "12 rue de la Paix\n75002 Paris"],
         ['id' => 2, 'name' => 'Atelier Numérique', 'contactName' => 'Hugo Bernard', 'contactEmail' => 'hugo@atelier-numerique.fr', 'mission' => 'Audit de performance', 'address' => "4 quai des Chartrons\n33000 Bordeaux"],
-        ['id' => 3, 'name' => 'Coopérative Horizon', 'contactName' => 'Inès Robert', 'contactEmail' => null, 'mission' => null, 'address' => "8 place Bellecour\n69002 Lyon"],
+        ['id' => 3, 'name' => 'Coopérative Horizon', 'contactName' => 'Inès Robert', 'contactEmail' => null, 'mission' => 'Accompagnement technique', 'address' => "8 place Bellecour\n69002 Lyon"],
     ];
 
+    // The SIRET is fictitious: it passes the Luhn check on its 14 digits, but its SIREN part
+    // (first 9 digits) does not, so it cannot belong to a real company.
     private const FREELANCER = [
         'name' => 'Camille Durand',
         'company' => 'Durand Conseil SASU',
-        'siret' => '812 345 678 00019',
+        'siret' => '81234567800013',
         'address' => "25 rue des Lilas\n75020 Paris",
         'email' => 'camille@durand-conseil.fr',
     ];
@@ -123,12 +125,12 @@ final class DesignSystemController extends AbstractController
     #[Route('/clients/form', name: 'client_form')]
     public function clientForm(): Response
     {
-        $form = $this->createFormBuilder(null, ['csrf_protection' => false, 'translation_domain' => 'messages'])
-            ->add('name', TextType::class, ['label' => 'client.field.name', 'constraints' => [new Assert\NotBlank(message: 'client.name.not_blank')]])
-            ->add('address', TextareaType::class, ['label' => 'client.field.address', 'required' => false, 'help' => 'client.field.address_help'])
-            ->add('contactName', TextType::class, ['label' => 'client.field.contact_name', 'required' => false])
-            ->add('contactEmail', EmailType::class, ['label' => 'client.field.contact_email', 'required' => false, 'constraints' => [new Assert\Email(message: 'client.contact_email.invalid')]])
-            ->add('mission', TextType::class, ['label' => 'client.field.mission', 'help' => 'client.field.mission_help', 'constraints' => [new Assert\NotBlank(message: 'client.mission.not_blank')]])
+        $form = $this->createFormBuilder(null, ['csrf_protection' => false, 'translation_domain' => false])
+            ->add('name', TextType::class, ['label' => 'Nom du client', 'constraints' => [new Assert\NotBlank(message: 'Indiquez le nom du client.')]])
+            ->add('address', TextareaType::class, ['label' => 'Adresse', 'required' => false, 'help' => 'Telle qu’elle doit apparaître sur le CRA.'])
+            ->add('contactName', TextType::class, ['label' => 'Nom du contact', 'required' => false])
+            ->add('contactEmail', EmailType::class, ['label' => 'E-mail du contact', 'required' => false, 'constraints' => [new Assert\Email(message: 'Cette adresse e-mail n’est pas valide (exemple : prenom@societe.fr).')]])
+            ->add('mission', TextType::class, ['label' => 'Nom de la mission', 'help' => 'Par exemple : « Refonte du back-office ».', 'constraints' => [new Assert\NotBlank(message: 'Indiquez le nom de la mission.')]])
             ->getForm();
 
         // Submitted with invalid data, to show validation errors.
@@ -140,12 +142,13 @@ final class DesignSystemController extends AbstractController
     #[Route('/profile', name: 'profile')]
     public function profile(): Response
     {
-        $form = $this->createFormBuilder(self::FREELANCER, ['csrf_protection' => false, 'translation_domain' => 'messages'])
-            ->add('name', TextType::class, ['label' => 'profile.field.name'])
-            ->add('company', TextType::class, ['label' => 'profile.field.company', 'required' => false])
-            ->add('siret', TextType::class, ['label' => 'profile.field.siret', 'help' => 'profile.field.siret_help', 'attr' => ['inputmode' => 'numeric', 'autocomplete' => 'off', 'class' => 'input--numeric']])
-            ->add('address', TextareaType::class, ['label' => 'profile.field.address'])
-            ->add('email', EmailType::class, ['label' => 'profile.field.email', 'required' => false, 'help' => 'profile.field.email_help'])
+        // The field shows the SIRET in groups, as the data transformer of the real form does.
+        $form = $this->createFormBuilder(['siret' => '812 345 678 00013'] + self::FREELANCER, ['csrf_protection' => false, 'translation_domain' => false])
+            ->add('name', TextType::class, ['label' => 'Nom et prénom'])
+            ->add('company', TextType::class, ['label' => 'Société', 'required' => false])
+            ->add('siret', TextType::class, ['label' => 'SIRET', 'help' => '14 chiffres, visibles sur votre avis de situation Insee.', 'attr' => ['inputmode' => 'numeric', 'autocomplete' => 'off', 'class' => 'input--numeric']])
+            ->add('address', TextareaType::class, ['label' => 'Adresse'])
+            ->add('email', EmailType::class, ['label' => 'E-mail', 'required' => false, 'help' => 'Affiché sur le CRA si renseigné.'])
             ->getForm();
 
         return $this->renderForm('examples/profile.html.twig', $form);

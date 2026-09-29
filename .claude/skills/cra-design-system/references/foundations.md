@@ -192,7 +192,7 @@ Translucent: `gray-950-a45` (rgba(16,19,19,.45)), `black-a40`, `black-a60`.
 | print-meta / print-small | 9pt / 8pt | 1.35 | regular | party blocks / hints |
 
 - Never set body text below `font-size-small` (14px) on screen. Captions (12px) only for short labels that repeat information available elsewhere (day labels mirror the accessible name).
-- French typography: typographic apostrophe `’`, non-breaking space before `: ; ! ?` and inside `« »` (handled in translation strings).
+- French typography: typographic apostrophe `’`, non-breaking space before `: ; ! ?` and inside `« »` (typed in the texts themselves).
 
 | Token | Value | Use |
 |---|---|---|

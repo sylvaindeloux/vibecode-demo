@@ -64,7 +64,7 @@
 
 {%- block form_label_content -%}
     {{- parent() -}}
-    {%- if not required and 'checkbox' not in block_prefixes and not compound %} <span class="field__required">({{ 'form.optional'|trans({}, 'messages') }})</span>{% endif -%}
+    {%- if not required and 'checkbox' not in block_prefixes and not compound %} <span class="field__required">(facultatif)</span>{% endif -%}
 {%- endblock form_label_content -%}
 
 {# ------------------------------------------------------------------ help + errors #}
@@ -133,7 +133,7 @@
         {%- for child in form %}
             <label class="segmented__option">
                 {{- form_widget(child, {attr: {class: 'segmented__input'}}) -}}
-                <span>{{ child.vars.label|trans(child.vars.label_translation_parameters, choice_translation_domain) }}</span>
+                <span>{{ child.vars.label }}</span>
             </label>
         {% endfor -%}
     </div>

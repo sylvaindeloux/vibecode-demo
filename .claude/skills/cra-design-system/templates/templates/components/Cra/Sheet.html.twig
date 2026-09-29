@@ -8,24 +8,24 @@
 <article {{ attributes.defaults({class: 'cra-sheet', 'aria-labelledby': 'cra-title'}) }}>
     <header class="cra-doc__header">
         <div>
-            <p class="cra-doc__eyebrow">{{ 'cra.eyebrow'|trans }}</p>
+            <p class="cra-doc__eyebrow">Compte rendu d’activité</p>
             <h1 class="cra-doc__title" id="cra-title">{{ cra.monthLabel }}</h1>
         </div>
         <dl class="cra-doc__meta">
-            <dt>{{ 'cra.mission'|trans }}</dt>
+            <dt>Mission</dt>
             <dd class="cra-doc__meta-value--strong">{{ cra.mission }}</dd>
-            <dt>{{ 'cra.period'|trans }}</dt>
+            <dt>Période</dt>
             <dd class="cra-doc__meta-value--numeric">{{ cra.periodStart|format_date(pattern: 'dd/MM/yyyy', locale: locale) }} – {{ cra.periodEnd|format_date(pattern: 'dd/MM/yyyy', locale: locale) }}</dd>
-            <dt>{{ 'cra.total_days'|trans }}</dt>
+            <dt>Jours travaillés</dt>
             <dd class="cra-doc__meta-value--numeric">{{ cra.total|format_number(locale: locale) }}</dd>
-            <dt>{{ 'cra.generated_at'|trans }}</dt>
+            <dt>Établi le</dt>
             <dd class="cra-doc__meta-value--numeric">{{ cra.generatedAt|format_date(pattern: 'dd/MM/yyyy', locale: locale) }}</dd>
         </dl>
     </header>
 
     <div class="cra-parties">
-        <twig:Cra:Party :role="'cra.freelancer'|trans" :party="cra.freelancer" />
-        <twig:Cra:Party :role="'cra.client'|trans" :party="cra.client" />
+        <twig:Cra:Party role="Prestataire" :party="cra.freelancer" />
+        <twig:Cra:Party role="Client" :party="cra.client" />
     </div>
 
     <twig:Cra:DaysTable :days="cra.days" :total="cra.total" />

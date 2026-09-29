@@ -15,7 +15,7 @@
     <twig:block name="footer">
         <form method="post" action="{{ action }}" class="modal__form" data-modal-target="form">
             {% if tokenId %}<input type="hidden" name="_token" value="{{ csrf_token(tokenId) }}">{% endif %}
-            <twig:Button variant="secondary" data-action="modal#close" data-modal-target="initialFocus">{{ 'action.cancel'|trans }}</twig:Button>
+            <twig:Button variant="secondary" data-action="modal#close" data-modal-target="initialFocus">Annuler</twig:Button>
             <twig:Button type="submit" variant="danger" icon="lucide:trash-2">{{ confirmLabel }}</twig:Button>
         </form>
     </twig:block>

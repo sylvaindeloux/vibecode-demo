@@ -45,6 +45,7 @@ When everything is done, give me:
 
 - **Always answer me in French**: questions, final reports, PR descriptions, replies to review comments.
 - Everything in the code stays in English: identifiers, comments, commit messages, branch names, technical docs.
+- User interface texts are the exception: they are written in French, directly in the files that show them (templates, form types, constraints, controllers). No translation keys, no translation files.
 
 ### Skills
 

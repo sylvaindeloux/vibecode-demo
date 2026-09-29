@@ -2,19 +2,20 @@
  # Calendar:Day - one gridcell. `day` = CalendarDay view model:
  #   {date: 'Y-m-d', number, kind: workday|weekend|holiday|outside, state: empty|full|half|off,
  #    note, isToday, holidayName, label: 'lundi 14 septembre 2026'}
+ # `stateLabel` = name of the day state, given by <twig:Calendar> (same texts as the controller).
  # Exactly one day of the grid is `tabbable` (roving tabindex).
  #}
-{% props day, tabbable = false %}
+{% props day, stateLabel, tabbable = false %}
 {%- if day.kind == 'outside' -%}
     <td role="gridcell" class="calendar-day" data-kind="outside" data-state="empty" aria-disabled="true">
         <span class="calendar-day__button" aria-hidden="true"><span class="calendar-day__number">{{ day.number }}</span></span>
     </td>
 {%- else -%}
     {%- set label = day.label
-        ~ (day.kind == 'holiday' ? ', ' ~ 'calendar.kind.holiday'|trans ~ ' : ' ~ day.holidayName : '')
-        ~ (day.kind == 'weekend' ? ', ' ~ 'calendar.kind.weekend'|trans : '')
-        ~ (day.isToday ? ', ' ~ 'calendar.today'|trans : '') -%}
-    {%- set accessibleName = label ~ ', ' ~ ('calendar.state.' ~ day.state)|trans ~ (day.note ? ', ' ~ 'calendar.note'|trans ~ ' : ' ~ day.note : '') -%}
+        ~ (day.kind == 'holiday' ? ', jour férié : ' ~ day.holidayName : '')
+        ~ (day.kind == 'weekend' ? ', week-end' : '')
+        ~ (day.isToday ? ', aujourd’hui' : '') -%}
+    {%- set accessibleName = label ~ ', ' ~ stateLabel ~ (day.note ? ', Note : ' ~ day.note : '') -%}
     <td role="gridcell" {{ attributes.defaults({class: 'calendar-day'}) }}
         data-calendar-target="day"
         data-date="{{ day.date }}"

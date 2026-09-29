@@ -176,7 +176,7 @@ public function create(Request $request): Response
 
 ## Project notes (EasyCRA)
 
-- Form rendering follows `cra-design-system` (`references/symfony-integration.md`, section "Forms"): global form theme, submit buttons as `<twig:Button type="submit">` components, `label` and `help` options given as translation keys.
+- Form rendering follows `cra-design-system` (`references/symfony-integration.md`, section "Forms"): global form theme, submit buttons as `<twig:Button type="submit">` components, `label` and `help` options given as French texts, with `'translation_domain' => false` (no translation keys).
 
 See also: `symfony-bp-controllers` (controller rules that also apply to form actions).
 

@@ -8,7 +8,7 @@
 <div {{ attributes.defaults({class: 'field' ~ (errors is not empty ? ' field--invalid' : '')}) }}>
     <label class="field__label{{ hideLabel ? ' visually-hidden' }}" for="{{ id }}">
         {{- label -}}
-        {% if optional %} <span class="field__required">({{ 'form.optional'|trans }})</span>{% endif -%}
+        {% if optional %} <span class="field__required">(facultatif)</span>{% endif -%}
     </label>
     {% block content %}{% endblock %}
     {% if help %}<p class="field__help" id="{{ id }}_help">{{ help }}</p>{% endif %}

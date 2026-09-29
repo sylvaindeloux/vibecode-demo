@@ -8,13 +8,13 @@
     <div class="app-header__inner">
         <a class="app-header__brand" href="{{ path('app_calendar') }}">
             <span class="app-header__logo" aria-hidden="true"><twig:ux:icon name="lucide:calendar-check" class="icon" /></span>
-            {{ 'app.name'|trans }}
+            EasyCRA
         </a>
-        <nav class="app-nav" aria-label="{{ 'nav.label'|trans }}">
+        <nav class="app-nav" aria-label="Navigation principale">
             <ul class="app-nav__list">
-                <li><twig:NavLink :href="path('app_calendar')" icon="lucide:calendar-days" :label="'nav.calendar'|trans" :active="route starts with 'app_calendar' or route starts with 'app_cra'" /></li>
-                <li><twig:NavLink :href="path('app_client_index')" icon="lucide:users" :label="'nav.clients'|trans" :active="route starts with 'app_client'" /></li>
-                <li><twig:NavLink :href="path('app_profile')" icon="lucide:user-round" :label="'nav.profile'|trans" :active="route starts with 'app_profile'" /></li>
+                <li><twig:NavLink :href="path('app_calendar')" icon="lucide:calendar-days" label="Calendrier" :active="route starts with 'app_calendar' or route starts with 'app_cra'" /></li>
+                <li><twig:NavLink :href="path('app_client_index')" icon="lucide:users" label="Clients" :active="route starts with 'app_client'" /></li>
+                <li><twig:NavLink :href="path('app_profile')" icon="lucide:user-round" label="Profil" :active="route starts with 'app_profile'" /></li>
             </ul>
         </nav>
         <div class="app-header__end">

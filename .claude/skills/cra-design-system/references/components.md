@@ -70,7 +70,7 @@ Page `<h1>`, optional subtitle, optional actions.
 | `disabled` | `false` | native `disabled` (a disabled link renders as a disabled `<button>`) |
 | `block` | `false` | full width |
 
-- Content block = label: `<twig:Button variant="primary" icon="lucide:plus">{{ 'client.index.add'|trans }}</twig:Button>`.
+- Content block = label: `<twig:Button variant="primary" icon="lucide:plus">Ajouter un client</twig:Button>`.
 - Automatic loading: while Turbo submits a form (`form[aria-busy="true"]`), its submit buttons show the spinner and ignore clicks. No JS to write.
 - Tokens: `color-primary(-hover/-active)`/`color-on-primary`, `color-error-solid(-hover)`/`color-on-error`, `color-surface(-hover/-active)`, `color-border-strong`, `radius-control`, `size-control-*`, `space-control-x-*`, `font-weight-semibold`.
 - States: default, hover, active, focus-visible (global ring), disabled (`color-surface-muted`, `color-text-disabled`), loading.
@@ -135,7 +135,7 @@ Radio group as joined buttons, for 2–5 short exclusive choices (day type in th
 Form Do / Don't:
 
 - Do: label above the control; help under it; errors under help, in `color-error-text` with an icon, phrased as a fix ("Indiquez le nom du client."). Mark optional fields, not required ones.
-- Do: validate server-side (Symfony constraints, messages in `translations/validators+intl-icu.fr.yaml`); the theme adds `novalidate` so browser bubbles never replace these messages. Return HTTP 422 on invalid submit (Turbo requirement).
+- Do: validate server-side (Symfony constraints, each with a French `message`); the theme adds `novalidate` so browser bubbles never replace these messages. Return HTTP 422 on invalid submit (Turbo requirement).
 - Don't: placeholders as labels; disabled submit buttons to signal invalid forms; red borders without a message.
 
 ## ClientPicker — `<twig:ClientPicker :clients :selected action :params />`
@@ -148,15 +148,15 @@ Labelled native select of `client · mission` in a GET form, auto-submitted on c
 ## DataTable — `<twig:DataTable>`, `<twig:DataTable:Row>`, `<twig:DataTable:Cell>`
 
 ```twig
-<twig:DataTable :caption="'client.index.caption'|trans" :columns="[
-    {label: 'client.field.name'|trans},
-    {label: 'client.field.contact'|trans},
-    {label: 'client.index.actions'|trans, type: 'actions', hidden: true},
+<twig:DataTable caption="Liste des clients" :columns="[
+    {label: 'Nom du client'},
+    {label: 'Contact'},
+    {label: 'Actions', type: 'actions', hidden: true},
 ]">
     {% for client in clients %}
         <twig:DataTable:Row>
             <twig:DataTable:Cell type="primary"><a class="data-table__link" href="…">{{ client.name }}</a></twig:DataTable:Cell>
-            <twig:DataTable:Cell :label="'client.field.contact'|trans">{{ client.contactName }}</twig:DataTable:Cell>
+            <twig:DataTable:Cell label="Contact">{{ client.contactName }}</twig:DataTable:Cell>
             <twig:DataTable:Cell type="actions">…icon-only ghost sm buttons…</twig:DataTable:Cell>
         </twig:DataTable:Row>
     {% endfor %}
@@ -167,7 +167,7 @@ Labelled native select of `client · mission` in a GET form, auto-submitted on c
 - Cell props: `type = 'text'` (`primary` → `<th scope="row">` semibold; `muted`; `numeric` → mono, right-aligned; `actions` → right-aligned button group), `label` (column label, **required on every non-primary, non-actions cell**: it is shown before the value on mobile).
 - States: row hover `color-surface-hover`; sticky header `color-surface-muted`.
 - Mobile (< 768px): each row becomes a card (primary cell as title, then `label | value` pairs, actions at the bottom right).
-- Do: row actions = icon-only ghost `sm` buttons with a label naming the item ("Supprimer Pharmacie Lumière"); the primary cell links to the edit page. Missing values: a neutral Badge ("Aucune mission") rather than an empty cell.
+- Do: row actions = icon-only ghost `sm` buttons with a label naming the item ("Supprimer Pharmacie Lumière"); the primary cell links to the edit page.
 - Don't: more than 5 columns; actions as text links; a table for the CRA sheet (use `Cra:DaysTable`).
 
 ## Calendar — `<twig:Calendar>`
@@ -198,8 +198,8 @@ Short text above (default) or below (`position="bottom"`) its content, on hover 
 
 Transient feedback after an action. `ToastStack` is in base.html.twig once: it renders **Symfony flash messages** and hosts client toasts.
 
-- Server: `$this->addFlash('success', 'client.flash.created')` (message = translation key). Types: `success`, `info` (alias `notice`), `warning`, `error` (alias `danger`).
-- Client: `window.dispatchEvent(new CustomEvent('toast:show', {detail: {tone: 'error', title: '…', message: '…'}}))` — texts must come from translations (e.g. `labels` values passed by Twig).
+- Server: `$this->addFlash('success', 'Client ajouté.')` (message = French text). Types: `success`, `info` (alias `notice`), `warning`, `error` (alias `danger`).
+- Client: `window.dispatchEvent(new CustomEvent('toast:show', {detail: {tone: 'error', title: '…', message: '…'}}))` — texts are written in a Twig template and passed to the controller in a value (e.g. `labels` of the calendar), never in the JavaScript.
 - Toast props: `tone = 'info'`, `title`, `message = null`, `persistent` (default: true for warning/error).
 - Behaviour: success/info auto-dismiss after `duration-toast` (5 s), paused on hover/focus; warning/error stay until closed; close button labelled "Fermer la notification". `role="status"` (success/info) or `role="alert"` (warning/error). Top-right on desktop, above the bottom bar on mobile. `data-turbo-temporary` (not cached by Turbo).
 - Tokens: `color-surface-overlay`, `color-<tone>-border`, icon `color-<tone>-text`, `elevation-overlay`, `radius-card`, `size-toast-width`.
