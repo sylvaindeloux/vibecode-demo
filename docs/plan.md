@@ -48,7 +48,7 @@ Checks run before every commit (`composer check`):
 - Files: `src/Controller/ProfileController.php`, `src/Form/ProfileType.php`, `templates/profile/edit.html.twig`, `tests/Controller/ProfileControllerTest.php`.
 - Done when: every acceptance criterion of US-01 has a passing functional test (save, 422 with errors, SIRET with and without spaces, grouped display, 14 digits, Luhn, single row).
 
-### [ ] F6. Clients (US-02, US-03, US-04)
+### [x] F6. Clients (US-02, US-03, US-04)
 
 - Goal: list, create, edit and delete clients.
 - Files: `src/Controller/ClientController.php`, `src/Form/ClientType.php`, `templates/client/{index,form}.html.twig`, `tests/Controller/ClientControllerTest.php`.

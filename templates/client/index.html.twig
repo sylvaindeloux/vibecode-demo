@@ -1,7 +1,82 @@
+{#
+ # Client list, with its empty state. Route: app_client_index
+ # Variables: clients (Client[], sorted by name)
+ # Deletion: one shared ConfirmDialog; each row passes action + subject to it.
+ #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Clients · EasyCRA{% endblock %}
 
 {% block body %}
-    <twig:PageHeader title="Clients" />
+    {# Blocks cannot be conditional in Twig: branch around the whole component instead. #}
+    {% if clients is empty %}
+        <twig:PageHeader title="Clients" subtitle="Les clients et missions pour lesquels vous remplissez un CRA." />
+    {% else %}
+        <twig:PageHeader title="Clients" subtitle="Les clients et missions pour lesquels vous remplissez un CRA.">
+            <twig:block name="actions">
+                <twig:Button variant="primary" icon="lucide:plus" :href="path('app_client_new')">Ajouter un client</twig:Button>
+            </twig:block>
+        </twig:PageHeader>
+    {% endif %}
+
+    {% if clients is empty %}
+        <twig:EmptyState
+            icon="lucide:briefcase"
+            title="Aucun client pour l’instant"
+            message="Ajoutez un client et sa mission : ses coordonnées apparaîtront sur vos CRA."
+        >
+            <twig:block name="actions">
+                <twig:Button variant="primary" icon="lucide:user-plus" :href="path('app_client_new')">Ajouter un client</twig:Button>
+            </twig:block>
+        </twig:EmptyState>
+    {% else %}
+        <twig:DataTable
+            caption="Liste des clients"
+            :columns="[
+                {label: 'Nom du client'},
+                {label: 'Contact'},
+                {label: 'Nom de la mission'},
+                {label: 'Actions', type: 'actions', hidden: true},
+            ]"
+        >
+            {% for client in clients %}
+                <twig:DataTable:Row>
+                    <twig:DataTable:Cell type="primary">
+                        <a class="data-table__link" href="{{ path('app_client_edit', {id: client.id}) }}">{{ client.name }}</a>
+                    </twig:DataTable:Cell>
+                    <twig:DataTable:Cell label="Contact">
+                        {{ client.contactName }}
+                        {% if client.contactEmail %}<br><span class="text-muted text-small">{{ client.contactEmail }}</span>{% endif %}
+                    </twig:DataTable:Cell>
+                    <twig:DataTable:Cell label="Nom de la mission">{{ client.mission }}</twig:DataTable:Cell>
+                    <twig:DataTable:Cell type="actions">
+                        <twig:Tooltip text="Modifier" decorative>
+                            <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:pencil"
+                                :href="path('app_client_edit', {id: client.id})"
+                                label="Modifier {{ client.name }}" />
+                        </twig:Tooltip>
+                        <twig:Tooltip text="Supprimer" decorative>
+                            <twig:Button variant="ghost" size="sm" iconOnly icon="lucide:trash-2"
+                                label="Supprimer {{ client.name }}"
+                                data-controller="modal-trigger"
+                                data-action="modal-trigger#open"
+                                data-modal-trigger-id-param="confirm-delete-client"
+                                data-modal-trigger-action-param="{{ path('app_client_delete', {id: client.id}) }}"
+                                data-modal-trigger-subject-param="{{ client.name }}" />
+                        </twig:Tooltip>
+                    </twig:DataTable:Cell>
+                </twig:DataTable:Row>
+            {% endfor %}
+        </twig:DataTable>
+    {% endif %}
+{% endblock %}
+
+{% block dialogs %}
+    <twig:ConfirmDialog
+        id="confirm-delete-client"
+        title="Supprimer ce client ?"
+        message="Ses jours saisis seront aussi supprimés. Cette action est définitive."
+        confirmLabel="Supprimer le client"
+        tokenId="delete-client"
+    />
 {% endblock %}
