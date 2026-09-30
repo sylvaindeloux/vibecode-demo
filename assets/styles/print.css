@@ -1,0 +1,95 @@
+/*
+ * Print stylesheet (CRA "Imprimer / Enregistrer en PDF").
+ * - A4 portrait, fixed margins (size-print-margin = 15mm; @page cannot read custom properties).
+ * - Hides everything that is not the document: layout, navigation, buttons, help, toasts.
+ * - Loaded in the last cascade layer (`print`, see app.css): no !important needed.
+ * - Forces the light theme: dark tokens are declared under `@media screen` in tokens.css,
+ *   and the sheet only uses color-paper-* tokens (never themed).
+ * - Readable in black and white: meaning carried by text and rules, never by fills alone.
+ * - No page break inside a table row, a party block or the signature zone.
+ * Tested targets: Chrome/Edge, Firefox, Safari (see references/print.md).
+ */
+
+@page {
+  size: A4 portrait;
+  margin: 15mm;
+}
+
+@media print {
+  html,
+  body {
+    background: var(--color-paper-bg);
+    color: var(--color-paper-text);
+  }
+
+  body {
+    min-height: 0;
+    padding: 0;
+    font-size: var(--font-size-print-body);
+  }
+
+  /* Everything that is not the document. */
+  .skip-link,
+  .app-header,
+  .app-nav,
+  .toast-stack,
+  .page-header,
+  [data-print-hide] {
+    display: none;
+  }
+
+  .page,
+  .cra-screen {
+    display: block;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* The sheet becomes the page: the @page margin replaces its padding. */
+  .cra-sheet {
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+
+  /* Page-break control. */
+  .cra-doc__header,
+  .cra-parties,
+  .cra-party,
+  .cra-signatures,
+  .cra-days tr {
+    break-inside: avoid;
+    page-break-inside: avoid; /* Safari / older engines */
+  }
+
+  .cra-days thead {
+    display: table-header-group; /* repeat the header row on every page */
+  }
+
+  .cra-days tfoot {
+    display: table-row-group; /* print the total once, at the end */
+  }
+
+  .cra-days__heading,
+  h1,
+  h2 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Keep the total with the signatures when possible. */
+  .cra-signatures {
+    margin-block-start: var(--space-stack-lg);
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

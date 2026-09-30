@@ -1,0 +1,15 @@
+{#
+ # SegmentedControl - one choice among 2 to 5 short options (radio group, fieldset + legend).
+ # options: [{value, label, icon?}]
+ #}
+{% props legend, name, options = [], value = null, hideLegend = false %}
+<fieldset {{ attributes.defaults({class: 'segmented'}) }}>
+    <legend class="segmented__legend{{ hideLegend ? ' visually-hidden' }}">{{ legend }}</legend>
+    {% for option in options %}
+        <label class="segmented__option">
+            <input class="segmented__input" type="radio" name="{{ name }}" value="{{ option.value }}"{% if option.value == value %} checked{% endif %}>
+            {% if option.icon is defined and option.icon %}<twig:ux:icon :name="option.icon" class="icon" />{% endif %}
+            <span>{{ option.label }}</span>
+        </label>
+    {% endfor %}
+</fieldset>

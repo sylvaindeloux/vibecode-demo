@@ -1,0 +1,9 @@
+{#
+ # Badge - read-only status. tone: neutral | primary | success | warning | error | info.
+ # Always carries text; the icon is optional and decorative.
+ #}
+{% props tone = 'neutral', icon = null %}
+<span {{ attributes.defaults({class: 'badge badge--' ~ tone}) }}>
+    {%- if icon %}<twig:ux:icon :name="icon" class="icon" />{% endif -%}
+    {% block content %}{% endblock %}
+</span>

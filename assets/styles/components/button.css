@@ -1,0 +1,177 @@
+/*
+ * Button: primary | secondary | ghost | danger, sizes sm | md | lg,
+ * states hover, active, focus-visible, disabled, loading; icon-only variant.
+ * Twig: <twig:Button>, <twig:PrintButton>
+ */
+.button {
+  --button-bg: var(--color-surface);
+  --button-bg-hover: var(--color-surface-hover);
+  --button-bg-active: var(--color-surface-active);
+  --button-text: var(--color-text);
+  --button-border: var(--color-border-strong);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-inline-sm);
+  min-height: var(--size-control-md);
+  padding-inline: var(--space-control-x-md);
+  border: var(--border-width-default) solid var(--button-border);
+  border-radius: var(--radius-control);
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-control);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
+}
+
+.button:hover {
+  background: var(--button-bg-hover);
+  color: var(--button-text);
+}
+
+.button:active {
+  background: var(--button-bg-active);
+}
+
+/* ---------- Variants ---------- */
+.button--primary {
+  --button-bg: var(--color-primary);
+  --button-bg-hover: var(--color-primary-hover);
+  --button-bg-active: var(--color-primary-active);
+  --button-text: var(--color-on-primary);
+  --button-border: var(--color-primary);
+}
+
+.button--primary:hover {
+  border-color: var(--color-primary-hover);
+}
+
+.button--secondary {
+  /* defaults above */
+}
+
+.button--ghost {
+  --button-bg: transparent;
+  --button-border: transparent;
+}
+
+.button--danger {
+  --button-bg: var(--color-error-solid);
+  --button-bg-hover: var(--color-error-solid-hover);
+  --button-bg-active: var(--color-error-solid-hover);
+  --button-text: var(--color-on-error);
+  --button-border: var(--color-error-solid);
+}
+
+.button--danger:hover {
+  border-color: var(--color-error-solid-hover);
+}
+
+/* ---------- Sizes ---------- */
+.button--sm {
+  min-height: var(--size-control-sm);
+  padding-inline: var(--space-control-x-sm);
+  font-size: var(--font-size-small);
+}
+
+.button--lg {
+  min-height: var(--size-control-lg);
+  padding-inline: var(--space-control-x-lg);
+}
+
+.button--block {
+  width: 100%;
+}
+
+/* ---------- Icon ---------- */
+.button__icon {
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+}
+
+.button--sm .button__icon {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.button--icon-only {
+  width: var(--size-control-md);
+  padding-inline: 0;
+}
+
+.button--icon-only.button--sm {
+  width: var(--size-control-sm);
+}
+
+.button--icon-only.button--lg {
+  width: var(--size-control-lg);
+}
+
+/* ---------- Disabled ---------- */
+.button:disabled,
+.button[aria-disabled="true"]:not([aria-busy="true"]) {
+  --button-bg: var(--color-surface-muted);
+  --button-bg-hover: var(--color-surface-muted);
+  --button-bg-active: var(--color-surface-muted);
+  --button-text: var(--color-text-disabled);
+  --button-border: var(--color-border-disabled);
+
+  cursor: not-allowed;
+}
+
+.button--ghost:disabled,
+.button--ghost[aria-disabled="true"]:not([aria-busy="true"]) {
+  --button-bg: transparent;
+  --button-bg-hover: transparent;
+  --button-border: transparent;
+}
+
+/* ---------- Loading (prop `loading`, or a Turbo form being submitted) ---------- */
+.button__spinner {
+  display: none;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  border: var(--border-width-strong) solid currentColor;
+  border-inline-end-color: transparent;
+  border-radius: var(--radius-pill);
+  animation: button-spin var(--duration-spinner) linear infinite;
+}
+
+.button[aria-busy="true"],
+form[aria-busy="true"] .button[type="submit"] {
+  cursor: progress;
+  pointer-events: none;
+}
+
+.button[aria-busy="true"] .button__spinner,
+form[aria-busy="true"] .button[type="submit"] .button__spinner {
+  display: inline-block;
+}
+
+.button[aria-busy="true"] .button__icon,
+form[aria-busy="true"] .button[type="submit"] .button__icon {
+  display: none;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* ---------- Group ---------- */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline-md);
+}

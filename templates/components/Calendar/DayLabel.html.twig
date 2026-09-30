@@ -1,0 +1,14 @@
+{#
+ # Calendar:DayLabel - visible short label inside a day cell (decorative: the accessible name
+ # is on the button). Shared by Calendar:Day and the <template>s used by the controller.
+ #}
+{% props state, kind, holidayName = null %}
+{%- if state == 'full' -%}
+    <twig:ux:icon name="lucide:check" class="icon" />Journée
+{%- elseif state == 'half' -%}
+    ½ j
+{%- elseif state == 'off' -%}
+    <twig:ux:icon name="lucide:tree-palm" class="icon" />Congé
+{%- elseif kind == 'holiday' -%}
+    <twig:ux:icon name="lucide:flag" class="icon" /><span data-slot="holiday">{{ holidayName }}</span>
+{%- endif -%}

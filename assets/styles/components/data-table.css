@@ -1,0 +1,171 @@
+/*
+ * Data table: caption, header, rows, numeric and actions columns, hover,
+ * stacked "cards" layout on mobile (each cell shows its column label).
+ * Twig: <twig:DataTable>, <twig:DataTable:Row>, <twig:DataTable:Cell>
+ */
+.data-table {
+  overflow-x: auto;
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--elevation-flat);
+}
+
+.data-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-body);
+}
+
+.data-table__caption {
+  padding: var(--space-inset-md);
+  text-align: start;
+  font-weight: var(--font-weight-semibold);
+}
+
+.data-table__header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-sticky);
+  padding: var(--space-table-cell-y) var(--space-inset-md);
+  border-block-end: var(--border-width-default) solid var(--color-border);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  text-align: start;
+  white-space: nowrap;
+}
+
+.data-table__cell {
+  padding: var(--space-table-cell-y) var(--space-inset-md);
+  border-block-end: var(--border-width-default) solid var(--color-border);
+  font-weight: var(--font-weight-regular);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.data-table__row:last-child .data-table__cell {
+  border-block-end: 0;
+}
+
+.data-table__row {
+  transition: background-color var(--duration-fast) var(--easing-default);
+}
+
+.data-table__row:hover {
+  background: var(--color-surface-hover);
+}
+
+.data-table__cell--primary {
+  font-weight: var(--font-weight-semibold);
+}
+
+.data-table__cell--muted {
+  color: var(--color-text-muted);
+}
+
+.data-table__header--numeric,
+.data-table__cell--numeric {
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.data-table__header--actions,
+.data-table__cell--actions {
+  width: 1%;
+  text-align: end;
+  white-space: nowrap;
+}
+
+.data-table__value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.data-table__actions {
+  display: inline-flex;
+  gap: var(--space-inline-xs);
+}
+
+/* Link covering the primary cell (row is clickable without JS). */
+.data-table__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.data-table__link:hover {
+  color: var(--color-text-link);
+  text-decoration: underline;
+}
+
+/* ---------- Mobile: stacked rows (breakpoint-mobile) ---------- */
+@media (max-width: 47.99rem) {
+  .data-table {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .data-table__table,
+  .data-table__table tbody,
+  .data-table__row,
+  .data-table__cell {
+    display: block;
+  }
+
+  .data-table__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .data-table__row {
+    margin-block-end: var(--space-stack-sm);
+    padding: var(--space-inset-sm) 0;
+    border: var(--border-width-default) solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .data-table__row:hover {
+    background: var(--color-surface);
+  }
+
+  .data-table__cell,
+  .data-table__row:last-child .data-table__cell {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--space-inline-md);
+    padding: var(--space-inset-xs) var(--space-inset-md);
+    border: 0;
+    text-align: start;
+  }
+
+  .data-table__cell::before {
+    content: attr(data-label);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .data-table__cell--primary {
+    grid-template-columns: 1fr;
+    font-size: var(--font-size-heading-3);
+  }
+
+  .data-table__cell--primary::before,
+  .data-table__cell--actions::before {
+    content: none;
+  }
+
+  .data-table__cell--actions {
+    display: flex;
+    width: auto;
+    justify-content: flex-end;
+    padding-block-start: var(--space-inset-sm);
+  }
+}

@@ -1,0 +1,45 @@
+{#
+ # Button - primary | secondary | ghost | danger; sizes sm | md | lg.
+ # Renders <a> when `href` is set (navigation), <button> otherwise (action).
+ # Icon-only: set `iconOnly` + `icon` + `label` (accessible name, required).
+ # Loading: `loading` (or automatically while its Turbo form is submitting, see button.css).
+ # Spec: references/components.md#button
+ #}
+{% props
+    variant = 'secondary',
+    size = 'md',
+    type = 'button',
+    href = null,
+    icon = null,
+    iconEnd = null,
+    iconOnly = false,
+    label = null,
+    loading = false,
+    disabled = false,
+    block = false
+%}
+{%- set classes = [
+    'button',
+    'button--' ~ variant,
+    size != 'md' ? 'button--' ~ size,
+    iconOnly ? 'button--icon-only',
+    block ? 'button--block',
+]|filter(c => c)|join(' ') -%}
+{%- set isLink = href is not null and not disabled -%}
+{%- if isLink -%}
+<a href="{{ href }}"
+{%- else -%}
+<button type="{{ type }}"{% if disabled %} disabled{% endif %}
+{%- endif %}
+    {%- if iconOnly %} aria-label="{{ label }}"{% endif %}
+    {%- if loading %} aria-busy="true" aria-disabled="true"{% endif %}
+    {{ attributes.defaults({class: classes}) }}
+>
+    <span class="button__spinner" aria-hidden="true"></span>
+    {%- if icon %}<twig:ux:icon :name="icon" class="icon button__icon" />{% endif -%}
+    {%- if not iconOnly -%}
+        <span class="button__label">{% block content %}{{ label }}{% endblock %}</span>
+    {%- endif -%}
+    {%- if iconEnd %}<twig:ux:icon :name="iconEnd" class="icon button__icon" />{% endif -%}
+    {%- if loading %}<span class="visually-hidden">Chargement…</span>{% endif -%}
+</{{ isLink ? 'a' : 'button' }}>

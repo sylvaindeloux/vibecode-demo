@@ -1,0 +1,10 @@
+{#
+ # DataTable:Cell - type: text | primary (row header, <th scope="row">) | muted | numeric | actions.
+ # `label` = column label, shown before the value on mobile.
+ #}
+{% props label = null, type = 'text' %}
+{%- set tag = type == 'primary' ? 'th' : 'td' -%}
+<{{ tag }}{% if type == 'primary' %} scope="row"{% endif %}{% if label %} data-label="{{ label }}"{% endif %} {{ attributes.defaults({class: 'data-table__cell data-table__cell--' ~ type}) }}>
+    {#- One wrapper, so the mobile layout (label | value grid) always gets a single value item. -#}
+    <div class="{{ type == 'actions' ? 'data-table__actions' : 'data-table__value' }}">{% block content %}{% endblock %}</div>
+</{{ tag }}>

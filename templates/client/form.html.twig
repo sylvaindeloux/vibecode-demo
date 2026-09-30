@@ -1,0 +1,31 @@
+{#
+ # Client create/edit form. Routes: app_client_new, app_client_edit
+ # Variables: form (ClientType form view), client (null when creating)
+ #}
+{% extends 'base.html.twig' %}
+
+{% set title = client ? 'Modifier ' ~ client.name : 'Nouveau client' %}
+
+{% block title %}{{ title }} · EasyCRA{% endblock %}
+{% block page_modifier %} page--narrow{% endblock %}
+
+{% block body %}
+    <twig:PageHeader :title="title" subtitle="Ces informations figurent sur le CRA remis au client." />
+
+    <twig:Card>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.address) }}
+            <div class="form__row">
+                {{ form_row(form.contactName) }}
+                {{ form_row(form.contactEmail) }}
+            </div>
+            {{ form_row(form.mission) }}
+            <div class="form-actions">
+                <twig:Button type="submit" variant="primary" icon="lucide:check">Enregistrer</twig:Button>
+                <twig:Button variant="ghost" :href="path('app_client_index')">Annuler</twig:Button>
+            </div>
+        {{ form_end(form) }}
+    </twig:Card>
+{% endblock %}

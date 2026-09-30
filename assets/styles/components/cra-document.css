@@ -1,0 +1,271 @@
+/*
+ * CRA document: screen preview (toolbar, help, A4 sheet) and the document itself.
+ * The sheet uses ONLY color-paper-* tokens and print font sizes (pt), so the on-screen
+ * preview is identical to the printed page, in both themes.
+ * Print rules: print.css. Spec: references/print.md
+ * Twig: <twig:Cra:Toolbar>, <twig:Cra:Help>, <twig:Cra:Sheet>, <twig:Cra:Party>, <twig:Cra:DaysTable>, <twig:Cra:Signatures>
+ */
+
+/* ---------- Screen chrome ---------- */
+.cra-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-stack-lg);
+}
+
+.cra-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-stack-sm) var(--space-inline-md);
+  width: min(100%, var(--size-sheet-width));
+}
+
+.cra-toolbar__title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-heading-3);
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cra-help {
+  display: flex;
+  gap: var(--space-inline-md);
+  width: min(100%, var(--size-sheet-width));
+  padding: var(--space-inset-md);
+  border: var(--border-width-default) solid var(--color-info-border);
+  border-radius: var(--radius-card);
+  background: var(--color-info-bg);
+  color: var(--color-text);
+  font-size: var(--font-size-small);
+}
+
+.cra-help__icon {
+  flex: none;
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+  color: var(--color-info-text);
+}
+
+.cra-help__title {
+  margin-block-end: var(--space-stack-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cra-help ol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  padding-inline-start: var(--space-inset-md);
+}
+
+/* ---------- The A4 sheet (paper) ---------- */
+.cra-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-print-section);
+  width: var(--size-sheet-width);
+  max-width: 100%;
+  min-height: var(--size-sheet-height);
+  padding: var(--size-sheet-padding);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-none);
+  background: var(--color-paper-bg);
+  color: var(--color-paper-text);
+  box-shadow: var(--elevation-overlay);
+  color-scheme: light;
+  font-size: var(--font-size-print-body);
+  line-height: var(--line-height-print);
+}
+
+/* ---------- Document header ---------- */
+.cra-doc__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-stack-sm) var(--space-inline-lg);
+  padding-block-end: var(--space-stack-sm);
+  border-block-end: var(--border-width-strong) solid var(--color-paper-text);
+}
+
+.cra-doc__eyebrow {
+  color: var(--color-paper-accent);
+  font-size: var(--font-size-print-meta);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+}
+
+.cra-doc__title {
+  font-size: var(--font-size-print-heading);
+  line-height: var(--line-height-display);
+  font-weight: var(--font-weight-bold);
+}
+
+.cra-doc__meta {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 0 var(--space-inline-md);
+  font-size: var(--font-size-print-meta);
+}
+
+.cra-doc__meta dt {
+  color: var(--color-paper-text-muted);
+}
+
+.cra-doc__meta dd {
+  margin: 0;
+  text-align: end;
+}
+
+.cra-doc__meta-value--strong {
+  font-weight: var(--font-weight-bold);
+}
+
+.cra-doc__meta-value--numeric {
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Parties (freelance / client) ---------- */
+.cra-parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-inline-lg);
+}
+
+.cra-party {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  padding: var(--space-inset-sm) var(--space-inset-md);
+  border: var(--border-width-default) solid var(--color-paper-rule);
+  font-size: var(--font-size-print-meta);
+  break-inside: avoid;
+}
+
+.cra-party__role {
+  color: var(--color-paper-text-muted);
+  font-size: var(--font-size-print-small);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+}
+
+.cra-party__name {
+  font-size: var(--font-size-print-subheading);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+}
+
+.cra-party address {
+  font-style: normal;
+  white-space: pre-line;
+}
+
+.cra-party__id {
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Days table ---------- */
+.cra-days {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-print-body);
+}
+
+.cra-days th,
+.cra-days td {
+  padding: var(--space-print-cell-y) var(--space-inset-sm);
+  border-block-end: var(--border-width-default) solid var(--color-paper-rule-light);
+  text-align: start;
+  vertical-align: top;
+}
+
+.cra-days thead th {
+  border-block-end: var(--border-width-strong) solid var(--color-paper-text);
+  background: var(--color-paper-fill);
+  font-size: var(--font-size-print-meta);
+  font-weight: var(--font-weight-bold);
+}
+
+td.cra-days__date,
+td.cra-days__qty {
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cra-days .cra-days__qty {
+  text-align: end;
+}
+
+.cra-days__note {
+  color: var(--color-paper-text-muted);
+}
+
+.cra-days tfoot th,
+.cra-days tfoot td {
+  border-block-start: var(--border-width-strong) solid var(--color-paper-text);
+  border-block-end: 0;
+  background: var(--color-paper-fill);
+  font-size: var(--font-size-print-subheading);
+  font-weight: var(--font-weight-bold);
+}
+
+.cra-days tr {
+  break-inside: avoid;
+}
+
+/* ---------- Signatures ---------- */
+.cra-signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-inline-lg);
+  margin-block-start: auto;
+  break-inside: avoid;
+}
+
+.cra-signature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  font-size: var(--font-size-print-meta);
+}
+
+.cra-signature__role {
+  font-weight: var(--font-weight-bold);
+}
+
+.cra-signature__box {
+  height: var(--size-signature-height);
+  border: var(--border-width-default) solid var(--color-paper-rule);
+}
+
+.cra-signature__hint {
+  color: var(--color-paper-text-muted);
+  font-size: var(--font-size-print-small);
+}
+
+/* breakpoint-mobile: the sheet reflows to the screen width */
+@media screen and (max-width: 47.99rem) {
+  .cra-toolbar__title {
+    display: none;
+  }
+
+  .cra-sheet {
+    min-height: 0;
+    padding: var(--space-inset-md);
+    overflow-x: auto;
+  }
+
+  .cra-parties,
+  .cra-signatures {
+    grid-template-columns: 1fr;
+  }
+}

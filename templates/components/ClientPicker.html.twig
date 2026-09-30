@@ -1,0 +1,15 @@
+{#
+ # ClientPicker - chooses the client/mission shown in the calendar. GET form auto-submitted
+ # on change (Turbo visit); the submit button is only visible without JavaScript.
+ # clients: [{id, name, mission}], params: extra query parameters to keep (e.g. {month: '2026-09'}).
+ #}
+{% props clients, selected = null, name = 'client', action = '', params = {} %}
+{%- set options = clients|map(c => {value: c.id, label: c.mission ? c.name ~ ' · ' ~ c.mission : c.name}) -%}
+<form method="get" action="{{ action }}" {{ attributes.defaults({class: 'client-picker', 'data-controller': 'autosubmit'}) }}>
+    {% for key, value in params %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
+    <label class="client-picker__label" for="client-picker">
+        <twig:ux:icon name="lucide:briefcase" class="icon" />Mission
+    </label>
+    <twig:Select id="client-picker" :name="name" :options="options" :value="selected" data-action="autosubmit#submit" />
+    <twig:Button type="submit" size="sm" class="autosubmit-fallback">Afficher</twig:Button>
+</form>

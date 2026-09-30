@@ -1,0 +1,18 @@
+{#
+ # Printable CRA. Route: app_cra (/cra/{client}/{month})
+ # Variables:
+ #   cra       {monthLabel, periodStart, periodEnd, mission, freelancer (Profile), client (Client), days, total, generatedAt}
+ #   back_url  URL of the calendar for the same client and month
+ # The <title> is the default PDF file name: "CRA - <client> - <Mois AAAA>" (references/print.md).
+ #}
+{% extends 'base.html.twig' %}
+
+{% block title %}CRA - {{ cra.client.name|replace({'/': '-', '\\': '-', ':': '-'}) }} - {{ cra.monthLabel }}{% endblock %}
+
+{% block body %}
+    <div class="cra-screen">
+        <twig:Cra:Toolbar :backUrl="back_url" title="CRA - {{ cra.client.name }} - {{ cra.monthLabel }}" />
+        <twig:Cra:Help />
+        <twig:Cra:Sheet :cra="cra" />
+    </div>
+{% endblock %}

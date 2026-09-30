@@ -1,0 +1,40 @@
+/*
+ * Tag: a label attached to an item (e.g. a mission's billing mode, a note category).
+ * Optionally removable (the remove button has an accessible label).
+ * Twig: <twig:Tag>
+ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-xs);
+  min-height: var(--size-icon-lg);
+  padding: 0 var(--space-inset-sm);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-tag);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-body);
+}
+
+.tag .icon {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  color: var(--color-text-muted);
+}
+
+.tag__remove {
+  display: inline-grid;
+  place-items: center;
+  margin-inline-end: calc(-1 * var(--space-inset-xs));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-tag);
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.tag__remove:hover {
+  background: var(--color-surface-active);
+  color: var(--color-text);
+}

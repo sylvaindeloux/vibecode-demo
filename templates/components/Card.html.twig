@@ -1,0 +1,19 @@
+{#
+ # Card - flat surface. Optional header (title, subtitle, `actions` block), body (content), `footer` block.
+ #}
+{% props title = null, subtitle = null, headingLevel = 2 %}
+<section {{ attributes.defaults({class: 'card'}) }}>
+    {% if title or block('actions') is defined %}
+        <header class="card__header">
+            <div>
+                {% if title %}<h{{ headingLevel }} class="card__title">{{ title }}</h{{ headingLevel }}>{% endif %}
+                {% if subtitle %}<p class="card__subtitle">{{ subtitle }}</p>{% endif %}
+            </div>
+            {% if block('actions') is defined %}<div class="cluster">{{ block('actions') }}</div>{% endif %}
+        </header>
+    {% endif %}
+    <div class="card__body">{% block content %}{% endblock %}</div>
+    {% if block('footer') is defined %}
+        <footer class="card__footer">{{ block('footer') }}</footer>
+    {% endif %}
+</section>

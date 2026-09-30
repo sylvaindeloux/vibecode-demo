@@ -1,0 +1,8 @@
+{#
+ # Textarea - multi-line text. Use inside <twig:Field>.
+ #}
+{% props id, name = null, value = '', rows = 3, invalid = false, describedBy = null %}
+<textarea id="{{ id }}" name="{{ name ?? id }}" rows="{{ rows }}"
+    {%- if invalid %} aria-invalid="true"{% endif %}
+    {%- if describedBy %} aria-describedby="{{ describedBy }}"{% endif %}
+    {{ attributes.defaults({class: 'input input--textarea'}) }}>{{ value }}</textarea>

@@ -1,0 +1,14 @@
+# Icons: Lucide only (https://lucide.dev), used as <twig:ux:icon name="lucide:<name>" class="icon" />.
+# Every icon used by the design system is committed in assets/icons/lucide/ (no runtime Iconify call).
+# New icon: php bin/console ux:icons:lock after first use, or copy the SVG from lucide-static.
+ux_icons:
+    # Size and color come from CSS (.icon + size-icon-* tokens, currentColor stroke).
+    # Do NOT set `fill: currentColor` here: Lucide icons are stroked, a fill would blot them.
+    default_icon_attributes:
+        'aria-hidden': 'true'
+        focusable: 'false'
+    ignore_not_found: false
+
+when@prod:
+    ux_icons:
+        ignore_not_found: true

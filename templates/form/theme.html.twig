@@ -1,0 +1,198 @@
+{#
+ # Symfony form theme of the CRA design system.
+ # Enabled globally in config/packages/twig.yaml (twig.form_themes).
+ # Produces exactly the markup of <twig:Field>, <twig:Input>, <twig:Select>, <twig:Textarea>,
+ # <twig:Checkbox> and <twig:Toggle> (see assets/styles/components/form.css):
+ #
+ #   <div class="field [field--invalid]">
+ #     <label class="field__label" for="id">Label <span class="field__required">(facultatif)</span></label>
+ #     <input class="input" aria-describedby="id_help id_errors" aria-invalid="true">
+ #     <p class="field__help" id="id_help">…</p>
+ #     <ul class="field__errors" id="id_errors"><li class="field__error">…</li></ul>
+ #   </div>
+ #
+ # Optional fields (required: false) get "(facultatif)"; required ones get the `required` attribute.
+ # Form-level errors render as an alert above the fields.
+ #}
+{% extends 'form_div_layout.html.twig' %}
+
+{# ------------------------------------------------------------------ form #}
+{%- block form_start -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form')|trim, novalidate: 'novalidate'}) -%}
+    {{- parent() -}}
+{%- endblock form_start -%}
+
+{# ------------------------------------------------------------------ rows #}
+{%- block form_row -%}
+    {%- set invalid = not valid and (not compound or force_error|default(false)) -%}
+    {%- set row_attr = row_attr|merge({class: (row_attr.class|default('') ~ ' field' ~ (invalid ? ' field--invalid'))|trim}) -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{# Expanded choices (radio groups) are grouped in a fieldset + legend. #}
+{%- block choice_row -%}
+    {%- if expanded -%}
+        {{- block('grouped_form_row') -}}
+    {%- else -%}
+        {{- block('form_row') -}}
+    {%- endif -%}
+{%- endblock choice_row -%}
+
+{%- block grouped_form_row -%}
+    <fieldset class="form__section">
+        {%- if label is not same as(false) -%}
+            <legend class="form__legend">{{ block('form_label_content') }}</legend>
+        {%- endif -%}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </fieldset>
+{%- endblock grouped_form_row -%}
+
+{# ------------------------------------------------------------------ labels #}
+{%- block form_label -%}
+    {%- if label is not same as(false) -%}
+        {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' field__label')|trim}) -%}
+    {%- endif -%}
+    {{- parent() -}}
+{%- endblock form_label -%}
+
+{%- block form_label_content -%}
+    {{- parent() -}}
+    {%- if not required and 'checkbox' not in block_prefixes and not compound %} <span class="field__required">(facultatif)</span>{% endif -%}
+{%- endblock form_label_content -%}
+
+{# ------------------------------------------------------------------ help + errors #}
+{%- block form_help -%}
+    {%- if help is not empty -%}
+        {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' field__help')|trim}) -%}
+        <p id="{{ id }}_help"{% with {attr: help_attr} %}{{ block('attributes') }}{% endwith %}>{{ block('form_help_content') }}</p>
+    {%- endif -%}
+{%- endblock form_help -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- if form.parent is null -%}
+            <div class="form-errors" role="alert">
+                {{ ux_icon('lucide:circle-alert', {class: 'icon'}) }}
+                <ul>
+                    {%- for error in errors -%}<li>{{ error.message }}</li>{%- endfor -%}
+                </ul>
+            </div>
+        {%- else -%}
+            <ul class="field__errors" id="{{ id }}_errors">
+                {%- for error in errors -%}
+                    <li class="field__error">{{ ux_icon('lucide:circle-alert', {class: 'icon'}) }}{{ error.message }}</li>
+                {%- endfor -%}
+            </ul>
+        {%- endif -%}
+    {%- endif -%}
+{%- endblock form_errors -%}
+
+{# aria-describedby (help + errors) and aria-invalid on every widget #}
+{%- block widget_attributes -%}
+    {%- set describedby = [] -%}
+    {%- if help is not empty -%}{%- set describedby = describedby|merge([id ~ '_help']) -%}{%- endif -%}
+    {%- if not valid and errors|length > 0 -%}{%- set describedby = describedby|merge([id ~ '_errors']) -%}{%- endif -%}
+    {%- if describedby is not empty -%}{%- set attr = attr|merge({'aria-describedby': describedby|join(' ')}) -%}{%- endif -%}
+    {%- if not valid -%}{%- set attr = attr|merge({'aria-invalid': 'true'}) -%}{%- endif -%}
+    {{- parent() -}}
+{%- endblock widget_attributes -%}
+
+{# ------------------------------------------------------------------ widgets #}
+{%- block form_widget_simple -%}
+    {%- if type is not defined or type not in ['file', 'hidden', 'range', 'color', 'checkbox', 'radio'] -%}
+        {%- set numeric = type is defined and type in ['number', 'date', 'time', 'datetime-local', 'month'] -%}
+        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input' ~ (numeric ? ' input--numeric'))|trim}) -%}
+    {%- endif -%}
+    {{- parent() -}}
+{%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input input--textarea')|trim, rows: attr.rows|default(4)}) -%}
+    {{- parent() -}}
+{%- endblock textarea_widget -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input')|trim}) -%}
+    <span class="select">
+        {{- parent() -}}
+        {{ ux_icon('lucide:chevron-down', {class: 'icon select__chevron'}) }}
+    </span>
+{%- endblock choice_widget_collapsed -%}
+
+{# Expanded choices (radio buttons) render as a segmented control. #}
+{%- block choice_widget_expanded -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' segmented')|trim}) -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            <label class="segmented__option">
+                {{- form_widget(child, {attr: {class: 'segmented__input'}}) -}}
+                <span>{{ child.vars.label }}</span>
+            </label>
+        {% endfor -%}
+    </div>
+{%- endblock choice_widget_expanded -%}
+
+{%- block date_widget -%}
+    {%- if widget == 'single_text' -%}
+        {{- block('form_widget_simple') -}}
+    {%- else -%}
+        {{- parent() -}}
+    {%- endif -%}
+{%- endblock date_widget -%}
+
+{# ------------------------------------------------------------------ checkbox #}
+{%- block checkbox_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' checkbox__input')|trim}) -%}
+    {{- parent() -}}
+{%- endblock checkbox_widget -%}
+
+{%- block checkbox_row -%}
+    {%- set row_attr = row_attr|merge({class: (row_attr.class|default('') ~ ' field' ~ (not valid ? ' field--invalid'))|trim}) -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        <label class="checkbox" for="{{ id }}">
+            {{- form_widget(form) -}}
+            <span class="checkbox__label">{{ block('form_label_content') }}</span>
+        </label>
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock checkbox_row -%}
+
+{# ------------------------------------------------------------------ toggle (App\Form\Type\ToggleType) #}
+{%- block toggle_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' toggle__input')|trim, role: 'switch'}) -%}
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{%- endblock toggle_widget -%}
+
+{%- block toggle_row -%}
+    <div class="field">
+        <label class="toggle" for="{{ id }}">
+            {{- form_widget(form) -}}
+            <span class="toggle__label">{{ block('form_label_content') }}</span>
+        </label>
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock toggle_row -%}
+
+{# ------------------------------------------------------------------ buttons (prefer <twig:Button type="submit"> in templates) #}
+{%- block button_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('button button--secondary'))|trim}) -%}
+    {{- parent() -}}
+{%- endblock button_widget -%}
+
+{%- block submit_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('button button--primary'))|trim}) -%}
+    {{- parent() -}}
+{%- endblock submit_widget -%}
+
+{%- block button_row -%}
+    <div class="form-actions">{{- form_widget(form) -}}</div>
+{%- endblock button_row -%}

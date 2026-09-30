@@ -1,0 +1,14 @@
+{#
+ # Cra:Signatures - two signature zones (freelance, client). Never split across pages.
+ #}
+{% props freelancerName, clientName %}
+<section class="cra-signatures" aria-label="Signatures">
+    {% for party in [{role: 'Le prestataire', name: freelancerName}, {role: 'Le client', name: clientName}] %}
+        <div class="cra-signature">
+            <p class="cra-signature__role">{{ party.role }}</p>
+            <p>{{ party.name }}</p>
+            <div class="cra-signature__box" role="img" aria-label="Zone de signature"></div>
+            <p class="cra-signature__hint">Date, nom et signature</p>
+        </div>
+    {% endfor %}
+</section>

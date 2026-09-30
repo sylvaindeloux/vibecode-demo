@@ -1,0 +1,26 @@
+{#
+ # Calendar:DayDialog - edit one day: state (segmented control) + note (shown on the CRA).
+ # Opened by the calendar controller (key N, or the "Edit day" button of Calendar:Selection).
+ #}
+<twig:Modal id="calendar-day-dialog" icon="lucide:notebook-pen" title="Modifier le jour" data-calendar-target="dialog">
+    <p class="text-muted" data-calendar-target="dialogDate"></p>
+    <form id="calendar-day-form" class="stack" data-action="submit->calendar#saveDialog">
+        <twig:SegmentedControl
+            name="day-state"
+            legend="Type de journée"
+            :options="[
+                {value: 'full', label: 'Journée complète', icon: 'lucide:check'},
+                {value: 'half', label: 'Demi-journée'},
+                {value: 'off', label: 'Congé ou absence', icon: 'lucide:tree-palm'},
+                {value: 'empty', label: 'Non travaillé'},
+            ]"
+        />
+        <twig:Field id="calendar-day-note" label="Note" help="Affichée dans le CRA imprimé. 140 caractères maximum." optional>
+            <twig:Textarea id="calendar-day-note" name="note" maxlength="140" rows="2" describedBy="calendar-day-note_help" data-calendar-target="dialogNote" />
+        </twig:Field>
+    </form>
+    <twig:block name="footer">
+        <twig:Button data-action="modal#close">Annuler</twig:Button>
+        <twig:Button type="submit" variant="primary" form="calendar-day-form" icon="lucide:check">Enregistrer</twig:Button>
+    </twig:block>
+</twig:Modal>

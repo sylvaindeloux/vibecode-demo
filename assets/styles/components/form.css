@@ -1,0 +1,356 @@
+/*
+ * Form fields: field wrapper, label, help, errors, input, textarea, select,
+ * date, checkbox, toggle, form actions.
+ * Twig: <twig:Field>, <twig:Input>, <twig:Textarea>, <twig:Select>, <twig:Checkbox>, <twig:Toggle>
+ *       and templates/form/theme.html.twig (same markup for Symfony forms).
+ */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-md);
+  max-width: var(--size-field-max-width);
+}
+
+.form__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-md);
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.form__legend {
+  margin-block-end: var(--space-stack-xs);
+  padding: 0;
+  font-size: var(--font-size-heading-3);
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-semibold);
+}
+
+.form__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size-field-min-width), 1fr));
+  gap: var(--space-stack-md);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline-md);
+  padding-block-start: var(--space-stack-sm);
+}
+
+/* ---------- Field wrapper ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  min-width: 0;
+}
+
+.field__label {
+  font-weight: var(--font-weight-medium);
+}
+
+.field__required {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+.field__help {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+.field__errors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  padding: 0;
+  list-style: none;
+  color: var(--color-error-text);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-inline-xs);
+}
+
+.field__error .icon {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  margin-block-start: var(--space-inset-xs);
+}
+
+/* Form-level errors (form_errors(form)): an error alert above the fields. */
+.form-errors {
+  display: flex;
+  gap: var(--space-inline-sm);
+  padding: var(--space-inset-md);
+  border: var(--border-width-default) solid var(--color-error-border);
+  border-radius: var(--radius-card);
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+.form-errors ul {
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Text inputs, date, select, textarea ---------- */
+.input {
+  width: 100%;
+  min-height: var(--size-control-md);
+  padding: 0 var(--space-control-x-md);
+  border: var(--border-width-default) solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  transition: border-color var(--duration-fast) var(--easing-default);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:hover {
+  border-color: var(--color-text-muted);
+}
+
+.input:focus-visible {
+  border-color: var(--color-border-primary);
+}
+
+.input:disabled {
+  border-color: var(--color-border-disabled);
+  background: var(--color-surface-muted);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.input[readonly] {
+  background: var(--color-surface-muted);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--color-error-solid);
+  border-width: var(--border-width-strong);
+}
+
+.input--textarea {
+  min-height: calc(var(--size-control-md) * 2);
+  padding-block: var(--space-inset-sm);
+  resize: vertical;
+}
+
+.input--numeric,
+.input[type="date"] {
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+.input[type="date"] {
+  max-width: var(--size-input-date-width);
+}
+
+/* Select: native <select> + decorative chevron icon (UX Icons) */
+.select {
+  position: relative;
+  display: block;
+}
+
+.select .input {
+  appearance: none;
+  padding-inline-end: calc(var(--space-control-x-md) + var(--size-icon-md));
+  cursor: pointer;
+}
+
+.select__chevron {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--space-control-x-sm);
+  margin-block: auto;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+/* ---------- Checkbox ---------- */
+.checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-inline-sm);
+  cursor: pointer;
+}
+
+.checkbox__input {
+  flex: none;
+  appearance: none;
+  display: inline-grid;
+  place-content: center;
+  width: var(--size-checkbox);
+  height: var(--size-checkbox);
+  margin-block-start: calc((1lh - var(--size-checkbox)) / 2);
+  border: var(--border-width-default) solid var(--color-border-strong);
+  border-radius: var(--radius-tag);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.checkbox__input::before {
+  content: "";
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  background: var(--color-on-primary);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transition: transform var(--duration-fast) var(--easing-default);
+}
+
+.checkbox__input:checked {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+}
+
+.checkbox__input:checked::before {
+  transform: scale(0.75);
+}
+
+.checkbox__input:disabled {
+  border-color: var(--color-border-disabled);
+  background: var(--color-surface-muted);
+  cursor: not-allowed;
+}
+
+.checkbox__input[aria-invalid="true"] {
+  border-color: var(--color-error-solid);
+}
+
+/* ---------- Toggle (checkbox with role="switch") ---------- */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  cursor: pointer;
+}
+
+.toggle__input {
+  flex: none;
+  appearance: none;
+  position: relative;
+  width: var(--size-toggle-width);
+  height: var(--size-toggle-height);
+  border: var(--border-width-default) solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--easing-default);
+}
+
+.toggle__input::before {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--border-width-strong);
+  inset-inline-start: var(--border-width-strong);
+  width: calc(var(--size-toggle-height) - 3 * var(--border-width-strong));
+  height: calc(var(--size-toggle-height) - 3 * var(--border-width-strong));
+  border-radius: var(--radius-pill);
+  background: var(--color-text-muted);
+  transition: transform var(--duration-fast) var(--easing-default), background-color var(--duration-fast) var(--easing-default);
+}
+
+.toggle__input:checked {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+}
+
+.toggle__input:checked::before {
+  background: var(--color-on-primary);
+  transform: translateX(calc(var(--size-toggle-width) - var(--size-toggle-height)));
+}
+
+.toggle__input:disabled {
+  border-color: var(--color-border-disabled);
+  background: var(--color-surface-muted);
+  cursor: not-allowed;
+}
+
+.toggle__input:disabled::before {
+  background: var(--color-text-disabled);
+}
+
+.toggle:has(.toggle__input:disabled),
+.checkbox:has(.checkbox__input:disabled) {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+/* ---------- Segmented control (radio group shown as joined buttons) ---------- */
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline-xs);
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.segmented__legend {
+  margin-block-end: var(--space-stack-xs);
+  padding: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+.segmented__option {
+  position: relative;
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-inline-sm);
+  min-height: var(--size-control-md);
+  padding-inline: var(--space-control-x-sm);
+  border: var(--border-width-default) solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.segmented__option:hover {
+  background: var(--color-surface-hover);
+}
+
+.segmented__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segmented__option:has(.segmented__input:checked) {
+  border-color: var(--color-border-primary);
+  background: var(--color-primary-subtle);
+  color: var(--color-text-primary);
+  box-shadow: inset 0 0 0 var(--border-width-default) var(--color-border-primary);
+}
+
+.segmented__option:has(.segmented__input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.segmented__option .icon {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}

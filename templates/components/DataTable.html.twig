@@ -1,0 +1,22 @@
+{#
+ # DataTable - table of records. Rows: <twig:DataTable:Row> with <twig:DataTable:Cell>.
+ # columns: [{label, type?: 'text'|'numeric'|'actions', hidden?: bool}]
+ # On mobile each row becomes a card; every Cell needs its column `label` (shown via data-label).
+ #}
+{% props columns, caption, captionVisible = false %}
+<div {{ attributes.defaults({class: 'data-table', role: 'region', 'aria-label': caption, tabindex: '0'}) }}>
+    <table class="data-table__table">
+        <caption class="data-table__caption{{ captionVisible ? '' : ' visually-hidden' }}">{{ caption }}</caption>
+        <thead>
+            <tr>
+                {% for column in columns %}
+                    {%- set type = column.type ?? 'text' -%}
+                    <th scope="col" class="data-table__header{{ type != 'text' ? ' data-table__header--' ~ type }}">
+                        {%- if column.hidden ?? false %}<span class="visually-hidden">{{ column.label }}</span>{% else %}{{ column.label }}{% endif -%}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>{% block content %}{% endblock %}</tbody>
+    </table>
+</div>

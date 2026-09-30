@@ -1,0 +1,169 @@
+/*
+ * Base: fonts, reset, document typography, focus, skip link. Utilities: utilities.css.
+ * Uses semantic tokens only (see tokens.css).
+ */
+
+/* ---------- Fonts (self-hosted, SIL OFL 1.1 - see assets/fonts/OFL.txt) ---------- */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("../fonts/AtkinsonHyperlegibleNext-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Mono";
+  src: url("../fonts/AtkinsonHyperlegibleMono-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+p,
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: break-word;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/* ---------- Document typography ---------- */
+h1,
+.text-heading-1 {
+  font-size: var(--font-size-heading-1);
+  line-height: var(--line-height-display);
+  font-weight: var(--font-weight-bold);
+  text-wrap: balance;
+}
+
+h2,
+.text-heading-2 {
+  font-size: var(--font-size-heading-2);
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-semibold);
+  text-wrap: balance;
+}
+
+h3,
+.text-heading-3 {
+  font-size: var(--font-size-heading-3);
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-semibold);
+}
+
+.text-display {
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-display);
+  font-weight: var(--font-weight-bold);
+}
+
+
+
+a {
+  color: var(--color-text-link);
+  text-underline-offset: var(--size-link-underline-offset);
+  text-decoration-thickness: from-font;
+}
+
+a:hover {
+  color: var(--color-text-link-hover);
+}
+
+kbd {
+  padding: 0 var(--space-inset-xs);
+  border: var(--border-width-default) solid var(--color-border-strong);
+  border-radius: var(--radius-tag);
+  background: var(--color-surface-muted);
+  font-family: var(--font-family-numeric);
+  font-size: var(--font-size-caption);
+}
+
+/* ---------- Focus: always visible for keyboard users ---------- */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ---------- Skip link ---------- */
+.skip-link {
+  position: absolute;
+  inset-block-start: var(--space-inset-sm);
+  inset-inline-start: var(--space-inset-sm);
+  z-index: var(--z-toast);
+  padding: var(--space-inset-sm) var(--space-inset-md);
+  border-radius: var(--radius-control);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.skip-link:not(:focus) {
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:hover {
+  color: var(--color-on-primary);
+}
+
+/* UX Icons render inline <svg>; size them with the size-icon-* tokens only. */
+.icon {
+  flex: none;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+}
